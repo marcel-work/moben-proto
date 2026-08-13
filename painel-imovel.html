@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moben — Ap. Centro</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#0101CD;--purple:#8301CD;--cyan:#01CCFF;--navy:#0C005F;
+  --grad-h:linear-gradient(90deg,#9CECFB 0%,#0052D4 50%,#8301CD 100%);
+  --grad-d:linear-gradient(135deg,#0C005F 0%,#0101CD 60%,#8301CD 100%);
+  --white:#fff;--off:#F5F4FF;--off2:#EEF0FF;
+  --text:#0C005F;--muted:#6B6B9A;--border:rgba(1,1,205,0.1);
+  --success:#1A7F3A;--success-bg:#E6F4EC;--success-border:rgba(26,127,58,.2);
+  --warning:#92400E;--warning-bg:#FEF3C7;--warning-border:rgba(146,64,14,.2);
+  --danger:#C62828;--danger-bg:#FFEBEE;--danger-border:rgba(198,40,40,.2);
+  --mint:#78FFD6;--sw:220px;
+}
+body{font-family:'Quicksand',sans-serif;background:var(--off);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* SIDEBAR */
+.app-sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--navy);display:flex;flex-direction:column;z-index:100;overflow:hidden}
+.app-sidebar::before{content:'';position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,0 60,52 0,52' fill='%239CECFB'/%3E%3C/svg%3E");background-size:60px 60px;pointer-events:none}
+.as-logo{padding:24px 20px 20px;position:relative;z-index:1;border-bottom:1px solid rgba(255,255,255,.06)}
+.as-logo img{height:22px}
+.as-nav{flex:1;padding:10px 0;position:relative;z-index:1;overflow-y:auto}
+.as-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.22);padding:10px 20px 4px}
+.as-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:12px;font-weight:600;color:rgba(255,255,255,.42);text-decoration:none;transition:all .15s}
+.as-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.as-item:hover{color:rgba(255,255,255,.75);background:rgba(255,255,255,.05)}
+.as-item.active{color:#fff;background:rgba(255,255,255,.1)}
+.as-item.active svg{stroke:var(--cyan)}
+.as-foot{padding:16px 20px;border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:1}
+.as-av{width:28px;height:28px;background:var(--grad-h);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;color:#fff;flex-shrink:0}
+
+/* MAIN */
+.main{margin-left:var(--sw);min-height:100vh}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 28px;gap:10px;position:sticky;top:0;z-index:50}
+.back-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:none;transition:color .15s}
+.back-btn:hover{color:var(--blue)}
+.back-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5}
+.tb-sep{width:1px;height:18px;background:var(--border)}
+.tb-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;color:var(--navy)}
+.tb-actions{margin-left:auto;display:flex;gap:6px}
+.state-btn{padding:4px 10px;font-family:'Quicksand',sans-serif;font-size:10px;font-weight:700;color:var(--muted);background:var(--off);border:1px solid var(--border);cursor:pointer}
+.state-btn.on{color:var(--blue);background:var(--off2);border-color:rgba(1,1,205,.2)}
+
+/* PAGE */
+.page{padding:20px 28px 60px;max-width:780px}
+
+/* HEADER IMOVEL */
+.prop-header{background:var(--grad-d);padding:20px 22px;margin-bottom:18px;position:relative;overflow:hidden}
+.prop-header::before{content:'';position:absolute;inset:0;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,0 60,52 0,52' fill='%23fff'/%3E%3C/svg%3E");background-size:60px 60px}
+.ph-alias{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:2px;position:relative;z-index:1}
+.ph-addr{font-size:11px;color:rgba(255,255,255,.5);font-weight:500;position:relative;z-index:1;margin-bottom:14px}
+.ph-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1}
+.ph-info{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:10px 12px}
+.phi-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.4);margin-bottom:4px}
+.phi-val{font-size:12px;font-weight:700;color:#fff}
+.phi-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:2px}
+
+/* STATUS HERO */
+.status-hero{border:1px solid var(--border);background:var(--white);margin-bottom:12px;overflow:hidden}
+.sh-top{padding:16px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.sh-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:5px}
+.sh-valor{font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;color:var(--navy);letter-spacing:-.02em}
+.sh-date{font-size:11px;color:var(--muted);font-weight:500;margin-top:3px}
+.sh-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border:1px solid;white-space:nowrap}
+.sh-badge.paid{color:var(--success);background:var(--success-bg);border-color:var(--success-border)}
+.sh-badge.waiting{color:var(--blue);background:var(--off2);border-color:rgba(1,1,205,.15)}
+.sh-badge.overdue{color:var(--danger);background:var(--danger-bg);border-color:var(--danger-border)}
+.sh-badge svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5}
+.sh-bottom{border-top:1px solid var(--border);padding:11px 20px;display:flex;align-items:center;gap:10px;justify-content:space-between}
+
+/* ALERTAS PROATIVOS */
+.alert-proativo{border:1px solid var(--border);background:var(--white);padding:14px 18px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
+.ap-icon{width:34px;height:34px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.ap-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.ap-icon.azul{background:rgba(1,1,205,.08);color:var(--blue)}
+.ap-icon.roxo{background:rgba(131,1,205,.08);color:var(--purple)}
+.ap-icon.vermelho{background:rgba(198,40,40,.08);color:var(--danger)}
+.ap-body{flex:1}
+.ap-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.ap-sub{font-size:11px;color:var(--muted);font-weight:500;line-height:1.5;margin-bottom:8px}
+.ap-preview{background:var(--off2);border-left:3px solid var(--blue);padding:8px 10px;margin-bottom:8px;font-size:11px;color:var(--text);font-weight:500;line-height:1.6}
+.ap-preview.roxo{border-left-color:var(--purple);background:rgba(131,1,205,.04)}
+.ap-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ap-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;font-family:'Quicksand',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;border:none}
+.ap-btn.main{color:#fff;background:var(--grad-h)}
+.ap-btn.main:hover{transform:translateY(-1px);box-shadow:0 3px 12px rgba(131,1,205,.22)}
+.ap-btn.main svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2.5}
+.ap-btn.sec{color:var(--muted);background:transparent;border:1px solid var(--border)}
+.ap-btn.sec:hover{color:var(--blue);border-color:var(--blue)}
+
+/* PERFORMANCE FINANCEIRA */
+.perf-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.perf-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:flex;align-items:center;gap:6px}
+.perf-title svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.perf-period{font-size:10px;color:var(--muted);font-weight:600}
+.perf-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.perf-card{background:var(--white);border:1px solid var(--border);padding:14px 16px;position:relative;overflow:hidden}
+.perf-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.perf-card.aluguel::after{background:var(--blue)}
+.perf-card.multas::after{background:var(--success)}
+.perf-card.economia::after{background:var(--grad-h)}
+.pc-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
+.pc-val{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--navy);letter-spacing:-.01em;margin-bottom:3px}
+.pc-sub{font-size:10px;color:var(--muted);font-weight:500;line-height:1.4}
+.pc-sub strong{color:var(--success);font-weight:700}
+
+/* GRAFICO BARRAS */
+.chart-wrap{background:var(--white);border:1px solid var(--border);padding:16px 18px;margin-bottom:18px}
+.chart-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between}
+.chart-body{display:flex;align-items:flex-end;gap:5px;height:72px}
+.bar-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.bar-stack{width:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:1px;height:64px}
+.bar-seg{width:100%;min-height:2px;transition:height .3s ease}
+.bar-seg.aluguel{background:rgba(1,1,205,.35)}
+.bar-seg.multa{background:var(--success)}
+.bar-month{font-size:8px;font-weight:700;color:var(--muted);margin-top:4px}
+.chart-legend{display:flex;gap:12px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.cl-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);font-weight:600}
+.cl-dot{width:8px;height:8px;flex-shrink:0}
+.cl-dot.aluguel{background:rgba(1,1,205,.35)}
+.cl-dot.multa{background:var(--success)}
+
+/* HEAT MAP PAGAMENTOS */
+.heatmap-wrap{background:var(--white);border:1px solid var(--border);padding:16px 18px;margin-bottom:18px}
+.hm-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.hm-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-bottom:8px}
+.hm-cell{aspect-ratio:1;position:relative;cursor:default}
+.hm-cell-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:rgba(255,255,255,.9);transition:transform .1s}
+.hm-cell:hover .hm-cell-inner{transform:scale(1.1)}
+.hm-cell.paid .hm-cell-inner{background:var(--success)}
+.hm-cell.paid-late .hm-cell-inner{background:#F59E0B}
+.hm-cell.overdue .hm-cell-inner{background:var(--danger)}
+.hm-cell.waiting .hm-cell-inner{background:var(--blue)}
+.hm-cell.future .hm-cell-inner{background:var(--border)}
+.hm-cell.current .hm-cell-inner{box-shadow:0 0 0 2px var(--navy)}
+.hm-month{font-size:8px;font-weight:600;color:var(--muted);text-align:center;margin-top:3px}
+.hm-legend{display:flex;gap:10px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--border)}
+.hm-leg{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--muted);font-weight:600}
+.hm-leg-sq{width:9px;height:9px;flex-shrink:0}
+
+/* SOLICITACOES */
+.sol-section{margin-bottom:18px}
+.sol-header{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.sol-header svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.sol-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sol-item{border:1px solid var(--border);padding:12px 14px;cursor:pointer;background:var(--white);transition:all .15s;text-align:left;display:flex;align-items:center;gap:10px}
+.sol-item:hover{border-color:var(--blue);background:var(--off)}
+.sol-item.destaque{border-color:rgba(1,1,205,.2);background:var(--off2)}
+.sol-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--off2)}
+.sol-icon svg{width:14px;height:14px;stroke:var(--blue);fill:none;stroke-width:2}
+.sol-item.destaque .sol-icon{background:rgba(1,1,205,.12)}
+.sol-label{font-size:12px;font-weight:700;color:var(--navy);line-height:1.3}
+.sol-desc{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3}
+
+/* SEÇÕES COLAPSÁVEIS */
+.section{background:var(--white);border:1px solid var(--border);margin-bottom:10px}
+.section-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.sec-ttl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:flex;align-items:center;gap:8px}
+.sec-ttl svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.sec-chev{width:13px;height:13px;stroke:var(--muted);fill:none;stroke-width:2;transition:transform .2s}
+.sec-chev.open{transform:rotate(180deg)}
+.sec-body{padding:0 18px 16px;display:none;animation:fu .2s ease}
+.sec-body.open{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+
+/* DADOS CONTRATO */
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.cg-item{padding:8px 10px;background:var(--off);border:1px solid var(--border)}
+.cg-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+.cg-val{font-size:12px;font-weight:700;color:var(--navy)}
+.responsavel-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.resp-item{padding:8px 10px;background:var(--off);border:1px solid var(--border)}
+.resp-quem{font-size:10px;font-weight:700;color:var(--navy)}
+.resp-label{font-size:9px;color:var(--muted);font-weight:500;margin-top:1px}
+.c-actions{display:flex;gap:8px;flex-wrap:wrap}
+.c-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;font-family:'Quicksand',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;border:none}
+.c-btn.primary{color:#fff;background:var(--grad-h)}
+.c-btn.ghost{color:var(--blue);background:var(--off2);border:1px solid var(--border)}
+.c-btn.ghost:hover{border-color:var(--blue)}
+.c-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* INQUILINO */
+.iq-card{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.iq-av{width:40px;height:40px;border-radius:50%;background:var(--grad-h);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;color:#fff;flex-shrink:0}
+.iq-name{font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:var(--navy)}
+.iq-meta{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+.iq-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.iq-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;font-family:'Quicksand',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;border:1px solid var(--border);background:var(--white)}
+.iq-btn:hover{border-color:var(--blue);color:var(--blue)}
+.iq-btn.wa{border-color:rgba(37,211,102,.35);background:#E8F8EE;color:#1A7F3A}
+.iq-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* BOLETO ROWS */
+.b-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.b-row:last-child{border-bottom:none}
+.b-row.total{font-weight:700;border-top:2px solid var(--border);border-bottom:none;padding-top:10px;margin-top:2px}
+.b-lbl{color:var(--muted);font-weight:500}
+.b-val{font-weight:700;color:var(--navy)}
+
+/* DRAWER */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(12,0,95,.35);z-index:200}
+.drawer-overlay.show{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:100vw;background:var(--white);z-index:201;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+.drawer.open{transform:translateX(0)}
+.dh{padding:18px 20px 14px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.dh-title{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--navy)}
+.dh-sub{font-size:11px;color:var(--muted);font-weight:500;margin-top:3px;line-height:1.5}
+.dc{background:none;border:none;cursor:pointer;color:var(--muted);padding:2px;flex-shrink:0}
+.dc svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.5}
+.db{flex:1;overflow-y:auto;padding:18px 20px}
+.df{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0}
+.fh{font-size:11px;color:var(--muted);margin-top:5px;font-weight:500;line-height:1.5}
+.fh.info{color:var(--blue);background:var(--off2);border-left:2px solid var(--blue);padding:8px 10px;margin-top:8px}
+.fh.warn{color:var(--warning);background:var(--warning-bg);border-left:2px solid var(--warning);padding:8px 10px;margin-top:8px}
+.fh strong{font-weight:700;display:block;margin-bottom:2px}
+
+/* CAMPOS DRAWER */
+.fg{margin-bottom:12px}
+label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+input[type=text],input[type=email],input[type=tel],input[type=date],select,textarea{width:100%;padding:9px 11px;border:1.5px solid var(--border);background:var(--white);font-family:'Quicksand',sans-serif;font-size:12px;font-weight:600;color:var(--text);outline:none;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B9A' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;-webkit-appearance:none}
+textarea{resize:vertical;min-height:80px}
+.fgr2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* COMUNICADO PREVIEW */
+.preview-box{background:var(--off2);border:1px solid var(--border);padding:14px;margin-bottom:12px}
+.pb-header{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+.pb-body{font-size:12px;color:var(--text);font-weight:500;line-height:1.7;white-space:pre-line}
+
+/* BOTÕES */
+.btn-p{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px;font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;color:#fff;background:var(--grad-h);border:none;cursor:pointer;transition:all .2s}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(131,1,205,.25)}
+.btn-p svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2}
+.btn-s{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:var(--blue);background:var(--off2);border:1.5px solid var(--border);cursor:pointer;margin-top:8px}
+.btn-s:hover{border-color:var(--blue)}
+.btn-danger{display:flex;align-items:center;justify-content:center;width:100%;padding:9px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:var(--danger);background:none;border:1px solid var(--danger-border);cursor:pointer;margin-top:8px}
+
+/* BOTTOM NAV MOBILE */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:64px;background:var(--navy);z-index:100;border-top:1px solid rgba(255,255,255,.1);box-shadow:0 -4px 20px rgba(12,0,95,.25)}
+.bn-inner{display:flex;width:100%;height:100%}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:rgba(255,255,255,.38);transition:color .15s;border:none;background:none;cursor:pointer;padding:0;min-width:0;-webkit-tap-highlight-color:transparent}
+.bn-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
+.bn-item span{font-family:'Quicksand',sans-serif;font-size:10px;font-weight:700;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56px}
+.bn-item.active{color:var(--cyan)}
+.bn-item.active svg{stroke:var(--cyan)}
+
+@media(max-width:768px){
+  .app-sidebar{display:none}
+  .main{margin-left:0;padding-bottom:64px}
+  .bottom-nav{display:flex}
+  .topbar{padding:0 16px;height:48px}
+  .page{padding:14px 14px 40px}
+  .tb-actions{display:none}
+  /* texto base maior no mobile para legibilidade */
+  body{font-size:14px}
+  .sol-label{font-size:13px}
+  .sol-desc{font-size:11px}
+  .b-lbl,.b-val{font-size:13px}
+  .sec-ttl{font-size:12px}
+  .ph-alias{font-size:18px}
+  .sh-valor{font-size:22px}
+  .dh-title{font-size:15px}
+  /* grids viram coluna unica */
+  .ph-grid,.cg,.fgr2,.responsavel-grid{grid-template-columns:1fr}
+  /* header do imovel mais compacto */
+  .ph-grid{gap:6px}
+  .ph-info{padding:8px 10px}
+  /* solicitacoes: lista em coluna unica com toque generoso */
+  .sol-grid{grid-template-columns:1fr}
+  .sol-item{min-height:56px;padding:13px 14px}
+  /* heatmap: 6 colunas no mobile */
+  .hm-grid{grid-template-columns:repeat(6,1fr)}
+  .hm-cell-inner{font-size:9px}
+  .hm-month{font-size:9px}
+  /* drawer sobe da base */
+  .drawer{width:100%;top:auto;border-radius:16px 16px 0 0;max-height:92vh}
+  /* perf cards em scroll horizontal */
+  .perf-cards{display:flex;overflow-x:auto;gap:10px;padding-bottom:6px;-webkit-overflow-scrolling:touch;grid-template-columns:unset;scrollbar-width:none}
+  .perf-cards::-webkit-scrollbar{display:none}
+  .perf-card{min-width:150px;flex-shrink:0}
+  .pc-val{font-size:17px}
+  /* topbar */
+  .tb-sep{display:none}
+  .back-btn{font-size:11px}
+  /* chart */
+  .bar-month{font-size:9px}
+  /* mobile: colapsar blocos secundarios por padrao */
+  .mobile-collapsed{display:none}
+}
+</style>
+</head>
+<body>
+<aside class="app-sidebar">
+  <div class="as-logo"><img src="data:image/svg+xml;base64,__B64W__" alt="Moben"></div>
+  <nav class="as-nav">
+    <div class="as-label">Principal</div>
+    <a class="as-item" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Meu painel</a>
+    <a class="as-item active" href="imovel.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Meus imoveis</a>
+    <a class="as-item" href="pretendentes.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Pretendentes</a>
+    <a class="as-item" href="contrato.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Contratos</a>
+    <a class="as-item" href="financeiro.html"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cobrancas</a>
+    <div class="as-label">Financeiro</div>
+    <a class="as-item" href="financeiro.html"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Financeiro</a>
+    <div class="as-label">Conta</div>
+    <a class="as-item" href="#"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Meu perfil</a>
+  </nav>
+  <div class="as-foot"><div style="display:flex;align-items:center;gap:8px"><div class="as-av">JS</div><div><div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.7)">Joao Silva</div><div style="font-size:10px;color:rgba(255,255,255,.3);font-weight:500">Plano Essencial</div></div></div></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <a href="imovel.html" class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Meus imoveis</a>
+    <div class="tb-sep"></div>
+    <span class="tb-title">Ap. Centro</span>
+    <div class="tb-actions">
+      <button class="state-btn" id="sb-pago" onclick="setEstado('pago')">Pago</button>
+      <button class="state-btn" id="sb-aguardando" onclick="setEstado('aguardando')">Aguardando</button>
+      <button class="state-btn" id="sb-atrasado" onclick="setEstado('atrasado')">Atrasado</button>
+      <button class="state-btn" id="sb-alertas" onclick="setEstado('alertas')">Com alertas</button>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <!-- 1. HEADER DO IMOVEL -->
+    <div class="prop-header">
+      <div class="ph-alias">Ap. Centro</div>
+      <div class="ph-addr">Rua Augusta, 1420 · Apto 52 — Consolacao, Sao Paulo/SP · CEP 01304-001</div>
+      <div class="ph-grid">
+        <div class="ph-info">
+          <div class="phi-label">Inquilino</div>
+          <div class="phi-val">Maria Santos</div>
+          <div class="phi-sub">maria.santos@email.com · (11) 98765-4321</div>
+        </div>
+        <div class="ph-info">
+          <div class="phi-label">Contrato ativo</div>
+          <div class="phi-val">01/01/2025 — 31/12/2026</div>
+          <div class="phi-sub">Vencimento dia 10 · Boleto Moben</div>
+        </div>
+        <div class="ph-info">
+          <div class="phi-label">Responsabilidade — condominio</div>
+          <div class="phi-val">Inquilino</div>
+          <div class="phi-sub">R$ 480/mes incluso no boleto</div>
+        </div>
+        <div class="ph-info">
+          <div class="phi-label">Responsabilidade — IPTU</div>
+          <div class="phi-val">Proprietario</div>
+          <div class="phi-sub">R$ 1.140/ano · R$ 95/mes no boleto</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. STATUS DO MES -->
+    <div class="status-hero" id="hero"></div>
+
+    <!-- 3. ALERTAS PROATIVOS -->
+    <div id="alertas"></div>
+
+    <!-- 4. PERFORMANCE FINANCEIRA -->
+    <div id="bloco-perf" style="margin-bottom:18px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div class="perf-title" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Performance financeira</div>
+        <span class="perf-period" style="font-size:10px;color:var(--muted);font-weight:600">Desde 01/01/2025</span>
+      </div>
+      <div id="perf-conteudo">
+        <div class="perf-cards">
+        <div class="perf-card aluguel">
+          <div class="pc-lbl">Receita de aluguel</div>
+          <div class="pc-val">R$ 35.103</div>
+          <div class="pc-sub">16 meses recebidos<br><strong>100% pontualidade</strong></div>
+        </div>
+        <div class="perf-card multas">
+          <div class="pc-lbl">Multas e juros recebidos</div>
+          <div class="pc-val">R$ 78,40</div>
+          <div class="pc-sub">2 pagamentos em atraso<br><strong>Aplicados automaticamente</strong></div>
+        </div>
+        <div class="perf-card economia">
+          <div class="pc-lbl">Economia vs. mercado</div>
+          <div class="pc-val">R$ 5.265</div>
+          <div class="pc-sub">Taxa de 10% evitada<br><strong>R$ 329/mes poupado</strong></div>
+        </div>
+      </div>
+
+      <!-- GRAFICO MENSAL -->
+      <div class="chart-wrap">
+        <div class="chart-title">
+          <span>Receita mensal — 2025</span>
+          <span style="font-size:10px;color:var(--muted)">valores em R$</span>
+        </div>
+        <div class="chart-body" id="chart-body">
+          <!-- gerado por JS -->
+        </div>
+        <div class="chart-legend">
+          <div class="cl-item"><div class="cl-dot aluguel"></div>Aluguel</div>
+          <div class="cl-item"><div class="cl-dot multa"></div>Multas/juros</div>
+        </div>
+      </div>
+    </div><!-- fecha chart-wrap -->
+    </div><!-- fecha perf-conteudo -->
+    <button id="btn-perf-mobile" onclick="toggleMobileBloco('perf-conteudo','btn-perf-mobile')" style="display:none;width:100%;padding:10px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:var(--blue);background:var(--off2);border:1px solid var(--border);cursor:pointer;margin-bottom:14px">Ver performance financeira ↓</button>
+    </div><!-- fecha bloco-perf -->
+
+    <!-- 5. HISTORICO — HEAT MAP -->
+    <div id="bloco-heatmap">
+    <div class="heatmap-wrap" id="hm-conteudo">
+      <div class="hm-title">Historico de pagamentos — 2025</div>
+      <div class="hm-grid" id="hm-grid"><!-- gerado por JS --></div>
+      <div class="hm-legend">
+        <div class="hm-leg"><div class="hm-leg-sq" style="background:var(--success)"></div>Pago em dia</div>
+        <div class="hm-leg"><div class="hm-leg-sq" style="background:#F59E0B"></div>Pago com atraso</div>
+        <div class="hm-leg"><div class="hm-leg-sq" style="background:var(--danger)"></div>Em atraso</div>
+        <div class="hm-leg"><div class="hm-leg-sq" style="background:var(--blue)"></div>Boleto emitido</div>
+        <div class="hm-leg"><div class="hm-leg-sq" style="background:var(--border)"></div>Futuro</div>
+      </div><!-- fecha hm-legend -->
+    </div><!-- fecha heatmap-wrap / hm-conteudo -->
+    <button id="btn-hm-mobile" onclick="toggleMobileBloco('hm-conteudo','btn-hm-mobile')" style="display:none;width:100%;padding:10px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:var(--blue);background:var(--off2);border:1px solid var(--border);cursor:pointer;margin-bottom:14px">Ver historico de pagamentos ↓</button>
+    </div><!-- fecha bloco-heatmap --> E SERVICOS -->
+    <div class="sol-section">
+      <div class="sol-header"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Solicitacoes e servicos</div>
+
+      <!-- Financeiro -->
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">Financeiro</div>
+      <div class="sol-grid" style="margin-bottom:16px">
+        <button class="sol-item destaque" onclick="openDrawer('d-ajuste-boleto')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+          <div><div class="sol-label">Ajuste de boleto</div><div class="sol-desc">Alterar valor de aluguel, condominio, IPTU ou seguro</div></div>
+        </button>
+        <button class="sol-item destaque" onclick="openDrawer('d-reajuste')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/></svg></div>
+          <div><div class="sol-label">Reajuste anual</div><div class="sol-desc">Calcular e aplicar reajuste do contrato · no mes do aniversario</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-negociacao')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg></div>
+          <div><div class="sol-label">Negociacao de valor</div><div class="sol-desc">Acordo permanente de novo valor base do aluguel</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-reenvio')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+          <div><div class="sol-label">Reenviar boleto</div><div class="sol-desc">Inquilino perdeu ou nao recebeu o boleto</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-baixa-manual')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div>
+          <div><div class="sol-label">Registrar pagamento manual</div><div class="sol-desc">Inquilino pagou fora do sistema · suspende alertas</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-simulacao')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+          <div><div class="sol-label">Simulacao de encerramento</div><div class="sol-desc">Calcule valores finais antes de decidir</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-irpf')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          <div><div class="sol-label">Carne-Leao / IRPF</div><div class="sol-desc">Cálculo mensal e relatorio anual</div></div>
+        </button>
+      </div>
+
+      <!-- Contrato -->
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">Contrato</div>
+      <div class="sol-grid" style="margin-bottom:16px">
+        <button class="sol-item" onclick="openDrawer('d-distrato')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+          <div><div class="sol-label">Solicitar distrato</div><div class="sol-desc">Encerramento antecipado por acordo mutuo</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-renovar')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/></svg></div>
+          <div><div class="sol-label">Renovar ou encerrar contrato</div><div class="sol-desc">Decisao com antecedencia minima de 30 dias</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-quitacao')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div>
+          <div><div class="sol-label">Declaracao de quitacao</div><div class="sol-desc">Para o inquilino na saida do imovel</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-notif-extraju')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><div class="sol-label">Notificacao extrajudicial</div><div class="sol-desc">Primeiro passo juridico · a partir de 5 dias de atraso</div></div>
+        </button>
+        <!-- Contextual: contrato nos ultimos 60 dias -->
+        <button class="sol-item" onclick="alert('Contratar vistoria de saida — servico adicional')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div><div class="sol-label">Vistoria de saida</div><div class="sol-desc">Servico adicional · contrato vence em 60 dias</div></div>
+        </button>
+      </div>
+
+      <!-- Cadastro e dados -->
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">Cadastro e dados</div>
+      <div class="sol-grid" style="margin-bottom:16px">
+        <button class="sol-item" onclick="openDrawer('d-contato')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="sol-label">Atualizar contatos</div><div class="sol-desc">Email e WhatsApp do proprietario e do inquilino</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-conta-bancaria')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div>
+          <div><div class="sol-label">Conta bancaria do imovel</div><div class="sol-desc">Define conta especifica ou usa a conta padrao do perfil</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-divisao')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+          <div><div class="sol-label">Divisao entre proprietarios</div><div class="sol-desc">Percentual para cada conta em caso de casal</div></div>
+        </button>
+        <button class="sol-item" onclick="openDrawer('d-recibo')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+          <div><div class="sol-label">Recibos de aluguel</div><div class="sol-desc">Gerados automaticamente · historico disponivel aqui</div></div>
+        </button>
+      </div>
+
+      <!-- Seguros — terceirizados -->
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">Seguros — servicos parceiros</div>
+      <div class="sol-grid">
+        <button class="sol-item" onclick="alert('Cotacao de seguro incendio — em breve integracao direta')">
+          <div class="sol-icon"><svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 01-7 7 7 7 0 01-7-7c0-1.915.81-3.597 2.1-5"/></svg></div>
+          <div><div class="sol-label">Seguro incendio</div><div class="sol-desc">Vence em 15/05/2026 · Cotacao pelo parceiro</div></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- LOG DE COMUNICACOES -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSec('log')">
+        <span class="sec-ttl"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Comunicacoes enviadas</span>
+        <svg class="sec-chev" id="chev-log" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="sec-body" id="body-log">
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:4px"></div>
+            <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--navy)">Boleto de abril enviado ao inquilino</div><div style="font-size:10px;color:var(--muted);margin-top:2px">05/04/2026 · 09h14 · Por email para maria.santos@email.com</div></div>
+            <div style="font-size:10px;font-weight:700;color:var(--success);flex-shrink:0">Entregue</div>
+          </div>
+          <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:4px"></div>
+            <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--navy)">Lembrete de vencimento enviado ao inquilino</div><div style="font-size:10px;color:var(--muted);margin-top:2px">05/04/2026 · 09h14 · 5 dias antes do vencimento · Automatico</div></div>
+            <div style="font-size:10px;font-weight:700;color:var(--success);flex-shrink:0">Entregue</div>
+          </div>
+          <div style="display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:4px"></div>
+            <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--navy)">Boleto de marco enviado ao inquilino</div><div style="font-size:10px;color:var(--muted);margin-top:2px">20/03/2026 · 08h00 · Por email para maria.santos@email.com</div></div>
+            <div style="font-size:10px;font-weight:700;color:var(--success);flex-shrink:0">Entregue</div>
+          </div>
+          <div style="display:flex;gap:10px;padding:9px 0;align-items:flex-start">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;margin-top:4px"></div>
+            <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--navy)">Recibo de fevereiro gerado e enviado ao inquilino</div><div style="font-size:10px;color:var(--muted);margin-top:2px">15/03/2026 · Automatico apos compensacao · Voce foi notificado</div></div>
+            <div style="font-size:10px;font-weight:700;color:var(--success);flex-shrink:0">Entregue</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. DADOS DO CONTRATO -->
+    <div class="section">
+      <div class="section-header" onclick="toggleSec('contrato')">
+        <span class="sec-ttl"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>Contrato e valores</span>
+        <svg class="sec-chev" id="chev-contrato" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="sec-body" id="body-contrato">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Responsabilidades</div>
+        <div class="responsavel-grid" style="margin-bottom:14px">
+          <div class="resp-item"><div class="resp-quem">Inquilino</div><div class="resp-label">Condominio · Agua/Luz/Gas</div></div>
+          <div class="resp-item"><div class="resp-quem">Proprietario</div><div class="resp-label">IPTU · Seguro incendio</div></div>
+        </div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Vigencia e valores</div>
+        <div class="cg">
+          <div class="cg-item"><div class="cg-lbl">Inicio</div><div class="cg-val">01/01/2025</div></div>
+          <div class="cg-item"><div class="cg-lbl">Termino</div><div class="cg-val">31/12/2026</div></div>
+          <div class="cg-item"><div class="cg-lbl">Vencimento boleto</div><div class="cg-val">Todo dia 10</div></div>
+          <div class="cg-item"><div class="cg-lbl">Indice de reajuste</div><div class="cg-val">IGP-M</div></div>
+          <div class="cg-item"><div class="cg-lbl">Multa rescisao</div><div class="cg-val">3 alugueis</div></div>
+          <div class="cg-item"><div class="cg-lbl">Garantia</div><div class="cg-val">Sem garantia</div></div>
+        </div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:14px 0 8px">Composicao do boleto</div>
+        <div class="b-row"><span class="b-lbl">Aluguel</span><span class="b-val">R$ 2.500,00</span></div>
+        <div class="b-row"><span class="b-lbl">Condominio</span><span class="b-val">R$ 480,00</span></div>
+        <div class="b-row"><span class="b-lbl">IPTU mensal</span><span class="b-val">R$ 95,00</span></div>
+        <div class="b-row"><span class="b-lbl">Seguro incendio</span><span class="b-val">R$ 28,00</span></div>
+        <div class="b-row total"><span class="b-lbl">Total</span><span class="b-val" style="font-family:'Nunito',sans-serif;font-size:15px">R$ 3.103,00</span></div>
+        <div class="c-actions" style="margin-top:12px">
+          <button class="c-btn primary" onclick="alert('Ver PDF')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Ver contrato</button>
+          <button class="c-btn ghost" onclick="openDrawer('d-renovar')">Renovar / encerrar</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- .page -->
+</div><!-- .main -->
+
+<!-- BOTTOM NAV MOBILE -->
+<nav class="bottom-nav">
+  <div class="bn-inner">
+    <a href="dashboard.html" class="bn-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Painel</span></a>
+    <a href="imovel.html" class="bn-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Imoveis</span></a>
+    <a href="contrato.html" class="bn-item"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg><span>Contratos</span></a>
+    <a href="financeiro.html" class="bn-item"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span>Cobrancas</span></a>
+    <a href="#" class="bn-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
+  </div>
+</nav>
+<!-- BAIXA MANUAL -->
+<div class="drawer" id="d-baixa-manual">
+  <div class="dh"><div><div class="dh-title">Registrar pagamento manual</div><div class="dh-sub">Inquilino pagou fora do sistema — Pix, TED, dinheiro ou deposito</div></div><button class="dc" onclick="closeDrawer('d-baixa-manual')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div style="background:var(--warning-bg);border:1px solid var(--warning-border);padding:12px;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--warning);margin-bottom:4px">Pagamento fora do sistema Moben</div>
+      <div style="font-size:11px;color:var(--warning);font-weight:500;line-height:1.5">Ao registrar, a Moben marca o boleto como pago e <strong>suspende todos os alertas automaticos</strong> deste mes — lembretes, notificacoes de atraso e cobracas. Nao sera gerada transferencia pela Moben.</div>
+    </div>
+    <div class="fg"><label>Boleto de referencia</label><select><option>Abril 2026 — R$ 3.103,00 · Venceu 10/04</option><option>Marco 2026 — R$ 3.103,00</option></select></div>
+    <div class="fgr2">
+      <div class="fg"><label>Valor recebido (R$)</label><input type="text" placeholder="3.103,00"></div>
+      <div class="fg"><label>Data do recebimento</label><input type="date"></div>
+    </div>
+    <div class="fg"><label>Forma de pagamento</label><select><option>Pix</option><option>TED / DOC</option><option>Deposito bancario</option><option>Dinheiro</option><option>Outro</option></select></div>
+    <div class="fg"><label>Observacao (opcional)</label><textarea placeholder="Ex: transferido diretamente para conta pessoal..."></textarea></div>
+    <div class="fh info"><strong>Recomendacao Moben</strong>Prefira receber sempre via boleto Moben. O pagamento direto nao gera recibo automatico — voce pode emitir um recibo manual em Recibos de aluguel.</div>
+  </div>
+  <div class="df">
+    <button class="btn-p" onclick="alert('Pagamento registrado. Alertas de abril suspensos. Boleto marcado como pago.');closeDrawer('d-baixa-manual')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Registrar e suspender alertas</button>
+    <button class="btn-s" onclick="closeDrawer('d-baixa-manual')">Cancelar</button>
+  </div>
+</div>
+
+<div class="drawer-overlay" id="overlay" onclick="closeAllDrawers()"></div>
+
+<!-- DRAWERS -->
+
+<!-- AJUSTE DE BOLETO (unificado: único mês ou todos) -->
+<div class="drawer" id="d-ajuste-boleto">
+  <div class="dh"><div><div class="dh-title">Ajuste de boleto</div><div class="dh-sub">Alterar o valor — escolha se afeta um mes especifico ou todos os proximos</div></div><button class="dc" onclick="closeDrawer('d-ajuste-boleto')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div style="display:flex;gap:0;margin-bottom:16px;border:1.5px solid var(--border)">
+      <button id="aj-tab-unico" onclick="ajTab('unico')" style="flex:1;padding:10px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;border:none;cursor:pointer;background:var(--navy);color:#fff">Um mes especifico</button>
+      <button id="aj-tab-todos" onclick="ajTab('todos')" style="flex:1;padding:10px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;border:none;cursor:pointer;background:var(--white);color:var(--muted)">A partir deste mes</button>
+    </div>
+    <div id="aj-unico">
+      <div class="fg"><label>Mes de referencia</label>
+        <select id="aj-mes-sel" onchange="calcAjuste()">
+          <option value="futuro">Maio 2026 — boleto ainda nao emitido</option>
+          <option value="emitido">Abril 2026 — boleto emitido, nao pago</option>
+          <option value="vencido-pago">Marco 2026 — boleto pago</option>
+        </select>
+      </div>
+      <div id="aj-aviso-emitido" style="display:none;background:var(--warning-bg);border:1px solid var(--warning-border);padding:10px;margin-bottom:10px;font-size:11px;color:var(--warning);font-weight:600">Boleto ja emitido. A Moben cancelara o boleto atual e emitira um novo com o valor corrigido. O inquilino sera notificado do novo boleto.</div>
+      <div id="aj-aviso-vencido" style="display:none;background:var(--off2);border:1px solid var(--border);padding:10px;margin-bottom:10px;font-size:11px;color:var(--muted);font-weight:600">Boleto ja pago. O ajuste gerara um credito ou debito no proximo boleto, conforme o valor.</div>
+    </div>
+    <div id="aj-todos" style="display:none">
+      <div class="fg"><label>A partir de</label><select><option>Maio 2026</option><option>Junho 2026</option></select></div>
+    </div>
+    <div style="height:1px;background:var(--border);margin:8px 0 12px"></div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px">Componentes do boleto</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:11px;color:var(--muted);font-weight:600;width:130px;flex-shrink:0">Aluguel</span>
+        <input type="text" value="2.500,00" oninput="calcAjuste()" id="aj-aluguel" style="flex:1;padding:7px 9px;border:1.5px solid var(--border);font-family:'Quicksand',sans-serif;font-size:12px;font-weight:600;color:var(--text)">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:11px;color:var(--muted);font-weight:600;width:130px;flex-shrink:0">Condominio</span>
+        <input type="text" value="480,00" oninput="calcAjuste()" id="aj-cond" style="flex:1;padding:7px 9px;border:1.5px solid var(--border);font-family:'Quicksand',sans-serif;font-size:12px;font-weight:600;color:var(--text)">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:11px;color:var(--muted);font-weight:600;width:130px;flex-shrink:0">IPTU mensal</span>
+        <input type="text" value="95,00" oninput="calcAjuste()" id="aj-iptu" style="flex:1;padding:7px 9px;border:1.5px solid var(--border);font-family:'Quicksand',sans-serif;font-size:12px;font-weight:600;color:var(--text)">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:11px;color:var(--muted);font-weight:600;width:130px;flex-shrink:0">Seguro incendio</span>
+        <input type="text" value="28,00" oninput="calcAjuste()" id="aj-seguro" style="flex:1;padding:7px 9px;border:1.5px solid var(--border);font-family:'Quicksand',sans-serif;font-size:12px;font-weight:600;color:var(--text)">
+      </div>
+    </div>
+    <div style="background:var(--navy);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7)">Novo total do boleto</span>
+      <span style="font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:#fff" id="aj-total">R$ 3.103,00</span>
+    </div>
+    <div style="background:var(--off2);border:1px solid var(--border);padding:10px 12px;margin-bottom:12px;font-size:11px;color:var(--text);font-weight:500;line-height:1.5" id="aj-resumo">
+      Valor atual: <strong>R$ 3.103,00</strong> → Novo valor: <strong id="aj-resumo-novo">R$ 3.103,00</strong><br>
+      <span id="aj-resumo-dif" style="color:var(--muted)">Sem alteracao</span>
+    </div>
+    <div class="fg"><label>Motivo</label><select><option>Selecione...</option><option>Desconto por benfeitoria do inquilino</option><option>Acordo amigavel</option><option>Correcao de erro</option><option>Atualizacao de encargos</option><option>Outro</option></select></div>
+    <div class="fg"><label>Observacao (opcional)</label><textarea placeholder="Detalhe o motivo..."></textarea></div>
+    <div class="fh warn"><strong>Atencao</strong>Confira os valores antes de confirmar. O inquilino sera notificado sobre a alteracao e voce recebera copia.</div>
+  </div>
+  <div class="df"><button class="btn-p" onclick="alert('Ajuste registrado. Novo boleto sera emitido e inquilino notificado. Voce recebe copia.');closeDrawer('d-ajuste-boleto')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Confirmar ajuste</button></div>
+</div>
+
+<!-- REAJUSTE ANUAL (sem preview comunicado, com opção não aplicar) -->
+<div class="drawer" id="d-reajuste">
+  <div class="dh"><div><div class="dh-title">Reajuste anual — Janeiro 2026</div><div class="dh-sub">Aplicado automaticamente conforme previsto em contrato</div></div><button class="dc" onclick="closeDrawer('d-reajuste')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div style="background:var(--off2);border:1px solid var(--border);padding:14px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:10px">Calculo do reajuste — IGP-M</div>
+      <div class="b-row"><span class="b-lbl">Variacao Jan/2025–Jan/2026</span><span class="b-val">+4,8%</span></div>
+      <div class="b-row"><span class="b-lbl">Aluguel atual</span><span class="b-val">R$ 2.500,00</span></div>
+      <div class="b-row"><span class="b-lbl">Acrescimo</span><span class="b-val" style="color:var(--success)">+ R$ 120,00</span></div>
+      <div class="b-row" style="border-top:2px solid var(--border);margin-top:4px;padding-top:8px"><span class="b-lbl" style="font-weight:700;color:var(--navy)">Novo aluguel a partir de fev/2026</span><span class="b-val" style="font-family:'Nunito',sans-serif;font-size:16px;color:var(--navy)">R$ 2.620,00</span></div>
+    </div>
+    <div style="background:var(--success-bg);border:1px solid var(--success-border);padding:12px;margin-bottom:16px">
+      <div style="font-size:12px;font-weight:700;color:var(--success);margin-bottom:4px">O reajuste sera aplicado automaticamente</div>
+      <div style="font-size:11px;color:var(--success);font-weight:500;line-height:1.5">A partir de fevereiro o boleto ja refletira R$ 2.620,00. O inquilino sera notificado por email com antecedencia. Voce recebe copia.</div>
+    </div>
+    <div style="height:1px;background:var(--border);margin-bottom:14px"></div>
+    <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px">Tem um acordo diferente com o inquilino?</div>
+    <div style="font-size:11px;color:var(--muted);font-weight:500;line-height:1.5;margin-bottom:12px">Se voce combinou um valor diferente ou decidiu nao reajustar desta vez, registre aqui para que a Moben nao aplique o reajuste automatico.</div>
+    <div id="raj-nao-form" style="display:none;margin-bottom:12px">
+      <div class="fg"><label>Motivo para nao reajustar</label><select><option>Acordo amigavel com o inquilino</option><option>Negociacao de valor em andamento</option><option>Outro</option></select></div>
+      <div class="fg"><label>Observacao</label><textarea placeholder="Detalhe o acordo..."></textarea></div>
+      <div class="fh info">O indice de +4,8% sera preservado e acumulara para o proximo aniversario do contrato.</div>
+    </div>
+    <button id="raj-btn-optout" onclick="toggleOptout()" style="width:100%;padding:10px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:var(--muted);background:none;border:1.5px solid var(--border);cursor:pointer;text-align:left">Nao aplicar o reajuste desta vez →</button>
+  </div>
+  <div class="df" id="raj-footer">
+    <div style="font-size:11px;color:var(--muted);font-weight:500;text-align:center;padding:8px 0">Nenhuma acao necessaria — o reajuste sera aplicado automaticamente.</div>
+    <button class="btn-p" id="raj-btn-confirmar-nao" style="display:none" onclick="alert('Registrado. O reajuste de janeiro nao sera aplicado. Indice acumulado preservado.');closeDrawer('d-reajuste')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Confirmar — nao reajustar desta vez</button>
+    <button class="btn-s" onclick="closeDrawer('d-reajuste')">Fechar</button>
+  </div>
+</div>
+
+<!-- NEGOCIACAO -->
+<div class="drawer" id="d-negociacao">
+  <div class="dh"><div><div class="dh-title">Negociacao de valor</div><div class="dh-sub">Acordo entre proprietario e inquilino — altera o aluguel base permanentemente</div></div><button class="dc" onclick="closeDrawer('d-negociacao')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div style="background:var(--off2);border:1px solid var(--border);padding:12px;margin-bottom:14px;font-size:11px;color:var(--text);font-weight:500;line-height:1.6">
+      <strong style="display:block;margin-bottom:4px;color:var(--navy)">Diferente do ajuste de boleto</strong>
+      A negociacao altera o <strong>valor base do aluguel</strong> por acordo formal entre as partes — como uma reducao por mercado ou renovacao antecipada. Nao afeta condominio, IPTU e seguro. O novo valor vale para todos os boletos futuros ate um novo reajuste ou negociacao.
+    </div>
+    <div class="fgr2">
+      <div class="fg"><label>Aluguel atual</label><input type="text" value="R$ 2.500,00" readonly style="background:var(--off);color:var(--muted)"></div>
+      <div class="fg"><label>Novo aluguel acordado (R$)</label><input type="text" placeholder="0,00" oninput="calcNegociacao()"></div>
+    </div>
+    <div class="fg"><label>Vigencia a partir de</label><select><option>Maio 2026</option><option>Junho 2026</option><option>Julho 2026</option></select></div>
+    <div class="fg"><label>Duracao do acordo</label><select><option>Permanente — ate novo reajuste ou negociacao</option><option>Temporario — 3 meses</option><option>Temporario — 6 meses</option><option>Temporario — 12 meses</option></select></div>
+    <div class="fg"><label>Motivo</label><select><option>Selecione...</option><option>Adequacao ao mercado atual</option><option>Renovacao antecipada do contrato</option><option>Acordo de longo prazo</option><option>Outro</option></select></div>
+    <div class="fg"><label>Observacao</label><textarea placeholder="Descreva o contexto do acordo..."></textarea></div>
+    <div id="neg-resumo" style="background:var(--navy);padding:12px 14px;margin-bottom:12px;display:none">
+      <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:4px">Impacto no boleto a partir de Mai/2026</div>
+      <div style="display:flex;justify-content:space-between">
+        <span style="font-size:12px;color:rgba(255,255,255,.7);font-weight:600">Aluguel negociado</span>
+        <span style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:#fff" id="neg-novo-val">—</span>
+      </div>
+    </div>
+    <div class="fh warn"><strong>Registro formal</strong>A Moben registra o acordo e notifica o inquilino. Ambas as partes recebem confirmacao por email.</div>
+  </div>
+  <div class="df"><button class="btn-p" onclick="alert('Acordo registrado. Inquilino e voce serao notificados. O novo valor entrara em vigor no mes selecionado.');closeDrawer('d-negociacao')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Registrar acordo</button></div>
+</div>
+
+<!-- REENVIO COM NOVA DATA -->
+<div class="drawer" id="d-reenvio">
+  <div class="dh"><div><div class="dh-title">Reenviar boleto</div><div class="dh-sub">Defina nova data de vencimento e escolha se aplica multa</div></div><button class="dc" onclick="closeDrawer('d-reenvio')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div class="fg"><label>Boleto</label><select><option>Abril 2026 — R$ 3.103,00 · Venceu 10/04</option></select></div>
+    <div class="fg"><label>Nova data de vencimento</label><input type="date" id="reenvio-data" oninput="calcReenvioMulta()"></div>
+    <div class="fg"><label>Enviar para (email)</label><input type="email" value="maria.santos@email.com"></div>
+    <!-- Toggle multa -->
+    <div style="border:1px solid var(--border);padding:12px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-size:12px;font-weight:700;color:var(--navy)">Aplicar multa e juros apos nova data?</div>
+        <div style="display:flex;gap:0;border:1px solid var(--border)">
+          <button id="reenvio-sim" onclick="setReenvioMulta(true)" style="padding:5px 14px;font-family:'Quicksand',sans-serif;font-size:11px;font-weight:700;border:none;cursor:pointer;background:var(--navy);color:#fff">Sim</button>
+          <button id="reenvio-nao" onclick="setReenvioMulta(false)" style="padding:5px 14px;font-family:'Quicksand',sans-serif;font-size:11px;font-weight:700;border:none;cursor:pointer;background:var(--white);color:var(--muted)">Nao</button>
+        </div>
+      </div>
+      <div id="reenvio-multa-info" style="font-size:11px;color:var(--muted);font-weight:500;line-height:1.5">Se o pagamento nao for efetuado ate a nova data, multa (2%) e juros serao calculados automaticamente.</div>
+    </div>
+    <!-- Calculo estimado se multa ativa e data passada -->
+    <div id="reenvio-calc" style="display:none;background:var(--off2);border:1px solid var(--border);padding:12px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Valores atuais com multa e juros</div>
+      <div class="b-row"><span class="b-lbl">Valor original</span><span class="b-val">R$ 3.103,00</span></div>
+      <div class="b-row"><span class="b-lbl" style="color:var(--danger)">Multa (2%)</span><span class="b-val" style="color:var(--danger)">+ R$ 62,06</span></div>
+      <div class="b-row"><span class="b-lbl" style="color:var(--danger)">Juros (5 dias)</span><span class="b-val" style="color:var(--danger)">+ R$ 5,12</span></div>
+      <div class="b-row total"><span class="b-lbl">Total atual</span><span class="b-val" style="font-family:'Nunito',sans-serif;font-size:14px">R$ 3.170,18</span></div>
+    </div>
+  </div>
+  <div class="df"><button class="btn-p" onclick="alert('Boleto reenviado com nova data. Voce recebeu confirmacao.');closeDrawer('d-reenvio')">Reenviar boleto</button></div>
+</div>
+
+<!-- SIMULACAO DE ENCERRAMENTO (com caução) -->
+<div class="drawer" id="d-simulacao">
+  <div class="dh"><div><div class="dh-title">Simulacao de encerramento</div><div class="dh-sub">Calcule os valores antes de decidir — sem compromisso</div></div><button class="dc" onclick="closeDrawer('d-simulacao')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div class="fgr2">
+      <div class="fg"><label>Data de encerramento</label><input type="date" value="2026-04-30" oninput="calcSimulacao()"></div>
+      <div class="fg"><label>Quem encerra</label><select oninput="calcSimulacao()"><option>Inquilino</option><option>Proprietario</option><option>Acordo mutuo</option></select></div>
+    </div>
+    <!-- Campos por item -->
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:4px 0 10px">Composicao do encerramento</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+      <div style="background:var(--off);border:1px solid var(--border);padding:10px 12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+          <div style="font-size:12px;font-weight:700;color:var(--navy)">Aluguel proporcional</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:var(--navy)">R$ 0,00</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);font-weight:500">Encerramento no dia 30 — boleto do mes ja quitado</div>
+      </div>
+      <div style="background:var(--off);border:1px solid var(--border);padding:10px 12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+          <div style="font-size:12px;font-weight:700;color:var(--navy)">Multa por rescisao antecipada</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:var(--danger)">R$ 7.500,00</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);font-weight:500">3 alugueis (mes 4 de 24) · clausula 8 do contrato</div>
+      </div>
+      <!-- Caução — exibe quando garantia = caução -->
+      <div style="background:var(--success-bg);border:1px solid var(--success-border);padding:10px 12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+          <div style="font-size:12px;font-weight:700;color:var(--success)">Devolver caucao</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:var(--success)">- R$ 7.500,00</div>
+        </div>
+        <div style="font-size:10px;color:var(--success);font-weight:500">Caucao de 3 meses depositado em 01/2025 — a devolver se sem pendencias</div>
+        <div class="fgr2" style="margin-top:8px">
+          <div class="fg"><label style="color:var(--muted)">Valor depositado (R$)</label><input type="text" value="7.500,00"></div>
+          <div class="fg"><label style="color:var(--muted)">Deducoes (danos, etc)</label><input type="text" placeholder="0,00"></div>
+        </div>
+      </div>
+      <!-- Valores negociados -->
+      <div style="background:var(--off);border:1px solid var(--border);padding:10px 12px">
+        <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px">Outros valores negociados</div>
+        <div class="fgr2">
+          <div class="fg"><label>Descricao</label><input type="text" placeholder="Ex: Pinturas acordadas"></div>
+          <div class="fg"><label>Valor (R$) — negativo se desconto</label><input type="text" placeholder="0,00"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Total -->
+    <div style="background:var(--navy);padding:14px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.4);margin-bottom:6px">Saldo do encerramento</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.7)">A receber do inquilino</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:#fff">R$ 0,00</div>
+      </div>
+      <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:4px">Multa R$7.500 − Caucao R$7.500 = saldo zero · sem pendencias financeiras</div>
+    </div>
+    <div class="fh info"><strong>Apenas simulacao</strong>Valores exatos dependem da data real e de pendencias confirmadas. Para formalizar, use "Solicitar distrato".</div>
+  </div>
+  <div class="df">
+    <button class="btn-p" onclick="openDrawer('d-distrato');closeDrawer('d-simulacao')">Seguir para distrato</button>
+    <button class="btn-s" onclick="closeDrawer('d-simulacao')">Fechar simulacao</button>
+  </div>
+</div>
+
+<!-- CARNE LEAO / IRPF -->
+<div class="drawer" id="d-irpf">
+  <div class="dh"><div><div class="dh-title">Carne-Leao / IRPF</div><div class="dh-sub">Facilitamos o calculo mensal e o relatorio para declaracao</div></div><button class="dc" onclick="closeDrawer('d-irpf')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div style="background:var(--off2);border:1px solid var(--border);padding:14px;margin-bottom:16px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:8px">Como funciona</div>
+      <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.6">Rendimentos de aluguel recebidos de pessoa fisica devem ser declarados mensalmente pelo Carne-Leao. A Moben ja tem todos os dados — valor recebido, data, CPF do inquilino — e facilita esse calculo. O recolhimento e feito pelo proprietario no portal e-CAC da Receita Federal.</div>
+    </div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px">Calculos mensais — 2026</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:0 8px">
+        <span>Mes</span><span>Recebido</span><span>Aliquota</span><span>DARF estimado</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;background:var(--off);border:1px solid var(--border);padding:8px;font-size:11px;font-weight:600">
+        <span style="color:var(--navy)">Jan/26</span><span>R$ 2.500</span><span style="color:var(--muted)">*</span><span style="color:var(--muted)">Informar</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;background:var(--off);border:1px solid var(--border);padding:8px;font-size:11px;font-weight:600">
+        <span style="color:var(--navy)">Fev/26</span><span>R$ 2.500</span><span style="color:var(--muted)">*</span><span style="color:var(--muted)">Informar</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;background:var(--off);border:1px solid var(--border);padding:8px;font-size:11px;font-weight:600">
+        <span style="color:var(--navy)">Mar/26</span><span>R$ 2.500</span><span style="color:var(--muted)">*</span><span style="color:var(--muted)">Informar</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;background:var(--success-bg);border:1px solid var(--success-border);padding:8px;font-size:11px;font-weight:600">
+        <span style="color:var(--navy)">Abr/26</span><span>R$ 2.500</span><span>15%</span><span style="color:var(--success);font-weight:700">R$ 175,13</span>
+      </div>
+    </div>
+    <div class="fg"><label>Sua aliquota do Carne-Leao (sobre rendimentos totais)</label><select><option>Isento — ate R$ 2.259,20</option><option>7,5% — ate R$ 2.826,65</option><option>15% — ate R$ 3.751,05</option><option>22,5% — ate R$ 4.664,68</option><option>27,5% — acima de R$ 4.664,68</option></select></div>
+    <div class="fh info"><strong>Como usar</strong>A aliquota depende da sua renda total, nao so do aluguel. Consulte seu contador ou use o simulador da Receita Federal para confirmar. O DARF estimado acima considera apenas a renda de aluguel deste imovel.</div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">Relatorio anual para declaracao</div>
+      <div style="font-size:12px;color:var(--muted);font-weight:500;margin-bottom:10px">Exportar todos os recebimentos do ano com CPF do inquilino, datas e valores — pronto para informar na ficha de Rendimentos Tributaveis da declaracao anual.</div>
+    </div>
+  </div>
+  <div class="df">
+    <button class="btn-p" onclick="alert('Relatorio 2025 gerado — download iniciado.');closeDrawer('d-irpf')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Baixar relatorio 2025 (IR)</button>
+    <button class="btn-s" onclick="closeDrawer('d-irpf')">Fechar</button>
+  </div>
+</div>
+
+<!-- DISTRATO -->
+<div class="drawer" id="d-distrato">
+  <div class="dh"><div><div class="dh-title">Solicitar distrato</div><div class="dh-sub">Encerramento antecipado por acordo entre as partes</div></div><button class="dc" onclick="closeDrawer('d-distrato')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div class="fg"><label>Data de encerramento</label><input type="date"></div>
+    <div class="fg"><label>Quem solicitou</label><select><option>Inquilino</option><option>Proprietario</option><option>Acordo mutuo</option></select></div>
+    <div class="fg"><label>Condicoes acordadas</label><textarea placeholder="Multa, prazos, pendencias financeiras..."></textarea></div>
+    <div style="background:var(--off2);border:1px solid var(--border);padding:12px;margin-bottom:12px;font-size:12px;font-weight:500;line-height:1.5">
+      <strong style="display:block;margin-bottom:4px;color:var(--navy)">Multa estimada</strong>
+      Contrato no mes 4 de 24 · 3 alugueis = <strong>R$ 7.500,00</strong><br>(valor exato definido pelas condicoes acordadas)
+    </div>
+    <div class="fh warn"><strong>Proximo passo</strong>Apos confirmar, a Moben prepara o documento formal de distrato para sua aprovacao antes de enviar ao inquilino. Voce recebe copia de tudo.</div>
+  </div>
+  <div class="df">
+    <button class="btn-p" onclick="alert('Solicitacao registrada. Documento de distrato sera preparado em ate 24h. Voce recebera notificacao.');closeDrawer('d-distrato')">Solicitar distrato</button>
+    <button class="btn-s" onclick="closeDrawer('d-distrato')">Cancelar</button>
+  </div>
+</div>
+
+<!-- RENOVAR / ENCERRAR -->
+<div class="drawer" id="d-renovar">
+  <div class="dh"><div><div class="dh-title">Renovar ou encerrar contrato</div><div class="dh-sub">Contrato vence em 31/12/2026 · Decida com pelo menos 30 dias de antecedencia</div></div><button class="dc" onclick="closeDrawer('d-renovar')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db" id="renovar-menu">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="border:1.5px solid var(--border);padding:14px;cursor:pointer;background:var(--white)" onclick="renovarCaminho('novo-contrato')">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px">Renovar — novo contrato</div>
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div style="font-size:11px;color:var(--muted);font-weight:500;line-height:1.5">Cria novo contrato com dados atuais pre-preenchidos. Voce revisa valores e clausulas antes de assinar. Garante nova multa rescisoria.</div>
+      </div>
+      <div style="border:1.5px solid var(--border);padding:14px;cursor:pointer;background:var(--white)" onclick="renovarCaminho('encerrar')">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px">Encerrar ao vencer</div>
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div style="font-size:11px;color:var(--muted);font-weight:500;line-height:1.5">A Moben prepara a comunicacao formal ao inquilino com prazo de desocupacao (minimo 30 dias). Voce aprova antes de enviar.</div>
+      </div>
+      <div style="border:1.5px solid var(--border);padding:14px;cursor:pointer;background:var(--white)" onclick="renovarCaminho('automatica')">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px">Renovacao automatica</div>
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div style="font-size:11px;color:var(--muted);font-weight:500;line-height:1.5">O contrato ja tem clausula de renovacao automatica. Cobrancas continuam sem interrupcao. Atencao: sem nova multa rescisoria.</div>
+      </div>
+    </div>
+  </div>
+  <!-- Sub-tela: Novo contrato -->
+  <div class="db" id="renovar-novo-contrato" style="display:none">
+    <button onclick="renovarCaminho('menu')" style="font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;gap:4px;padding:0"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--blue);fill:none;stroke-width:2.5"><polyline points="15 18 9 12 15 6"/></svg> Voltar</button>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px">Dados do novo contrato</div>
+    <div class="fgr2">
+      <div class="fg"><label>Inicio</label><input type="date" value="2027-01-01"></div>
+      <div class="fg"><label>Termino</label><input type="date" value="2028-12-31"></div>
+    </div>
+    <div class="fgr2">
+      <div class="fg"><label>Novo aluguel (R$)</label><input type="text" value="2.620,00"></div>
+      <div class="fg"><label>Indice de reajuste</label><select><option>IGP-M</option><option>IPCA</option><option>IGPM+percentual</option></select></div>
+    </div>
+    <div class="fg"><label>Vencimento do boleto</label><select><option>Todo dia 10</option><option>Todo dia 5</option><option>Todo dia 15</option></select></div>
+    <div class="fg"><label>Garantia</label><select><option>Sem garantia</option><option>Caucao</option><option>Fiador</option><option>Seguro fianca</option></select></div>
+    <div class="fh info" style="margin-top:4px">O novo contrato sera pre-preenchido com estes dados. Voce e o inquilino revisam e assinam digitalmente antes de entrar em vigor.</div>
+  </div>
+  <!-- Sub-tela: Encerrar -->
+  <div class="db" id="renovar-encerrar" style="display:none">
+    <button onclick="renovarCaminho('menu')" style="font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;gap:4px;padding:0"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--blue);fill:none;stroke-width:2.5"><polyline points="15 18 9 12 15 6"/></svg> Voltar</button>
+    <div style="background:var(--off2);border:1px solid var(--border);padding:12px;margin-bottom:14px;font-size:12px;font-weight:500;line-height:1.6">Prazo minimo de aviso ao inquilino: <strong>30 dias</strong>. Contrato vence em 31/12/2026. Ultimo dia para notificar: <strong>01/12/2026</strong>.</div>
+    <div class="fg"><label>Data de desocupacao</label><input type="date" value="2026-12-31"></div>
+    <div class="fg"><label>Motivo (opcional)</label><textarea placeholder="Ex: imovel para uso proprio, reforma..."></textarea></div>
+    <div style="background:var(--off);border:1px solid var(--border);padding:12px;margin-bottom:12px;font-size:11px;font-weight:500;color:var(--text);line-height:1.6">A Moben preparara a comunicacao formal. Voce revisa e aprova antes de enviar ao inquilino. Voce recebe copia de tudo.</div>
+  </div>
+  <!-- Sub-tela: Automatica -->
+  <div class="db" id="renovar-automatica" style="display:none">
+    <button onclick="renovarCaminho('menu')" style="font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;gap:4px;padding:0"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--blue);fill:none;stroke-width:2.5"><polyline points="15 18 9 12 15 6"/></svg> Voltar</button>
+    <div style="background:var(--success-bg);border:1px solid var(--success-border);padding:14px;margin-bottom:14px">
+      <div style="font-size:12px;font-weight:700;color:var(--success);margin-bottom:6px">Renovacao automatica ativa</div>
+      <div style="font-size:11px;color:var(--success);font-weight:500;line-height:1.5">O contrato sera renovado automaticamente em 01/01/2027 pelo mesmo prazo e nas mesmas condicoes. Cobrancas continuam sem interrupcao.</div>
+    </div>
+    <div class="fh warn"><strong>Atencao</strong>Contratos renovados automaticamente nao geram nova multa rescisoria. Para garantir protecao, considere assinar um novo contrato.</div>
+  </div>
+  <div class="df" id="renovar-footer">
+    <button class="btn-p" id="renovar-btn-acao" style="display:none" onclick="alert('Solicitacao registrada. A Moben preparara os documentos necessarios.');closeDrawer('d-renovar')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Confirmar e preparar documentos</button>
+    <button class="btn-p" id="renovar-btn-automatica" style="display:none" onclick="alert('Renovacao automatica confirmada. Nenhuma acao adicional necessaria.');closeDrawer('d-renovar')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Entendido — manter renovacao automatica</button>
+  </div>
+</div>
+
+<!-- DECLARACAO DE QUITACAO E ENTREGA DE CHAVES -->
+<div class="drawer" id="d-quitacao">
+  <div class="dh"><div><div class="dh-title">Declaracao de quitacao</div><div class="dh-sub">Inclui termo de entrega de chaves — documento completo de encerramento</div></div><button class="dc" onclick="closeDrawer('d-quitacao')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div style="background:var(--off2);border:1px solid var(--border);padding:12px;margin-bottom:14px;font-size:12px;font-weight:500;line-height:1.6">
+      O documento gerado formaliza que <strong>Maria Santos</strong> nao possui debitos pendentes referentes ao contrato de locacao do imovel na Rua Augusta, 1420 · Apto 52, e registra a entrega das chaves ao proprietario.
+    </div>
+    <div class="fg"><label>Data de encerramento e entrega das chaves</label><input type="date"></div>
+    <div class="fg"><label>Condicao financeira</label><select><option>Sem pendencias — quitacao total</option><option>Pendencias pendentes — nao gerar agora</option></select></div>
+    <div class="fg"><label>Estado do imovel na entrega</label><select><option>Conforme vistoria — sem pendencias</option><option>Com ressalvas (descrever abaixo)</option></select></div>
+    <div class="fg"><label>Observacoes (opcional)</label><textarea placeholder="Ressalvas, acordos sobre reparos, etc."></textarea></div>
+    <div style="background:var(--off);border:1px solid var(--border);padding:12px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px">O documento gerado contera</div>
+      <div style="font-size:11px;color:var(--text);font-weight:500;line-height:1.7">✓ Quitacao de todos os debitos do contrato de locacao<br>✓ Termo de entrega e recebimento das chaves<br>✓ Data e condicoes de encerramento<br>✓ Assinaturas digitais das partes</div>
+    </div>
+    <div class="fh info"><strong>Por que "quitacao" e nao so "entrega de chaves"?</strong>O termo de quitacao abrange tanto a devolucao do imovel quanto a liquidacao de todas as obrigacoes financeiras — protegendo proprietario e inquilino. A entrega de chaves e o ato fisico que encerra a posse. O documento unificado e a pratica mais segura e reconhecida no mercado brasileiro.</div>
+  </div>
+  <div class="df"><button class="btn-p" onclick="alert('Documento gerado. Enviado ao inquilino para assinatura digital. Copia para voce.');closeDrawer('d-quitacao')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Gerar e enviar para assinatura</button></div>
+</div>
+
+<!-- NOTIFICACAO EXTRAJUDICIAL -->
+<div class="drawer" id="d-notif-extraju">
+  <div class="dh"><div><div class="dh-title">Notificacao extrajudicial</div><div class="dh-sub">Enviada em seu nome — voce e o remetente</div></div><button class="dc" onclick="closeDrawer('d-notif-extraju')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div style="background:var(--warning-bg);border:1px solid var(--warning-border);padding:12px;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--warning);margin-bottom:4px">Situacao atual</div>
+      <div style="font-size:11px;color:var(--warning);font-weight:500;line-height:1.5">Boleto de abril vencido ha 5 dias · Multa e juros aplicados · 2 lembretes automaticos enviados</div>
+    </div>
+    <div style="background:var(--off2);border:1px solid var(--border);padding:12px;margin-bottom:14px;font-size:11px;color:var(--text);font-weight:500;line-height:1.6">
+      Conforme clausula 12.1, a notificacao e enviada <strong>em nome do proprietario</strong> e sob seu comando. O remetente que aparece para o inquilino e voce — nao a Moben. Tem valor juridico e e o primeiro passo para eventual acao de despejo.
+    </div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Voce aparece como remetente</div>
+    <div class="fgr2" style="margin-bottom:14px">
+      <div class="fg"><label>Seu nome (remetente)</label><input type="text" value="Joao Silva"></div>
+      <div class="fg"><label>Seu email (remetente)</label><input type="email" value="joao.silva@email.com"></div>
+    </div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Notificacao preparada</div>
+    <div class="preview-box">
+      <div class="pb-header">De: Joao Silva &lt;joao.silva@email.com&gt; · Para: Maria Santos</div>
+      <div class="pb-body">Sr(a). Maria Santos,
+
+Notificamos V.Sa. do debito em aberto referente ao contrato de locacao do imovel na Rua Augusta, 1420 · Apto 52.
+
+Valor original: R$ 3.103,00 (vencimento 10/04/2026)
+Multa (2%): R$ 62,06 · Juros acumulados: R$ 5,12
+Total atualizado: R$ 3.170,18
+
+Requeremos quitacao no prazo de 5 dias, sob pena das medidas cabíveis previstas em contrato e em lei.
+
+Joao Silva — Proprietario</div>
+    </div>
+    <div class="fh info"><strong>Voce recebe copia</strong>Uma copia da notificacao sera enviada para o seu email apos o envio ao inquilino.</div>
+  </div>
+  <div class="df">
+    <button class="btn-p" onclick="alert('Notificacao enviada em seu nome. Voce recebeu copia por email.');closeDrawer('d-notif-extraju')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Enviar notificacao</button>
+    <button class="btn-s" onclick="closeDrawer('d-notif-extraju')">Revisar depois</button>
+  </div>
+</div>
+
+<!-- ATUALIZAR CONTATOS -->
+<div class="drawer" id="d-contato">
+  <div class="dh"><div><div class="dh-title">Atualizar contatos</div><div class="dh-sub">Proprietario, procurador/administrador e inquilino</div></div><button class="dc" onclick="closeDrawer('d-contato')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Proprietario — Joao Silva</div>
+    <div class="fgr2">
+      <div class="fg"><label>Email</label><input type="email" value="joao.silva@email.com"></div>
+      <div class="fg"><label>WhatsApp</label><input type="tel" value="(11) 99999-8888"></div>
+    </div>
+    <div style="height:1px;background:var(--border);margin:4px 0 14px"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Procurador / Administrador</div>
+      <button onclick="toggleProcurador()" id="btn-procurador" style="font-size:10px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer">+ Adicionar</button>
+    </div>
+    <div id="procurador-form" style="display:none;margin-bottom:14px">
+      <div class="fg"><label>Nome</label><input type="text" placeholder="Nome completo"></div>
+      <div class="fgr2">
+        <div class="fg"><label>Email</label><input type="email" placeholder="email@exemplo.com"></div>
+        <div class="fg"><label>WhatsApp</label><input type="tel" placeholder="(11) 99999-9999"></div>
+      </div>
+      <div class="fg"><label>Relacao</label><select><option>Procurador legal</option><option>Administrador do imovel</option><option>Familiar autorizado</option></select></div>
+      <div class="fh info" style="margin-top:4px">O procurador recebe copia de todas as comunicacoes e pode ser incluido como representante em documentos formais.</div>
+    </div>
+    <div style="height:1px;background:var(--border);margin:4px 0 14px"></div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Inquilino — Maria Santos</div>
+    <div class="fgr2">
+      <div class="fg"><label>Email (recebe boleto)</label><input type="email" value="maria.santos@email.com"></div>
+      <div class="fg"><label>WhatsApp</label><input type="tel" value="(11) 98765-4321"></div>
+    </div>
+    <div class="fh info" style="margin-top:4px">Os novos contatos passam a receber boletos e comunicados a partir do proximo mes.</div>
+  </div>
+  <div class="df"><button class="btn-p" onclick="alert('Contatos atualizados.');closeDrawer('d-contato')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Salvar alteracoes</button></div>
+</div>
+
+<!-- CONTA BANCARIA DO IMOVEL -->
+<div class="drawer" id="d-conta-bancaria">
+  <div class="dh"><div><div class="dh-title">Conta bancaria do imovel</div><div class="dh-sub">Conta vinculada a este imovel — cadastrada no contrato</div></div><button class="dc" onclick="closeDrawer('d-conta-bancaria')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px">Conta ativa para este imovel</div>
+    <!-- Conta existente cadastrada no contrato -->
+    <div style="border:1.5px solid var(--blue);background:var(--off2);padding:14px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--navy)">Banco Itau</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Ag. 0001 · CC 12345-6 · Joao Silva · CPF •••.456.789-••</div>
+        </div>
+        <span style="font-size:10px;font-weight:700;color:var(--success);background:var(--success-bg);border:1px solid var(--success-border);padding:2px 8px">Ativa</span>
+      </div>
+      <div style="font-size:10px;color:var(--blue);font-weight:600">Conta especifica deste imovel · cadastrada no contrato</div>
+    </div>
+    <!-- Opcao de usar conta do perfil -->
+    <div style="border:1.5px solid var(--border);background:var(--white);padding:14px;margin-bottom:14px;cursor:pointer" onclick="alert('Usar conta padrao do perfil')">
+      <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px">Usar conta padrao do perfil</div>
+      <div style="font-size:11px;color:var(--muted);font-weight:500">Bradesco · Ag. 0023 · CC 98765-4 · Joao Silva</div>
+    </div>
+    <!-- Alterar -->
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px">Alterar para outra conta</div>
+    <div class="fg"><label>Banco</label><select><option>Selecione...</option><option>Itau</option><option>Bradesco</option><option>Santander</option><option>Banco do Brasil</option><option>Caixa</option><option>Nubank</option><option>Inter</option><option>Outro</option></select></div>
+    <div class="fgr2">
+      <div class="fg"><label>Agencia</label><input type="text" placeholder="0000"></div>
+      <div class="fg"><label>Conta</label><input type="text" placeholder="00000-0"></div>
+    </div>
+    <div class="fgr2">
+      <div class="fg"><label>Tipo</label><select><option>Corrente</option><option>Poupanca</option></select></div>
+      <div class="fg"><label>CPF/CNPJ do titular</label><input type="text" placeholder="000.000.000-00"></div>
+    </div>
+    <div class="fh warn"><strong>Validacao antes de aplicar</strong>A alteracao sera verificada antes de entrar em vigor. A proxima transferencia ja usara a nova conta.</div>
+  </div>
+  <div class="df"><button class="btn-p" onclick="alert('Alteracao solicitada. Validacao em andamento.');closeDrawer('d-conta-bancaria')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Solicitar alteracao</button></div>
+</div>
+
+
+<!-- DIVISAO ENTRE PROPRIETARIOS -->
+<div class="drawer" id="d-divisao">
+  <div class="dh"><div><div class="dh-title">Divisao entre proprietarios</div><div class="dh-sub">Dividir o recebimento em percentual para ate 2 contas</div></div><button class="dc" onclick="closeDrawer('d-divisao')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div style="background:var(--off2);border:1px solid var(--border);padding:12px;margin-bottom:14px;font-size:12px;font-weight:500;line-height:1.5">Valor de referencia: <strong>R$ 2.500,00</strong> (aluguel liquido apos taxas Moben)</div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Proprietario 1</div>
+    <div class="fgr2">
+      <div class="fg"><label>Nome</label><input type="text" value="Joao Silva"></div>
+      <div class="fg"><label>Percentual (%)</label><input type="text" placeholder="50"></div>
+    </div>
+    <div class="fg"><label>Conta bancaria</label><select><option>Conta padrao do perfil — Itau ••••5-6</option><option>Outra conta...</option></select></div>
+    <div style="height:1px;background:var(--border);margin:4px 0 14px"></div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Proprietario 2</div>
+    <div class="fgr2">
+      <div class="fg"><label>Nome</label><input type="text" placeholder="Nome completo"></div>
+      <div class="fg"><label>Percentual (%)</label><input type="text" placeholder="50"></div>
+    </div>
+    <div class="fgr2">
+      <div class="fg"><label>Banco</label><select><option>Selecione...</option><option>Itau</option><option>Bradesco</option><option>Nubank</option><option>Inter</option></select></div>
+      <div class="fg"><label>Conta</label><input type="text" placeholder="00000-0"></div>
+    </div>
+    <div class="fh info">Os dois percentuais devem somar 100%. As transferencias serao feitas separadamente para cada conta no mesmo dia.</div>
+  </div>
+  <div class="df"><button class="btn-p" onclick="alert('Divisao configurada.');closeDrawer('d-divisao')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Salvar divisao</button></div>
+</div>
+
+<!-- RECIBOS -->
+<div class="drawer" id="d-recibo">
+  <div class="dh"><div><div class="dh-title">Recibos de aluguel</div><div class="dh-sub">Gerados automaticamente apos cada pagamento confirmado</div></div><button class="dc" onclick="closeDrawer('d-recibo')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div class="fh info" style="margin-bottom:14px"><strong>Automatico</strong>A Moben gera e envia o recibo ao inquilino automaticamente apos cada pagamento compensado, em nome do proprietario. Voce recebe copia por email.</div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px">Historico de recibos</div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--off);border:1px solid var(--border)"><div><div style="font-size:12px;font-weight:700;color:var(--navy)">Recibo — Marco 2026</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Pago em 08/03 · R$ 3.103,00 · Enviado automaticamente</div></div><button onclick="alert('Download do recibo')" style="font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer">Baixar</button></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--off);border:1px solid var(--border)"><div><div style="font-size:12px;font-weight:700;color:var(--navy)">Recibo — Fevereiro 2026</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Pago em 09/02 · R$ 3.103,00 · Enviado automaticamente</div></div><button onclick="alert('Download do recibo')" style="font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer">Baixar</button></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--off);border:1px solid var(--border)"><div><div style="font-size:12px;font-weight:700;color:var(--navy)">Recibo — Janeiro 2026</div><div style="font-size:10px;color:var(--muted);margin-top:2px">Pago em 07/01 · R$ 3.103,00 · Enviado automaticamente</div></div><button onclick="alert('Download do recibo')" style="font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer">Baixar</button></div>
+    </div>
+  </div>
+  <div class="df"><button class="btn-s" onclick="alert('Reenviar recibo mais recente ao inquilino');closeDrawer('d-recibo')">Reenviar ultimo recibo ao inquilino</button></div>
+</div>
+  <div class="dh"><div><div class="dh-title">Ajuste de boleto</div><div class="dh-sub">Alterar o valor de um mes especifico</div></div><button class="dc" onclick="closeDrawer('d-ajuste-boleto')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+  <div class="db">
+    <div class="fg"><label>Mes de referencia</label><select><option>Maio 2026</option><option>Junho 2026</option><option>Julho 2026</option></select></div>
+    <div class="fgr2">
+      <div class="fg"><label>Valor atual do boleto</label><input type="text" value="R$ 3.103,00" readonly style="background:var(--off);color:var(--muted)"></div>
+      <div class="fg"><label>Novo valor (R$)</label><input type="text" placeholder="0,00"></div>
+    </div>
+    <div class="fg"><label>Motivo</label><select><option>Selecione...</option><option>Desconto por benfeitoria</option><option>Acordo com o inquilino</option><option>Correcao de erro</option><option>Outro</option></select></div>
+    <div class="fg"><label>Observacao (opcional)</label><textarea placeholder="Detalhe o motivo do ajuste..."></textarea></div>
+    <div class="fh warn"><strong>Prazo</strong>Ajustes devem ser solicitados com pelo menos 30 dias de antecedencia do vencimento do boleto.</div>
+  </div>
+  <div class="df"><button class="btn-p" onclick="alert('Ajuste solicitado.');closeDrawer('d-ajuste-boleto')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Solicitar ajuste</button></div>
+</div>
+
+<!-- REAJUSTE ANUAL -->
+
+
+<!-- NEGOCIACAO DE VALOR -->
+
+
+<!-- REENVIO DE BOLETO -->
+
+
+<!-- ATUALIZAR CONTATO -->
+
+
+<!-- RECIBO DE ALUGUEL -->
+
+
+<!-- CONTA BANCARIA -->
+
+
+<!-- DISTRATO -->
+
+
+<!-- RENOVAR/ENCERRAR -->
+
+
+<script>
+var curEstado = '';
+var MESES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+// dados mockados
+var dadosHist = [
+  {status:'paid',val:3103,multa:0},
+  {status:'paid',val:3103,multa:0},
+  {status:'paid-late',val:3103,multa:62},
+  {status:'paid',val:3103,multa:0},  // abr — estado muda conforme toggle
+  {status:'waiting',val:0,multa:0},
+  {status:'future',val:0,multa:0},
+  {status:'future',val:0,multa:0},
+  {status:'future',val:0,multa:0},
+  {status:'future',val:0,multa:0},
+  {status:'future',val:0,multa:0},
+  {status:'future',val:0,multa:0},
+  {status:'future',val:0,multa:0},
+];
+
+function setEstado(e) {
+  curEstado = e;
+  ['pago','aguardando','atrasado','alertas'].forEach(function(s){
+    document.getElementById('sb-'+s).classList.toggle('on', s===e);
+  });
+
+  // status atual do mes (abr = index 3)
+  var abr = 3;
+  if(e==='pago') dadosHist[abr] = {status:'paid',val:3103,multa:0};
+  else if(e==='aguardando') dadosHist[abr] = {status:'waiting',val:0,multa:0};
+  else if(e==='atrasado') dadosHist[abr] = {status:'overdue',val:0,multa:62};
+  else dadosHist[abr] = {status:'paid',val:3103,multa:0};
+
+  renderHero(e);
+  renderAlertas(e);
+  renderChart();
+  renderHeatmap();
+}
+
+function renderHero(e) {
+  var h = document.getElementById('hero');
+  if(e==='pago') {
+    h.innerHTML = `<div class="sh-top"><div><div class="sh-label">Abril 2026 — Aluguel</div><div class="sh-valor">R$ 3.103,00</div><div class="sh-date">Vencimento: 10/04/2026 · Pago em: 08/04/2026</div></div><span class="sh-badge paid"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Pago</span></div><div class="sh-bottom" style="background:var(--success-bg);border-top-color:var(--success-border)"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--success);fill:none;stroke-width:2;flex-shrink:0"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg><span style="font-size:12px;font-weight:600;color:var(--success)">Recebido. Proximo boleto vence em 10/05/2026.</span></div>`;
+  } else if(e==='aguardando') {
+    h.innerHTML = `<div class="sh-top"><div><div class="sh-label">Abril 2026 — Aluguel</div><div class="sh-valor">R$ 3.103,00</div><div class="sh-date">Vencimento: 10/04/2026 · Boleto emitido em 05/04</div></div><span class="sh-badge waiting"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Aguardando</span></div><div class="sh-bottom"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--blue);fill:none;stroke-width:2;flex-shrink:0"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span style="font-size:12px;font-weight:600;color:var(--muted)">Boleto enviado. Notificacao automatica agendada para o vencimento.</span></div>`;
+  } else if(e==='atrasado') {
+    h.innerHTML = `<div class="sh-top"><div><div class="sh-label">Abril 2026 — Aluguel</div><div class="sh-valor" style="color:var(--danger)">R$ 3.170,18</div><div class="sh-date">Venceu em 10/04/2026 · 5 dias de atraso · Multa e juros aplicados</div></div><span class="sh-badge overdue"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Em atraso</span></div><div class="sh-bottom" style="background:var(--danger-bg);border-top-color:var(--danger-border)"><span style="font-size:12px;font-weight:600;color:var(--danger)">Multa (2%) e juros aplicados. 2 notificacoes enviadas ao inquilino.</span><button onclick="openDrawer('d-distrato')" style="font-size:11px;font-weight:700;color:var(--danger);background:none;border:1px solid var(--danger-border);cursor:pointer;padding:3px 10px;flex-shrink:0">Ver opcoes</button></div>`;
+  } else {
+    h.innerHTML = `<div class="sh-top"><div><div class="sh-label">Abril 2026 — Aluguel</div><div class="sh-valor">R$ 3.103,00</div><div class="sh-date">Vencimento: 10/04/2026 · Pago em: 08/04/2026</div></div><span class="sh-badge paid"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Pago</span></div><div class="sh-bottom" style="background:var(--success-bg);border-top-color:var(--success-border)"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--success);fill:none;stroke-width:2;flex-shrink:0"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg><span style="font-size:12px;font-weight:600;color:var(--success)">Recebido. Ha alertas que precisam da sua atencao abaixo.</span></div>`;
+  }
+}
+
+function renderAlertas(e) {
+  var ab = document.getElementById('alertas');
+  ab.innerHTML = '';
+  if(e==='alertas') {
+    ab.innerHTML = `
+    <div class="alert-proativo">
+      <div class="ap-icon azul"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/></svg></div>
+      <div class="ap-body">
+        <div class="ap-title">Reajuste anual calculado — pendente de aprovacao</div>
+        <div class="ap-sub">IGP-M Jan/2025–Jan/2026 apurado em +4,8%. Novo aluguel: R$ 2.620,00. Comunicado para o inquilino ja preparado.</div>
+        <div class="ap-preview">Aluguel atual: R$ 2.500,00 → Novo: R$ 2.620,00 (+R$ 120,00) · Vigencia: 01/02/2026</div>
+        <div class="ap-actions">
+          <button class="ap-btn main" onclick="openDrawer('d-reajuste')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Revisar e aprovar</button>
+          <button class="ap-btn sec" onclick="this.closest('.alert-proativo').style.display='none'">Depois</button>
+        </div>
+      </div>
+    </div>
+    <div class="alert-proativo">
+      <div class="ap-icon roxo"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="ap-body">
+        <div class="ap-title">Contrato vence em 60 dias</div>
+        <div class="ap-sub">O contrato com Maria Santos se encerra em 31/12/2026. Defina se deseja renovar, encerrar ou seguir com renovacao automatica.</div>
+        <div class="ap-preview roxo">Opcoes: renovar · encerrar · renovacao automatica</div>
+        <div class="ap-actions">
+          <button class="ap-btn main" onclick="openDrawer('d-renovar')">Decidir agora</button>
+          <button class="ap-btn sec" onclick="this.closest('.alert-proativo').style.display='none'">Depois</button>
+        </div>
+      </div>
+    </div>`;
+  }
+}
+
+function renderChart() {
+  var body = document.getElementById('chart-body');
+  body.innerHTML = '';
+  var maxVal = 3200;
+  var meses = MESES.slice(0,4); // jan-abr visivel
+  var vals = [{aluguel:3103,multa:0},{aluguel:3103,multa:0},{aluguel:3103,multa:62},{aluguel:dadosHist[3].status==='paid'?3103:0,multa:dadosHist[3].multa||0}];
+  
+  meses.forEach(function(m,i) {
+    var v = vals[i];
+    var altPct = Math.round((v.aluguel/maxVal)*100);
+    var mltPct = Math.round((v.multa/maxVal)*100);
+    var grp = document.createElement('div');
+    grp.className = 'bar-group';
+    grp.innerHTML = `<div class="bar-stack"><div class="bar-seg multa" style="height:${mltPct}%"></div><div class="bar-seg aluguel" style="height:${altPct}%"></div></div><div class="bar-month">${m}</div>`;
+    body.appendChild(grp);
+  });
+  // meses futuros
+  for(var i=4;i<12;i++) {
+    var grp = document.createElement('div');
+    grp.className = 'bar-group';
+    grp.innerHTML = `<div class="bar-stack"><div class="bar-seg aluguel" style="height:0%"></div></div><div class="bar-month">${MESES[i]}</div>`;
+    body.appendChild(grp);
+  }
+}
+
+function renderHeatmap() {
+  var grid = document.getElementById('hm-grid');
+  grid.innerHTML = '';
+  dadosHist.forEach(function(d,i) {
+    var cell = document.createElement('div');
+    cell.className = 'hm-cell ' + d.status + (i===3?' current':'');
+    var icon = d.status==='paid'||d.status==='paid-late' ? '✓' : d.status==='overdue'||d.status==='waiting' ? '!' : '';
+    cell.innerHTML = `<div class="hm-cell-inner">${icon}</div><div class="hm-month">${MESES[i]}</div>`;
+    grid.appendChild(cell);
+  });
+}
+
+function toggleSec(id) {
+  var b = document.getElementById('body-'+id);
+  var c = document.getElementById('chev-'+id);
+  var open = b.classList.contains('open');
+  b.classList.toggle('open', !open);
+  if(c) c.classList.toggle('open', !open);
+}
+
+function openDrawer(id) {
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById(id).classList.add('open');
+}
+function closeDrawer(id) {
+  document.getElementById(id).classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+function closeAllDrawers() {
+  document.querySelectorAll('.drawer').forEach(function(d){d.classList.remove('open')});
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// Mobile: colapsar blocos secundários por padrão
+function toggleMobileBloco(conteudoId, btnId) {
+  var conteudo = document.getElementById(conteudoId);
+  var btn = document.getElementById(btnId);
+  var collapsed = conteudo.style.display === 'none';
+  conteudo.style.display = collapsed ? 'block' : 'none';
+  btn.textContent = collapsed
+    ? btn.textContent.replace('↓','↑').replace('Ver ','Ocultar ')
+    : btn.textContent.replace('↑','↓').replace('Ocultar ','Ver ');
+}
+
+function initMobile() {
+  if (window.innerWidth <= 768) {
+    ['perf-conteudo','hm-conteudo'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    ['btn-perf-mobile','btn-hm-mobile'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'block';
+    });
+  }
+}
+
+setEstado('pago');
+initMobile();
+window.addEventListener('resize', initMobile);
+
+// Ajuste de boleto — toggle abas
+function ajTab(tab) {
+  document.getElementById('aj-unico').style.display = tab==='unico' ? 'block' : 'none';
+  document.getElementById('aj-todos').style.display = tab==='todos' ? 'block' : 'none';
+  document.getElementById('aj-tab-unico').style.background = tab==='unico' ? 'var(--navy)' : 'var(--white)';
+  document.getElementById('aj-tab-unico').style.color = tab==='unico' ? '#fff' : 'var(--muted)';
+  document.getElementById('aj-tab-todos').style.background = tab==='todos' ? 'var(--navy)' : 'var(--white)';
+  document.getElementById('aj-tab-todos').style.color = tab==='todos' ? '#fff' : 'var(--muted)';
+}
+
+// Ajuste de boleto — contexto do mês selecionado
+function ajMes() {
+  var sel = document.getElementById('aj-mes-sel');
+  if (!sel) return;
+  var v = sel.value;
+  document.getElementById('aj-aviso-emitido').style.display = v === 'emitido' ? 'block' : 'none';
+  document.getElementById('aj-aviso-vencido').style.display = v === 'vencido-pago' ? 'block' : 'none';
+}
+
+// Ajuste de boleto — totalizador em tempo real
+function calcAjuste() {
+  ajMes();
+  function val(id) {
+    var el = document.getElementById(id);
+    if (!el) return 0;
+    return parseFloat(el.value.replace(/\./g,'').replace(',','.')) || 0;
+  }
+  var total = val('aj-aluguel') + val('aj-cond') + val('aj-iptu') + val('aj-seguro');
+  var anterior = 3103;
+  var fmt = function(n){ return 'R$ ' + n.toLocaleString('pt-BR',{minimumFractionDigits:2}); };
+  var el = document.getElementById('aj-total');
+  var elNovo = document.getElementById('aj-resumo-novo');
+  var elDif = document.getElementById('aj-resumo-dif');
+  if (el) el.textContent = fmt(total);
+  if (elNovo) elNovo.textContent = fmt(total);
+  if (elDif) {
+    var dif = total - anterior;
+    if (Math.abs(dif) < 0.01) {
+      elDif.textContent = 'Sem alteracao';
+      elDif.style.color = 'var(--muted)';
+    } else {
+      elDif.textContent = (dif > 0 ? '+' : '') + fmt(dif) + ' em relacao ao valor atual';
+      elDif.style.color = dif > 0 ? 'var(--danger)' : 'var(--success)';
+    }
+  }
+}
+
+// Reenvio — toggle multa
+var reenvioMulta = true;
+function setReenvioMulta(val) {
+  reenvioMulta = val;
+  document.getElementById('reenvio-sim').style.background = val ? 'var(--navy)' : 'var(--white)';
+  document.getElementById('reenvio-sim').style.color = val ? '#fff' : 'var(--muted)';
+  document.getElementById('reenvio-nao').style.background = !val ? 'var(--navy)' : 'var(--white)';
+  document.getElementById('reenvio-nao').style.color = !val ? '#fff' : 'var(--muted)';
+  document.getElementById('reenvio-multa-info').textContent = val
+    ? 'Se o pagamento nao for efetuado ate a nova data, multa (2%) e juros serao calculados automaticamente.'
+    : 'O boleto sera reenviado sem acrescimo de multa ou juros. O proprietario assume a decisao de nao cobrar encargos.';
+  calcReenvioMulta();
+}
+function calcReenvioMulta() {
+  var data = document.getElementById('reenvio-data');
+  var calc = document.getElementById('reenvio-calc');
+  if (!calc) return;
+  if (reenvioMulta && data && data.value) {
+    calc.style.display = new Date(data.value) < new Date() ? 'block' : 'none';
+  } else {
+    calc.style.display = 'none';
+  }
+}
+
+// Reajuste — toggle opt-out
+function toggleOptout() {
+  var form = document.getElementById('raj-nao-form');
+  var btn = document.getElementById('raj-btn-optout');
+  var btnConfirmar = document.getElementById('raj-btn-confirmar-nao');
+  var footer = document.getElementById('raj-footer');
+  var showing = form.style.display !== 'none';
+  form.style.display = showing ? 'none' : 'block';
+  btnConfirmar.style.display = showing ? 'none' : 'flex';
+  btn.textContent = showing ? 'Nao aplicar o reajuste desta vez →' : '← Cancelar';
+  footer.querySelector('div').style.display = showing ? 'block' : 'none';
+}
+
+// Negociacao — calculo em tempo real
+function calcNegociacao() {
+  var input = event.target.value;
+  var v = parseFloat(input.replace(/\./g,'').replace(',','.')) || 0;
+  var resumo = document.getElementById('neg-resumo');
+  var novoVal = document.getElementById('neg-novo-val');
+  if (v > 0) {
+    resumo.style.display = 'block';
+    novoVal.textContent = 'R$ ' + v.toLocaleString('pt-BR',{minimumFractionDigits:2});
+  } else {
+    resumo.style.display = 'none';
+  }
+}
+
+// Renovar — navegacao entre sub-telas
+function renovarCaminho(path) {
+  var telas = ['menu','novo-contrato','encerrar','automatica'];
+  telas.forEach(function(t) {
+    var el = document.getElementById('renovar-' + (t==='menu'?'menu':t));
+    if (el) el.style.display = t === path ? 'block' : 'none';
+  });
+  var btnAcao = document.getElementById('renovar-btn-acao');
+  var btnAuto = document.getElementById('renovar-btn-automatica');
+  if (btnAcao) btnAcao.style.display = (path==='novo-contrato'||path==='encerrar') ? 'flex' : 'none';
+  if (btnAuto) btnAuto.style.display = path==='automatica' ? 'flex' : 'none';
+}
+
+// Procurador — toggle form
+function toggleProcurador() {
+  var form = document.getElementById('procurador-form');
+  var btn = document.getElementById('btn-procurador');
+  var visible = form.style.display !== 'none';
+  form.style.display = visible ? 'none' : 'block';
+  btn.textContent = visible ? '+ Adicionar' : '− Remover';
+}
+
+// Simulacao placeholder
+function calcSimulacao() {}
+
+// Reenvio — toggle multa
+var reenvioMulta = true;
+function setReenvioMulta(val) {
+  reenvioMulta = val;
+  document.getElementById('reenvio-sim').style.background = val ? 'var(--navy)' : 'var(--white)';
+  document.getElementById('reenvio-sim').style.color = val ? '#fff' : 'var(--muted)';
+  document.getElementById('reenvio-nao').style.background = !val ? 'var(--navy)' : 'var(--white)';
+  document.getElementById('reenvio-nao').style.color = !val ? '#fff' : 'var(--muted)';
+  document.getElementById('reenvio-multa-info').textContent = val
+    ? 'Se o pagamento nao for efetuado ate a nova data, multa (2%) e juros serao calculados automaticamente.'
+    : 'O boleto sera reenviado sem acrescimo de multa ou juros. O proprietario assume a decisao de nao cobrar encargos.';
+  calcReenvioMulta();
+}
+function calcReenvioMulta() {
+  var data = document.getElementById('reenvio-data');
+  var calc = document.getElementById('reenvio-calc');
+  if (reenvioMulta && data && data.value) {
+    var d = new Date(data.value);
+    var hoje = new Date();
+    if (d < hoje) {
+      calc.style.display = 'block';
+    } else {
+      calc.style.display = 'none';
+    }
+  } else {
+    if (calc) calc.style.display = 'none';
+  }
+}
+
+// Reajuste — toggle opcao
+function setReajuste(opcao) {
+  var aplicar = document.getElementById('raj-opcao-aplicar');
+  var nao = document.getElementById('raj-opcao-nao');
+  var btnAplicar = document.getElementById('raj-btn-aplicar');
+  var btnNao = document.getElementById('raj-btn-nao');
+  if (opcao === 'aplicar') {
+    aplicar.style.border = '2px solid var(--blue)';
+    aplicar.style.background = 'var(--off2)';
+    nao.style.border = '1.5px solid var(--border)';
+    nao.style.background = 'var(--white)';
+    btnAplicar.style.display = 'flex';
+    btnNao.style.display = 'none';
+  } else {
+    nao.style.border = '2px solid var(--blue)';
+    nao.style.background = 'var(--off2)';
+    aplicar.style.border = '1.5px solid var(--border)';
+    aplicar.style.background = 'var(--white)';
+    btnAplicar.style.display = 'none';
+    btnNao.style.display = 'flex';
+  }
+}
+
+// Procurador — toggle form
+function toggleProcurador() {
+  var form = document.getElementById('procurador-form');
+  var btn = document.getElementById('btn-procurador');
+  var visible = form.style.display !== 'none';
+  form.style.display = visible ? 'none' : 'block';
+  btn.textContent = visible ? '+ Adicionar' : '− Remover';
+}
+
+// Simulação — placeholder (cálculo real dependeria de dados do contrato)
+function calcSimulacao() {}
+</script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moben — Meus Imoveis</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#0101CD;--purple:#8301CD;--cyan:#01CCFF;--navy:#0C005F;
+  --grad-h:linear-gradient(90deg,#9CECFB 0%,#0052D4 50%,#8301CD 100%);
+  --white:#fff;--off:#F5F4FF;--off2:#EEF0FF;
+  --text:#0C005F;--muted:#6B6B9A;--border:rgba(1,1,205,0.1);
+  --success:#1A7F3A;--success-bg:#E6F4EC;--success-border:rgba(26,127,58,.2);
+  --warning:#92400E;--warning-bg:#FEF3C7;--warning-border:rgba(146,64,14,.2);
+  --danger:#C62828;--danger-bg:#FFEBEE;--danger-border:rgba(198,40,40,.2);
+  --sw:220px;
+}
+body{font-family:'Quicksand',sans-serif;background:var(--off);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* SIDEBAR */
+.app-sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--navy);display:flex;flex-direction:column;z-index:100;overflow:hidden}
+.app-sidebar::before{content:'';position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,0 60,52 0,52' fill='%239CECFB'/%3E%3C/svg%3E");background-size:60px 60px;pointer-events:none}
+.as-logo{padding:24px 20px 20px;position:relative;z-index:1;border-bottom:1px solid rgba(255,255,255,.06)}
+.as-logo img{height:22px}
+.as-nav{flex:1;padding:10px 0;position:relative;z-index:1;overflow-y:auto}
+.as-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.22);padding:10px 20px 4px}
+.as-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:12px;font-weight:600;color:rgba(255,255,255,.42);text-decoration:none;transition:all .15s}
+.as-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.as-item:hover{color:rgba(255,255,255,.75);background:rgba(255,255,255,.05)}
+.as-item.active{color:#fff;background:rgba(255,255,255,.1)}
+.as-item.active svg{stroke:var(--cyan)}
+.as-foot{padding:16px 20px;border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:1}
+.as-av{width:28px;height:28px;background:var(--grad-h);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;color:#fff;flex-shrink:0}
+
+/* MAIN */
+.main{margin-left:var(--sw);min-height:100vh}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 28px;gap:12px;position:sticky;top:0;z-index:50}
+.tb-title{font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:var(--navy)}
+.btn-novo{margin-left:auto;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:#fff;background:var(--grad-h);border:none;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-novo:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(131,1,205,.28)}
+.btn-novo svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2.5}
+
+/* PAGE */
+.page{padding:24px 28px 48px;max-width:880px}
+.sec-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.sec-title svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.sec-gap{margin-bottom:28px}
+
+/* GRID */
+.prop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+
+/* CARD ATIVO (com contrato) */
+.prop-card{background:var(--white);border:1px solid var(--border);cursor:pointer;transition:all .18s;text-decoration:none;display:block;position:relative;overflow:hidden}
+.prop-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 6px 24px rgba(1,1,205,.08)}
+.prop-card.active-contract{border-top:3px solid var(--blue)}
+.prop-card.overdue{border-top:3px solid var(--danger)}
+.prop-card.building{border-top:3px solid var(--muted)}
+.pc-top{padding:16px 18px 12px}
+.pc-alias{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--navy);margin-bottom:3px}
+.pc-addr{font-size:11px;color:var(--muted);font-weight:500;line-height:1.4;margin-bottom:10px}
+.pc-status{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 8px;border:1px solid}
+.pc-status.paid{color:var(--success);background:var(--success-bg);border-color:var(--success-border)}
+.pc-status.waiting{color:var(--blue);background:var(--off2);border-color:rgba(1,1,205,.15)}
+.pc-status.overdue{color:var(--danger);background:var(--danger-bg);border-color:var(--danger-border)}
+.pc-status.no-contract{color:var(--muted);background:var(--off);border-color:var(--border)}
+.pc-status.building{color:var(--warning);background:var(--warning-bg);border-color:var(--warning-border)}
+.pc-status svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.5}
+.pc-divider{height:1px;background:var(--border)}
+.pc-bottom{padding:10px 18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.pc-data{display:flex;flex-direction:column;gap:2px}
+.pc-data-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.pc-data-val{font-size:12px;font-weight:700;color:var(--navy)}
+.pc-data-val.money{font-family:'Nunito',sans-serif}
+.pc-data-val.danger{color:var(--danger)}
+.pc-arrow{position:absolute;bottom:12px;right:14px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;opacity:.25}
+.pc-arrow svg{width:14px;height:14px;stroke:var(--navy);fill:none;stroke-width:2}
+.prop-card:hover .pc-arrow{opacity:.6}
+
+/* CARD VAZIO (sem contrato) */
+.prop-card-empty{background:var(--white);border:1.5px dashed var(--border);padding:20px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;text-decoration:none;transition:all .15s}
+.prop-card-empty:hover{border-color:var(--blue);background:var(--off)}
+.pce-icon{width:40px;height:40px;background:var(--off2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pce-icon svg{width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:2}
+.pce-alias{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.pce-sub{font-size:11px;color:var(--muted);font-weight:500}
+
+/* ADD NOVO */
+.add-card{background:transparent;border:1.5px dashed var(--border);padding:20px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;text-decoration:none;transition:all .15s}
+.add-card:hover{border-color:var(--blue);background:var(--off)}
+.add-icon{width:40px;height:40px;background:var(--off2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.add-icon svg{width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:2.5}
+
+/* ALERTA CONSOLIDADO */
+.alert-bar{padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:14px;border:1px solid}
+.alert-bar.danger{background:var(--danger-bg);border-color:var(--danger-border)}
+.alert-bar.warning{background:var(--warning-bg);border-color:var(--warning-border)}
+.alert-bar svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.alert-bar.danger svg{stroke:var(--danger)}
+.alert-bar.warning svg{stroke:var(--warning)}
+.ab-text{font-size:12px;font-weight:600;flex:1}
+.alert-bar.danger .ab-text{color:var(--danger)}
+.alert-bar.warning .ab-text{color:var(--warning)}
+.ab-link{font-size:11px;font-weight:700;text-decoration:underline;cursor:pointer;white-space:nowrap}
+.alert-bar.danger .ab-link{color:var(--danger)}
+.alert-bar.warning .ab-link{color:var(--warning)}
+
+@media(max-width:900px){.prop-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.app-sidebar{display:none}.main{margin-left:0}}
+</style>
+</head>
+<body>
+<aside class="app-sidebar">
+  <div class="as-logo"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiPgogIDwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyOS44LjUsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiAyLjEuMSBCdWlsZCAyKSAgLS0+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5zdDAgewogICAgICAgIGZpbGw6ICMxZDFkMWI7CiAgICAgICAgZm9udC1mYW1pbHk6IFF1aWNrc2FuZC1MaWdodCwgUXVpY2tzYW5kOwogICAgICAgIGZvbnQtc2l6ZTogMzRweDsKICAgICAgICBmb250LXdlaWdodDogMzAwOwogICAgICAgIHN0cm9rZTogIzRkNGQ0ZDsKICAgICAgICBzdHJva2UtbWl0ZXJsaW1pdDogMTA7CiAgICAgIH0KCiAgICAgIC5zdDEgewogICAgICAgIGZpbGw6ICNlNmU2ZTY7CiAgICAgIH0KCiAgICAgIC5zdDIgewogICAgICAgIGZpbGw6ICMwMWNjZmY7CiAgICAgIH0KCiAgICAgIC5zdDMgewogICAgICAgIGZpbGw6ICMwMTAxY2Q7CiAgICAgIH0KCiAgICAgIC5zdDQgewogICAgICAgIGZpbGw6ICNmZmY7CiAgICAgIH0KCiAgICAgIC5zdDUgewogICAgICAgIGZpbGw6ICM4MzAxY2Q7CiAgICAgIH0KCiAgICAgIC5zdDYgewogICAgICAgIGZpbGw6ICMwYzAwNWY7CiAgICAgIH0KCiAgICAgIC5zdDcgewogICAgICAgIGZpbGw6ICMzMzM7CiAgICAgICAgZm9udC1mYW1pbHk6IFF1aWNrc2FuZC1Cb2xkLCBRdWlja3NhbmQ7CiAgICAgICAgZm9udC1zaXplOiA0M3B4OwogICAgICAgIGZvbnQtd2VpZ2h0OiA3MDA7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDx0ZXh0IGNsYXNzPSJzdDciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDc1NC4zNSA4NjAuNDUpIj48dHNwYW4geD0iMCIgeT0iMCI+YXBsaWNhw6fDo28gZGEgbWFyY2E8L3RzcGFuPjwvdGV4dD4KICA8dGV4dCBjbGFzcz0ic3QwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MDMuNDQgOTIzLjkyKSI+PHRzcGFuIHg9IjAiIHk9IjAiPnNvYnJlIGZ1bmRvIGNsYXJvIGUgZnVuZG8gZXNjdXJvPC90c3Bhbj48L3RleHQ+CiAgPHJlY3QgY2xhc3M9InN0NiIgeD0iMTAwNC4xMSIgeT0iMzIzLjY0IiB3aWR0aD0iNzYyIiBoZWlnaHQ9IjI0NyIvPgogIDxyZWN0IGNsYXNzPSJzdDEiIHg9IjE1My42NyIgeT0iMzIzLjY0IiB3aWR0aD0iNzYyIiBoZWlnaHQ9IjI0NyIvPgogIDxnPgogICAgPGc+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDUiIGQ9Ik0yMjEuMjYsNDMzLjM4bDU3LjkzLTI2LjUtNTUuNDktMjUuMzhjLTYuOTQtMy4xNy0xMi42MS40Ny0xMi42MSw4LjF2MTE4Ljg1YzAsNy42Myw1LjM1LDEwLjY2LDExLjg5LDYuNzNsNTYuMjEtMzMuNzItNTguNjYtMzUuMTljLTYuNTQtMy45Mi02LjIyLTkuNzMuNzItMTIuOVoiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MiIgZD0iTTMzNC42OCwzODEuNWwtNTUuNDksMjUuMzgsNTcuOTMsMjYuNWM2LjkzLDMuMTcsNy4yNiw4Ljk4LjcyLDEyLjlsLTU4LjY1LDM1LjE5LDU2LjIxLDMzLjcyYzYuNTQsMy45MiwxMS44OS44OSwxMS44OS02Ljczdi0xMTguODVjMC03LjYzLTUuNjgtMTEuMjctMTIuNjEtOC4xWiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNMzM3LjEzLDQzMy4zOGwtNTcuOTMtMjYuNS01Ny45MywyNi41Yy02Ljk0LDMuMTctNy4yNiw4Ljk4LS43MiwxMi45bDU4LjY2LDM1LjE5LDU4LjY1LTM1LjE5YzYuNTQtMy45Miw2LjIyLTkuNzMtLjcyLTEyLjlaIi8+CiAgICA8L2c+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTM5NS4yMSw0ODcuNjdjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuNDEsMS40MS0zLjA4LDIuMTEtNSwyLjExaC0uMjNjLTEuOTMsMC0zLjYtLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi45OWMwLTkuNjksMy40NC0xOCwxMC4zMi0yNC45Myw2Ljg4LTYuODgsMTUuMTktMTAuMzIsMjQuOTMtMTAuMzIsMTEuNjIsMCwyMC45Nyw0LjY0LDI4LjA2LDEzLjkxLDcuMDMtOS4yNywxNi4zNi0xMy45MSwyNy45OC0xMy45MSw5Ljc0LDAsMTguMDUsMy40NCwyNC45MywxMC4zMiw2Ljg4LDYuOTMsMTAuMzIsMTUuMjQsMTAuMzIsMjQuOTN2NDIuOTljMCwxLjk4LS42OCwzLjY1LTIuMDMsNS0xLjQxLDEuNDEtMy4xLDIuMTEtNS4wOCwyLjExaC0uMTZjLTEuOTgsMC0zLjY1LS43LTUtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDQtMTAuNjMtNi4xLTE0LjY5LTQuMDctNC4wNi04Ljk5LTYuMS0xNC43Ny02LjFzLTEwLjYzLDIuMDMtMTQuNyw2LjFjLTQuMDYsNC4wNi02LjEsOC45Ni02LjEsMTQuNjl2NDIuOTljMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDMtMTAuNjMtNi4xLTE0LjY5LTQuMDctNC4wNi04Ljk2LTYuMS0xNC42OS02LjFzLTEwLjYzLDIuMDMtMTQuNjksNi4xYy00LjA2LDQuMDYtNi4xLDguOTYtNi4xLDE0LjY5djQyLjk5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNNTU2Ljg1LDQwOS40M2MxMS43OCwwLDIxLjgzLDQuMTcsMzAuMTcsMTIuNSw4LjM0LDguMzQsMTIuNSwxOC40LDEyLjUsMzAuMTdzLTQuMTcsMjEuODMtMTIuNSwzMC4xN2MtOC4zNCw4LjM0LTE4LjM5LDEyLjUxLTMwLjE3LDEyLjUxcy0yMS44My00LjE3LTMwLjE3LTEyLjUxYy04LjM0LTguMzQtMTIuNS0xOC4zOS0xMi41LTMwLjE3czQuMTctMjEuODMsMTIuNS0zMC4xN2M4LjM0LTguMzQsMTguMzktMTIuNSwzMC4xNy0xMi41Wk01NTYuODUsNDI0LjA0Yy03LjgxLDAtMTQuNDksMi43Ni0yMC4wMSw4LjI5LTUuNDcsNS41Mi04LjIxLDEyLjE5LTguMjEsMjAuMDFzMi43NCwxNC40MSw4LjIxLDE5LjkzYzUuNTIsNS41MywxMi4xOSw4LjI5LDIwLjAxLDguMjlzMTQuNDYtMi43NiwxOS45My04LjI5YzUuNTItNS41Miw4LjI5LTEyLjE3LDguMjktMTkuOTNzLTIuNzYtMTQuNDktOC4yOS0yMC4wMWMtNS40Ny01LjUyLTEyLjEyLTguMjktMTkuOTMtOC4yOVoiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTYxMy43NiwzNzcuMzhjMS45MywwLDMuNi42OCw1LDIuMDMsMS40MSwxLjQxLDIuMTEsMy4xLDIuMTEsNS4wOHYzNS42NGM4LjAyLTcuMTQsMTcuNDMtMTAuNzEsMjguMjItMTAuNzEsMTEuNzcsMCwyMS44Myw0LjE3LDMwLjE3LDEyLjUsOC4zNCw4LjM0LDEyLjUsMTguNCwxMi41LDMwLjE3cy00LjE3LDIxLjgzLTEyLjUsMzAuMTdjLTguMzQsOC4zNC0xOC4zOSwxMi41MS0zMC4xNywxMi41MXMtMjEuODEtNC4xNC0zMC4wOS0xMi40M2MtOC4zNC04LjI5LTEyLjUzLTE4LjI5LTEyLjU4LTMwLjAxdi02Ny44NGMwLTEuOTguNy0zLjY3LDIuMTEtNS4wOCwxLjQxLTEuMzYsMy4wNy0yLjAzLDUtMi4wM2guMjNaTTY0OS4wOSw0MjQuMDRjLTcuODIsMC0xNC40OSwyLjc2LTIwLjAxLDguMjktNS40Nyw1LjUyLTguMjEsMTIuMTktOC4yMSwyMC4wMXMyLjc0LDE0LjQxLDguMjEsMTkuOTNjNS41Miw1LjUzLDEyLjE5LDguMjksMjAuMDEsOC4yOXMxNC40Ni0yLjc2LDE5LjkzLTguMjljNS41Mi01LjUyLDguMjgtMTIuMTcsOC4yOC0xOS45M3MtMi43Ni0xNC40OS04LjI4LTIwLjAxYy01LjQ3LTUuNTItMTIuMTItOC4yOS0xOS45My04LjI5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNNzgxLjUzLDQ1Mi40M2MuMDIsMS45Ni0uNjYsMy42NS0yLjA1LDUuMDgtMS4zNywxLjM4LTMuMDYsMi4wNy01LjA3LDIuMDctOC0uMDQtMTguNTItLjA4LTMxLjU1LS4xMi0xNi4xOC0uMDQtMjYuNjgtLjA3LTMxLjQ4LS4wOSwyLjE0LDguODgsNy4zOCwxNS4yMSwxNS43MywxOS4wMiw1LjU1LDIuNTMsMTEuMzIsMy4xOCwxNy4zMiwxLjk2LDUuODEtMS4xOSwxMC43NC0zLjkyLDE0LjgxLTguMiwyLjM4LTIuNDYsNS4xNC0yLjk4LDguMjctMS41NiwyLjIzLDEuMDIsMy41OCwyLjc1LDQuMDcsNS4yLjQ2LDIuMzktLjE4LDQuNDctMS45MSw2LjI2LTYuMTYsNi40Ny0xMy42MywxMC41Ny0yMi40MywxMi4yOC05LjAxLDEuOC0xNy42OC43OS0yNi4wMy0zLjAxLTEwLjcyLTQuODgtMTguMTQtMTIuODQtMjIuMjctMjMuODktNC4xMy0xMS4wNC0zLjc2LTIxLjkyLDEuMTMtMzIuNjQsNC44OC0xMC43MiwxMi44NC0xOC4xNCwyMy44OS0yMi4yNywxMS4wNC00LjEzLDIxLjkyLTMuNzYsMzIuNjQsMS4xMiw3LjczLDMuNTIsMTMuODMsOC44NSwxOC4zMSwxNS45OSw0LjQzLDcsNi42NCwxNC41OSw2LjYzLDIyLjc4Wk03NTAuNTMsNDI2Ljk3Yy03LjExLTMuMjQtMTQuMzMtMy40OS0yMS42NS0uNzUtNy4yNywyLjc2LTEyLjUyLDcuNjktMTUuNzYsMTQuODEtLjU4LDEuMjgtMS4wNiwyLjU4LTEuNDMsMy45bDU0LjI5LjE3Yy0yLjMzLTguNDUtNy40OS0xNC40OS0xNS40NS0xOC4xMloiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTgwMS44Myw0ODcuNjdjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuNDEsMS40MS0zLjA3LDIuMTEtNSwyLjExaC0uMjNjLTEuOTMsMC0zLjYtLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTkuNzksMy40Ni0xOC4xNiwxMC4zOS0yNS4wOSw2LjkzLTYuOTMsMTUuMjktMTAuMzksMjUuMDktMTAuMzlzMTguMDgsMy40NiwyNS4wMSwxMC4zOWM2LjkzLDYuOTMsMTAuMzksMTUuMywxMC4zOSwyNS4wOXY0Mi43NWMwLDEuOTgtLjcsMy42NS0yLjExLDUtMS4zNiwxLjQxLTMuMDIsMi4xMS01LDIuMTFoLS4xNmMtMS45OCwwLTMuNjctLjctNS4wOC0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTUuNzgtMi4wMy0xMC43My02LjEtMTQuODUtNC4xMi00LjEyLTkuMDctNi4xOC0xNC44NS02LjE4cy0xMC44MSwyLjA2LTE0LjkzLDYuMThjLTQuMDYsNC4xMi02LjEsOS4wNy02LjEsMTQuODV2NDIuNzVaIi8+CiAgICA8L2c+CiAgPC9nPgogIDxnPgogICAgPGc+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDUiIGQ9Ik0xMDcxLjkxLDQzMy4zN2w1Ny45My0yNi41LTU1LjQ5LTI1LjM4Yy02Ljk0LTMuMTctMTIuNjEuNDctMTIuNjEsOC4xdjExOC44NWMwLDcuNjMsNS4zNSwxMC42NiwxMS44OSw2LjczbDU2LjIxLTMzLjcyLTU4LjY2LTM1LjE5Yy02LjU0LTMuOTItNi4yMi05LjczLjcyLTEyLjlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xMTg1LjMzLDM4MS41bC01NS40OSwyNS4zOCw1Ny45MywyNi41YzYuOTQsMy4xNyw3LjI2LDguOTguNzIsMTIuOWwtNTguNjUsMzUuMTksNTYuMjEsMzMuNzJjNi41NCwzLjkyLDExLjg5Ljg5LDExLjg5LTYuNzN2LTExOC44NWMwLTcuNjMtNS42OC0xMS4yNy0xMi42MS04LjFaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDMiIGQ9Ik0xMTg3Ljc3LDQzMy4zN2wtNTcuOTMtMjYuNS01Ny45MywyNi41Yy02Ljk0LDMuMTctNy4yNiw4Ljk4LS43MiwxMi45bDU4LjY2LDM1LjE5LDU4LjY1LTM1LjE5YzYuNTQtMy45Miw2LjIyLTkuNzMtLjcyLTEyLjlaIi8+CiAgICA8L2c+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9InN0NCIgZD0iTTEyNDUuODYsNDg3LjY3YzAsMS45OC0uNywzLjY1LTIuMTEsNS0xLjQxLDEuNDEtMy4wOCwyLjExLTUsMi4xMWgtLjI0Yy0xLjkzLDAtMy41OS0uNy01LTIuMTEtMS40MS0xLjM1LTIuMTEtMy4wMi0yLjExLTV2LTQyLjk5YzAtOS42OSwzLjQ0LTE4LDEwLjMyLTI0LjkzLDYuODgtNi44OCwxNS4xOS0xMC4zMiwyNC45My0xMC4zMiwxMS42MiwwLDIwLjk3LDQuNjQsMjguMDYsMTMuOTEsNy4wNC05LjI3LDE2LjM2LTEzLjkxLDI3Ljk4LTEzLjkxLDkuNzQsMCwxOC4wNiwzLjQ0LDI0LjkzLDEwLjMyLDYuODgsNi45MywxMC4zMiwxNS4yNCwxMC4zMiwyNC45M3Y0Mi45OWMwLDEuOTgtLjY4LDMuNjUtMi4wMyw1LTEuNDEsMS40MS0zLjEsMi4xMS01LjA4LDIuMTFoLS4xNmMtMS45OCwwLTMuNjUtLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi45OWMwLTUuNzMtMi4wMy0xMC42My02LjEtMTQuNjktNC4wNi00LjA2LTguOTktNi4xLTE0Ljc3LTYuMXMtMTAuNjMsMi4wMy0xNC42OSw2LjFjLTQuMDYsNC4wNi02LjEsOC45Ni02LjEsMTQuNjl2NDIuOTljMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDMtMTAuNjMtNi4xLTE0LjY5LTQuMDYtNC4wNi04Ljk2LTYuMS0xNC42OS02LjFzLTEwLjYzLDIuMDMtMTQuNjksNi4xYy00LjA2LDQuMDYtNi4xLDguOTYtNi4xLDE0LjY5djQyLjk5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3Q0IiBkPSJNMTQwNy41LDQwOS40M2MxMS43OCwwLDIxLjgzLDQuMTcsMzAuMTcsMTIuNSw4LjMzLDguMzQsMTIuNSwxOC40LDEyLjUsMzAuMTdzLTQuMTcsMjEuODMtMTIuNSwzMC4xN2MtOC4zNCw4LjM0LTE4LjQsMTIuNTEtMzAuMTcsMTIuNTFzLTIxLjgzLTQuMTctMzAuMTctMTIuNTFjLTguMzQtOC4zNC0xMi41MS0xOC4zOS0xMi41MS0zMC4xN3M0LjE3LTIxLjgzLDEyLjUxLTMwLjE3YzguMzQtOC4zNCwxOC4zOS0xMi41LDMwLjE3LTEyLjVaTTE0MDcuNSw0MjQuMDRjLTcuODEsMC0xNC40OSwyLjc2LTIwLjAxLDguMjktNS40Nyw1LjUyLTguMjEsMTIuMTktOC4yMSwyMC4wMXMyLjczLDE0LjQxLDguMjEsMTkuOTNjNS41Miw1LjUzLDEyLjE5LDguMjksMjAuMDEsOC4yOXMxNC40Ni0yLjc2LDE5LjkzLTguMjljNS41My01LjUyLDguMjktMTIuMTcsOC4yOS0xOS45M3MtMi43Ni0xNC40OS04LjI5LTIwLjAxYy01LjQ3LTUuNTItMTIuMTItOC4yOS0xOS45My04LjI5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3Q0IiBkPSJNMTQ2NC40MSwzNzcuMzhjMS45MywwLDMuNTkuNjgsNSwyLjAzLDEuNDEsMS40MSwyLjExLDMuMSwyLjExLDUuMDh2MzUuNjRjOC4wMi03LjE0LDE3LjQzLTEwLjcxLDI4LjIyLTEwLjcxLDExLjc3LDAsMjEuODMsNC4xNywzMC4xNywxMi41LDguMzQsOC4zNCwxMi41MSwxOC40LDEyLjUxLDMwLjE3cy00LjE3LDIxLjgzLTEyLjUxLDMwLjE3Yy04LjM0LDguMzQtMTguMzksMTIuNTEtMzAuMTcsMTIuNTFzLTIxLjgxLTQuMTQtMzAuMDktMTIuNDNjLTguMzQtOC4yOS0xMi41My0xOC4yOS0xMi41OC0zMC4wMXYtNjcuODRjMC0xLjk4LjctMy42NywyLjExLTUuMDgsMS40MS0xLjM2LDMuMDgtMi4wMyw1LTIuMDNoLjIzWk0xNDk5Ljc0LDQyNC4wNGMtNy44MiwwLTE0LjQ5LDIuNzYtMjAuMDEsOC4yOS01LjQ3LDUuNTItOC4yMSwxMi4xOS04LjIxLDIwLjAxczIuNzQsMTQuNDEsOC4yMSwxOS45M2M1LjUyLDUuNTMsMTIuMTksOC4yOSwyMC4wMSw4LjI5czE0LjQ2LTIuNzYsMTkuOTMtOC4yOWM1LjUyLTUuNTIsOC4yOC0xMi4xNyw4LjI4LTE5Ljkzcy0yLjc2LTE0LjQ5LTguMjgtMjAuMDFjLTUuNDctNS41Mi0xMi4xMi04LjI5LTE5LjkzLTguMjlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDQiIGQ9Ik0xNjMyLjE4LDQ1Mi40M2MuMDIsMS45Ni0uNjYsMy42NS0yLjA1LDUuMDgtMS4zNywxLjM4LTMuMDYsMi4wNy01LjA3LDIuMDctOC0uMDQtMTguNTItLjA4LTMxLjU1LS4xMi0xNi4xOC0uMDQtMjYuNjgtLjA3LTMxLjQ4LS4wOSwyLjE0LDguODgsNy4zOCwxNS4yMSwxNS43MywxOS4wMiw1LjU1LDIuNTMsMTEuMzIsMy4xOCwxNy4zMSwxLjk2LDUuODEtMS4xOSwxMC43NS0zLjkyLDE0LjgxLTguMiwyLjM4LTIuNDYsNS4xNC0yLjk4LDguMjctMS41NiwyLjIzLDEuMDIsMy41OSwyLjc1LDQuMDcsNS4yLjQ2LDIuMzktLjE4LDQuNDctMS45MSw2LjI2LTYuMTUsNi40Ny0xMy42MywxMC41Ny0yMi40MywxMi4yOC05LjAxLDEuOC0xNy42OC43OS0yNi4wMy0zLjAxLTEwLjcyLTQuODgtMTguMTQtMTIuODQtMjIuMjctMjMuODktNC4xMy0xMS4wNC0zLjc2LTIxLjkyLDEuMTMtMzIuNjQsNC44OC0xMC43MiwxMi44NC0xOC4xNCwyMy44OS0yMi4yNywxMS4wNC00LjEzLDIxLjkyLTMuNzYsMzIuNjQsMS4xMiw3LjczLDMuNTIsMTMuODMsOC44NSwxOC4zMSwxNS45OSw0LjQzLDcsNi42NCwxNC41OSw2LjYzLDIyLjc4Wk0xNjAxLjE3LDQyNi45N2MtNy4xMS0zLjI0LTE0LjMzLTMuNDktMjEuNjQtLjc1LTcuMjcsMi43Ni0xMi41Miw3LjY5LTE1Ljc2LDE0LjgxLS41OCwxLjI4LTEuMDYsMi41OC0xLjQzLDMuOWw1NC4yOS4xN2MtMi4zMy04LjQ1LTcuNDktMTQuNDktMTUuNDUtMTguMTJaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDQiIGQ9Ik0xNjUyLjQ4LDQ4Ny42N2MwLDEuOTgtLjcsMy42NS0yLjExLDUtMS40MSwxLjQxLTMuMDcsMi4xMS01LDIuMTFoLS4yM2MtMS45MywwLTMuNTktLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTkuNzksMy40Ni0xOC4xNiwxMC4zOS0yNS4wOSw2LjkzLTYuOTMsMTUuMjktMTAuMzksMjUuMDktMTAuMzlzMTguMDgsMy40NiwyNS4wMSwxMC4zOWM2LjkzLDYuOTMsMTAuMzksMTUuMjksMTAuMzksMjUuMDl2NDIuNzVjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuNzVjMC01Ljc4LTIuMDMtMTAuNzMtNi4wOS0xNC44NS00LjEyLTQuMTItOS4wNy02LjE4LTE0Ljg1LTYuMThzLTEwLjgxLDIuMDYtMTQuOTMsNi4xOGMtNC4wNiw0LjEyLTYuMDksOS4wNy02LjA5LDE0Ljg1djQyLjc1WiIvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+" alt="Moben"></div>
+  <nav class="as-nav">
+    <div class="as-label">Principal</div>
+    <a class="as-item" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Meu painel</a>
+    <a class="as-item active" href="imovel.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Meus imoveis</a>
+    <a class="as-item" href="pretendentes.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Pretendentes</a>
+    <a class="as-item" href="contrato.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Contratos</a>
+    <a class="as-item" href="financeiro.html"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cobrancas</a>
+    <div class="as-label">Financeiro</div>
+    <a class="as-item" href="financeiro.html"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Financeiro</a>
+    <div class="as-label">Conta</div>
+    <a class="as-item" href="#"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Meu perfil</a>
+  </nav>
+  <div class="as-foot"><div style="display:flex;align-items:center;gap:8px"><div class="as-av">JS</div><div><div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.7)">Joao Silva</div><div style="font-size:10px;color:rgba(255,255,255,.3);font-weight:500">Plano Essencial</div></div></div></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <span class="tb-title">Meus imoveis</span>
+    <a href="imovel-cadastro.html" class="btn-novo">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Cadastrar imovel
+    </a>
+  </div>
+
+  <div class="page">
+
+    <!-- ALERTAS CONSOLIDADOS -->
+    <div class="alert-bar danger">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span class="ab-text">Ap. Centro — boleto de abril venceu ha 5 dias sem pagamento</span>
+      <a href="painel-imovel.html" class="ab-link">Ver opcoes →</a>
+    </div>
+    <div class="alert-bar warning">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span class="ab-text">Casa Jardins — reajuste anual calculado, pendente de aprovacao</span>
+      <a href="painel-imovel.html" class="ab-link">Revisar →</a>
+    </div>
+
+    <!-- IMOVEIS COM CONTRATO ATIVO -->
+    <div class="sec-gap">
+      <div class="sec-title"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>Contrato ativo</div>
+      <div class="prop-grid">
+
+        <!-- Ap. Centro — atrasado -->
+        <a href="painel-imovel.html" class="prop-card overdue">
+          <div class="pc-top">
+            <div class="pc-alias">Ap. Centro</div>
+            <div class="pc-addr">Rua Augusta, 1420 · Apto 52 — Consolacao, SP</div>
+            <span class="pc-status overdue"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Boleto em atraso — 5 dias</span>
+          </div>
+          <div class="pc-divider"></div>
+          <div class="pc-bottom">
+            <div class="pc-data"><div class="pc-data-label">Aluguel</div><div class="pc-data-val money">R$ 2.500</div></div>
+            <div class="pc-data"><div class="pc-data-label">Inquilino</div><div class="pc-data-val">Maria S.</div></div>
+            <div class="pc-data"><div class="pc-data-label">Vence contrato</div><div class="pc-data-val">Dez/2026</div></div>
+          </div>
+          <div class="pc-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </a>
+
+        <!-- Casa Jardins — exemplo, sem navegacao no prototipo -->
+        <div class="prop-card active-contract" style="cursor:default">
+          <div class="pc-top">
+            <div class="pc-alias">Casa Jardins</div>
+            <div class="pc-addr">Al. Franca, 890 — Jardim Paulista, SP</div>
+            <span class="pc-status paid"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Abril pago em 07/04</span>
+          </div>
+          <div class="pc-divider"></div>
+          <div class="pc-bottom">
+            <div class="pc-data"><div class="pc-data-label">Aluguel</div><div class="pc-data-val money">R$ 4.800</div></div>
+            <div class="pc-data"><div class="pc-data-label">Inquilino</div><div class="pc-data-val">Carlos M.</div></div>
+            <div class="pc-data"><div class="pc-data-label">Reajuste</div><div class="pc-data-val" style="color:var(--warning)">Pendente</div></div>
+          </div>
+        </div>
+
+        <!-- Studio Vila Madalena — exemplo, sem navegacao -->
+        <div class="prop-card active-contract" style="cursor:default">
+          <div class="pc-top">
+            <div class="pc-alias">Studio Vila Madalena</div>
+            <div class="pc-addr">R. Girassol, 340 · Apto 12 — Vila Madalena, SP</div>
+            <span class="pc-status waiting"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Aguardando pagamento</span>
+          </div>
+          <div class="pc-divider"></div>
+          <div class="pc-bottom">
+            <div class="pc-data"><div class="pc-data-label">Aluguel</div><div class="pc-data-val money">R$ 2.100</div></div>
+            <div class="pc-data"><div class="pc-data-label">Inquilino</div><div class="pc-data-val">Ana P.</div></div>
+            <div class="pc-data"><div class="pc-data-label">Vence</div><div class="pc-data-val">15/04/2026</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- IMOVEIS EM OUTRAS SITUACOES -->
+    <div class="sec-gap">
+      <div class="sec-title"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Outros imoveis</div>
+      <div class="prop-grid">
+
+        <!-- Ap. Moema — contrato em elaboracao -->
+        <a href="contrato.html" class="prop-card building">
+          <div class="pc-top">
+            <div class="pc-alias">Ap. Moema</div>
+            <div class="pc-addr">Av. Ibirapuera, 2200 · Apto 81 — Moema, SP</div>
+            <span class="pc-status building"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Contrato em elaboracao</span>
+          </div>
+          <div class="pc-divider"></div>
+          <div class="pc-bottom">
+            <div class="pc-data"><div class="pc-data-label">Aluguel previsto</div><div class="pc-data-val money">R$ 3.200</div></div>
+            <div class="pc-data"><div class="pc-data-label">Progresso</div><div class="pc-data-val">Etapa 4/8</div></div>
+            <div class="pc-data"><div class="pc-data-label">Pretendentes</div><div class="pc-data-val">2 propostas</div></div>
+          </div>
+          <div class="pc-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </a>
+
+        <!-- Sala Comercial — vago, sem contrato -->
+        <a href="pretendentes.html" class="prop-card-empty">
+          <div class="pce-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+          <div>
+            <div class="pce-alias">Sala Comercial Centro</div>
+            <div class="pce-sub">Av. Paulista, 1000 · Sala 52 — Bela Vista, SP</div>
+            <div style="margin-top:6px"><span class="pc-status no-contract" style="font-size:10px;padding:2px 7px">Sem contrato — captando pretendentes</span></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- CADASTRAR NOVO -->
+    <a href="imovel-cadastro.html" class="add-card">
+      <div class="add-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--navy)">Cadastrar novo imovel</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Adicione alias, endereco e siga para o contrato</div>
+      </div>
+    </a>
+
+  </div>
+</div>
+</body>
+</html>
