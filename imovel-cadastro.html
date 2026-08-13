@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moben - Cadastrar imovel</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#0101CD;--purple:#8301CD;--cyan:#01CCFF;--navy:#0C005F;
+  --grad:linear-gradient(135deg,#9CECFB 0%,#0052D4 50%,#8301CD 100%);
+  --grad-h:linear-gradient(90deg,#9CECFB 0%,#0052D4 50%,#8301CD 100%);
+  --white:#FFFFFF;--off:#F5F4FF;--off2:#EEF0FF;
+  --text:#0C005F;--muted:#6B6B9A;--border:rgba(1,1,205,0.12);
+  --success:#1B7F3A;--sw:240px;
+}
+body{font-family:'Quicksand',sans-serif;background:var(--off);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--navy);display:flex;flex-direction:column;z-index:100}
+.sidebar::before{content:'';position:absolute;inset:0;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,0 60,52 0,52' fill='%239CECFB'/%3E%3C/svg%3E");background-size:60px 60px;pointer-events:none}
+.sb-logo{padding:28px 24px 24px;position:relative;z-index:1;border-bottom:1px solid rgba(255,255,255,0.06)}
+.sb-logo img{height:24px}
+.sb-nav{flex:1;padding:16px 0;position:relative;z-index:1}
+.sb-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:12px 24px 6px}
+.sb-item{display:flex;align-items:center;gap:12px;padding:10px 24px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.45);text-decoration:none;transition:all 0.15s}
+.sb-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.sb-item:hover{color:rgba(255,255,255,0.75);background:rgba(255,255,255,0.05)}
+.sb-item.active{color:white;background:rgba(255,255,255,0.1)}
+.sb-item.active svg{stroke:var(--cyan)}
+.sb-foot{padding:20px 24px;border-top:1px solid rgba(255,255,255,0.06);position:relative;z-index:1}
+.sb-user{display:flex;align-items:center;gap:10px}
+.sb-av{width:32px;height:32px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:white;flex-shrink:0}
+.sb-uname{font-size:12px;font-weight:700;color:rgba(255,255,255,0.7)}
+.sb-uplan{font-size:10px;color:rgba(255,255,255,0.3);font-weight:500}
+
+/* MAIN */
+.main{margin-left:var(--sw);min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 32px;gap:12px;position:sticky;top:0;z-index:10}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:none;transition:color 0.15s}
+.back-btn:hover{color:var(--blue)}
+.back-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.5}
+.topbar-sep{width:1px;height:20px;background:var(--border)}
+.page-title{font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;color:var(--navy);letter-spacing:-0.02em}
+
+/* CONTENT */
+.content{flex:1;padding:40px 32px;max-width:680px}
+
+/* STEP PROGRESS */
+.step-progress{display:flex;align-items:center;margin-bottom:36px}
+.sp-item{display:flex;align-items:center;gap:8px}
+.sp-num{width:26px;height:26px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;transition:all 0.2s}
+.sp-num.active{background:var(--blue);border-color:var(--blue);color:white}
+.sp-num.done{background:var(--success);border-color:var(--success);color:white}
+.sp-label{font-size:12px;font-weight:700;color:var(--muted)}
+.sp-label.active{color:var(--navy)}
+.sp-line{flex:1;height:1px;background:var(--border);margin:0 10px}
+.sp-line.done{background:var(--success)}
+
+/* CARD */
+.card{background:var(--white);border:1px solid var(--border);padding:36px;margin-bottom:16px}
+.card-title{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--navy);letter-spacing:-0.02em;margin-bottom:6px}
+.card-sub{font-size:13px;color:var(--muted);font-weight:500;line-height:1.6;margin-bottom:28px}
+
+/* FIELDS */
+.fg{margin-bottom:20px}
+.fg-row{display:grid;gap:16px;margin-bottom:20px}
+.fg-row.col2{grid-template-columns:1fr 1fr}
+.fg-row.col3{grid-template-columns:2fr 1fr 1fr}
+label{display:block;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
+.field-hint{font-size:11px;color:var(--muted);margin-top:5px;font-weight:500;line-height:1.5}
+input[type=text],select{
+  width:100%;padding:12px 14px;border:1.5px solid var(--border);
+  background:var(--white);font-family:'Quicksand',sans-serif;
+  font-size:14px;font-weight:600;color:var(--text);
+  outline:none;transition:border-color 0.2s,background 0.2s;-webkit-appearance:none
+}
+input:focus,select:focus{border-color:var(--blue);background:var(--off)}
+input.prefilled{border-color:var(--success);background:var(--off)}
+select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B9A' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+
+/* CEP */
+.cep-wrap{position:relative}
+.cep-ico{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;pointer-events:none}
+.cep-ico.loading{color:var(--muted)}
+.cep-ico.ok{color:var(--success)}
+.cep-ico.err{color:#C62828}
+
+/* ALIAS PREVIEW */
+.alias-prev{display:none;align-items:center;gap:8px;margin-top:6px}
+.alias-badge{display:inline-flex;align-items:center;gap:5px;background:var(--off2);border:1px solid var(--border);padding:3px 10px;font-size:11px;font-weight:700;color:var(--blue)}
+
+/* SECTOR TOGGLE */
+.sector-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sector-opt{border:1.5px solid var(--border);padding:16px;cursor:pointer;text-align:center;transition:all 0.15s}
+.sector-opt:hover{border-color:var(--blue);background:var(--off)}
+.sector-opt.sel{border-color:var(--blue);background:var(--off)}
+.sector-opt svg{width:20px;height:20px;stroke:var(--muted);fill:none;stroke-width:1.5;display:block;margin:0 auto 8px}
+.sector-opt.sel svg{stroke:var(--blue)}
+.sector-opt-label{font-size:12px;font-weight:700;color:var(--muted)}
+.sector-opt.sel .sector-opt-label{color:var(--navy)}
+.sector-opt-desc{font-size:11px;color:var(--muted);font-weight:500;margin-top:3px;line-height:1.4}
+
+/* SUMMARY */
+.summary-card{background:var(--off2);border:1px solid var(--border);padding:20px 24px;margin-bottom:16px}
+.sum-alias{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:var(--navy);margin-bottom:4px}
+.sum-address{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:12px}
+.sum-tags{display:flex;gap:8px;flex-wrap:wrap}
+.sum-tag{display:inline-flex;align-items:center;gap:5px;background:var(--white);border:1px solid var(--border);padding:4px 10px;font-size:11px;font-weight:700;color:var(--text)}
+.sum-tag svg{width:10px;height:10px;stroke:var(--blue);fill:none;stroke-width:2}
+
+/* ROUTE CARDS */
+.route-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.route-card{border:1.5px solid var(--border);padding:24px;cursor:pointer;transition:all 0.18s}
+.route-card:hover{border-color:var(--blue);background:var(--off)}
+.route-card.sel{border-color:var(--blue);background:var(--off)}
+.route-icon{width:44px;height:44px;background:var(--off2);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.route-icon svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:1.5}
+.route-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.route-desc{font-size:12px;color:var(--muted);font-weight:500;line-height:1.55}
+.route-badge{display:inline-block;margin-top:10px;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase}
+.rb-new{background:var(--off2);color:var(--blue);border:1px solid var(--border)}
+.rb-migrate{background:#FEF3C7;color:#92400E;border:1px solid rgba(146,64,14,0.2)}
+
+/* ACTIONS */
+.actions{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.btn-back{display:inline-flex;align-items:center;gap:6px;padding:12px 20px;font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;color:var(--muted);background:transparent;border:1.5px solid var(--border);cursor:pointer;transition:all 0.2s;text-decoration:none}
+.btn-back:hover{border-color:var(--blue);color:var(--blue)}
+.btn-next{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;font-family:'Quicksand',sans-serif;font-size:14px;font-weight:700;color:white;background:var(--grad-h);border:none;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.btn-next:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(131,1,205,0.28)}
+.btn-next svg,.btn-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5}
+
+/* STEPS */
+.step{display:none}
+.step.active{display:block;animation:fu 0.25s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .main{margin-left:0}
+  .content{padding:20px}
+  .fg-row.col2,.fg-row.col3{grid-template-columns:1fr}
+  .route-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sb-logo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjEwNjAgMzcwIDY4MCAxMzUiPjxwYXRoIGZpbGw9IiM4MzAxY2QiIGQ9Ik0xMDcxLjkxLDQzMy4zN2w1Ny45My0yNi41LTU1LjQ5LTI1LjM4Yy02Ljk0LTMuMTctMTIuNjEuNDctMTIuNjEsOC4xdjExOC44NWMwLDcuNjMsNS4zNSwxMC42NiwxMS44OSw2LjczbDU2LjIxLTMzLjcyLTU4LjY2LTM1LjE5Yy02LjU0LTMuOTItNi4yMi05LjczLjcyLTEyLjlaIi8+PHBhdGggZmlsbD0iIzAxY2NmZiIgZD0iTTExODUuMzMsMzgxLjVsLTU1LjQ5LDI1LjM4LDU3LjkzLDI2LjVjNi45NCwzLjE3LDcuMjYsOC45OC43MiwxMi45bC01OC42NSwzNS4xOSw1Ni4yMSwzMy43MmM2LjU0LDMuOTIsMTEuODkuODksMTEuODktNi43M3YtMTE4Ljg1YzAtNy42My01LjY4LTExLjI3LTEyLjYxLTguMVoiLz48cGF0aCBmaWxsPSIjMDEwMWNkIiBkPSJNMTE4Ny43Nyw0MzMuMzdsLTU3LjkzLTI2LjUtNTcuOTMsMjYuNWMtNi45NCwzLjE3LTcuMjYsOC45OC0uNzIsMTIuOWw1OC42NiwzNS4xOSw1OC42NS0zNS4xOWM2LjU0LTMuOTIsNi4yMi05LjczLS43Mi0xMi45WiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0xMjQ1Ljg2LDQ4Ny42N2MwLDEuOTgtLjcsMy42NS0yLjExLDUtMS40MSwxLjQxLTMuMDgsMi4xMS01LDIuMTFoLS4yNGMtMS45MywwLTMuNTktLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi45OWMwLTkuNjksMy40NC0xOCwxMC4zMi0yNC45Myw2Ljg4LTYuODgsMTUuMTktMTAuMzIsMjQuOTMtMTAuMzIsMTEuNjIsMCwyMC45Nyw0LjY0LDI4LjA2LDEzLjkxLDcuMDQtOS4yNywxNi4zNi0xMy45MSwyNy45OC0xMy45MSw5Ljc0LDAsMTguMDYsMy40NCwyNC45MywxMC4zMiw2Ljg4LDYuOTMsMTAuMzIsMTUuMjQsMTAuMzIsMjQuOTN2NDIuOTljMCwxLjk4LS42OCwzLjY1LTIuMDMsNS0xLjQxLDEuNDEtMy4xLDIuMTEtNS4wOCwyLjExaC0uMTZjLTEuOTgsMC0zLjY1LS43LTUtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDMtMTAuNjMtNi4xLTE0LjY5LTQuMDYtNC4wNi04Ljk5LTYuMS0xNC43Ny02LjFzLTEwLjYzLDIuMDMtMTQuNjksNi4xYy00LjA2LDQuMDYtNi4xLDguOTYtNi4xLDE0LjY5djQyLjk5YzAsMS45OC0uNywzLjY1LTIuMTEsNS0xLjM2LDEuNDEtMy4wMiwyLjExLTUsMi4xMWgtLjE2Yy0xLjk4LDAtMy42Ny0uNy01LjA4LTIuMTEtMS40MS0xLjM1LTIuMTEtMy4wMi0yLjExLTV2LTQyLjk5YzAtNS43My0yLjAzLTEwLjYzLTYuMS0xNC42OS00LjA2LTQuMDYtOC45Ni02LjEtMTQuNjktNi4xcy0xMC42MywyLjAzLTE0LjY5LDYuMWMtNC4wNiw0LjA2LTYuMSw4Ljk2LTYuMSwxNC42OXY0Mi45OVoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTQwNy41LDQwOS40M2MxMS43OCwwLDIxLjgzLDQuMTcsMzAuMTcsMTIuNSw4LjMzLDguMzQsMTIuNSwxOC40LDEyLjUsMzAuMTdzLTQuMTcsMjEuODMtMTIuNSwzMC4xN2MtOC4zNCw4LjM0LTE4LjQsMTIuNTEtMzAuMTcsMTIuNTFzLTIxLjgzLTQuMTctMzAuMTctMTIuNTFjLTguMzQtOC4zNC0xMi41MS0xOC4zOS0xMi41MS0zMC4xN3M0LjE3LTIxLjgzLDEyLjUxLTMwLjE3YzguMzQtOC4zNCwxOC4zOS0xMi41LDMwLjE3LTEyLjVaTTE0MDcuNSw0MjQuMDRjLTcuODEsMC0xNC40OSwyLjc2LTIwLjAxLDguMjktNS40Nyw1LjUyLTguMjEsMTIuMTktOC4yMSwyMC4wMXMyLjczLDE0LjQxLDguMjEsMTkuOTNjNS41Miw1LjUzLDEyLjE5LDguMjksMjAuMDEsOC4yOXMxNC40Ni0yLjc2LDE5LjkzLTguMjljNS41My01LjUyLDguMjktMTIuMTcsOC4yOS0xOS45M3MtMi43Ni0xNC40OS04LjI5LTIwLjAxYy01LjQ3LTUuNTItMTIuMTItOC4yOS0xOS45My04LjI5WiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0xNDY0LjQxLDM3Ny4zOGMxLjkzLDAsMy41OS42OCw1LDIuMDMsMS40MSwxLjQxLDIuMTEsMy4xLDIuMTEsNS4wOHYzNS42NGM4LjAyLTcuMTQsMTcuNDMtMTAuNzEsMjguMjItMTAuNzEsMTEuNzcsMCwyMS44Myw0LjE3LDMwLjE3LDEyLjUsOC4zNCw4LjM0LDEyLjUxLDE4LjQsMTIuNTEsMzAuMTdzLTQuMTcsMjEuODMtMTIuNTEsMzAuMTdjLTguMzQsOC4zNC0xOC4zOSwxMi41MS0zMC4xNywxMi41MXMtMjEuODEtNC4xNC0zMC4wOS0xMi40M2MtOC4zNC04LjI5LTEyLjUzLTE4LjI5LTEyLjU4LTMwLjAxdi02Ny44NGMwLTEuOTguNy0zLjY3LDIuMTEtNS4wOCwxLjQxLTEuMzYsMy4wOC0yLjAzLDUtMi4wM2guMjNaTTE0OTkuNzQsNDI0LjA0Yy03LjgyLDAtMTQuNDksMi43Ni0yMC4wMSw4LjI5LTUuNDcsNS41Mi04LjIxLDEyLjE5LTguMjEsMjAuMDFzMi43NCwxNC40MSw4LjIxLDE5LjkzYzUuNTIsNS41MywxMi4xOSw4LjI5LDIwLjAxLDguMjlzMTQuNDYtMi43NiwxOS45My04LjI5YzUuNTItNS41Miw4LjI4LTEyLjE3LDguMjgtMTkuOTNzLTIuNzYtMTQuNDktOC4yOC0yMC4wMWMtNS40Ny01LjUyLTEyLjEyLTguMjktMTkuOTMtOC4yOVoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTYzMi4xOCw0NTIuNDNjLjAyLDEuOTYtLjY2LDMuNjUtMi4wNSw1LjA4LTEuMzcsMS4zOC0zLjA2LDIuMDctNS4wNywyLjA3LTgtLjA0LTE4LjUyLS4wOC0zMS41NS0uMTItMTYuMTgtLjA0LTI2LjY4LS4wNy0zMS40OC0uMDksMi4xNCw4Ljg4LDcuMzgsMTUuMjEsMTUuNzMsMTkuMDIsNS41NSwyLjUzLDExLjMyLDMuMTgsMTcuMzEsMS45Niw1LjgxLTEuMTksMTAuNzUtMy45MiwxNC44MS04LjIsMi4zOC0yLjQ2LDUuMTQtMi45OCw4LjI3LTEuNTYsMi4yMywxLjAyLDMuNTksMi43NSw0LjA3LDUuMi40NiwyLjM5LS4xOCw0LjQ3LTEuOTEsNi4yNi02LjE1LDYuNDctMTMuNjMsMTAuNTctMjIuNDMsMTIuMjgtOS4wMSwxLjgtMTcuNjguNzktMjYuMDMtMy4wMS0xMC43Mi00Ljg4LTE4LjE0LTEyLjg0LTIyLjI3LTIzLjg5LTQuMTMtMTEuMDQtMy43Ni0yMS45MiwxLjEzLTMyLjY0LDQuODgtMTAuNzIsMTIuODQtMTguMTQsMjMuODktMjIuMjcsMTEuMDQtNC4xMywyMS45Mi0zLjc2LDMyLjY0LDEuMTIsNy43MywzLjUyLDEzLjgzLDguODUsMTguMzEsMTUuOTksNC40Myw3LDYuNjQsMTQuNTksNi42MywyMi43OFpNMTYwMS4xNyw0MjYuOTdjLTcuMTEtMy4yNC0xNC4zMy0zLjQ5LTIxLjY0LS43NS03LjI3LDIuNzYtMTIuNTIsNy42OS0xNS43NiwxNC44MS0uNTgsMS4yOC0xLjA2LDIuNTgtMS40MywzLjlsNTQuMjkuMTdjLTIuMzMtOC40NS03LjQ5LTE0LjQ5LTE1LjQ1LTE4LjEyWiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0xNjUyLjQ4LDQ4Ny42N2MwLDEuOTgtLjcsMy42NS0yLjExLDUtMS40MSwxLjQxLTMuMDcsMi4xMS01LDIuMTFoLS4yM2MtMS45MywwLTMuNTktLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTkuNzksMy40Ni0xOC4xNiwxMC4zOS0yNS4wOSw2LjkzLTYuOTMsMTUuMjktMTAuMzksMjUuMDktMTAuMzlzMTguMDgsMy40NiwyNS4wMSwxMC4zOWM2LjkzLDYuOTMsMTAuMzksMTUuMjksMTAuMzksMjUuMDl2NDIuNzVjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuNzVjMC01Ljc4LTIuMDMtMTAuNzMtNi4wOS0xNC44NS00LjEyLTQuMTItOS4wNy02LjE4LTE0Ljg1LTYuMThzLTEwLjgxLDIuMDYtMTQuOTMsNi4xOGMtNC4wNiw0LjEyLTYuMDksOS4wNy02LjA5LDE0Ljg1djQyLjc1WiIvPjwvc3ZnPg==" alt="Moben"></div>
+  <nav class="sb-nav">
+    <div class="sb-label">Principal</div>
+    <a class="sb-item" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Meu painel</a>
+    <a class="sb-item active" href="imovel.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Meus imoveis</a>
+    <a class="sb-item" href="pretendentes.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Pretendentes</a>
+    <a class="sb-item" href="contrato.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Contratos</a>
+    <a class="sb-item" href="financeiro.html"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cobrancas</a>
+    <div class="sb-label">Financeiro</div>
+    <a class="sb-item" href="financeiro.html"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Financeiro</a>
+    <a class="sb-item" href="#"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>IRPF</a>
+    <div class="sb-label">Conta</div>
+    <a class="sb-item" href="#"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Meu perfil</a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-user">
+      <div class="sb-av">JS</div>
+      <div><div class="sb-uname">Joao Silva</div><div class="sb-uplan">Plano Essencial</div></div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <a href="imovel.html" class="back-btn">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Voltar
+    </a>
+    <div class="topbar-sep"></div>
+    <span class="page-title">Cadastrar imovel</span>
+  </div>
+
+  <div class="content">
+
+    <!-- PROGRESS -->
+    <div class="step-progress">
+      <div class="sp-item">
+        <div class="sp-num active" id="spn1">1</div>
+        <span class="sp-label active" id="spl1">O imovel</span>
+      </div>
+      <div class="sp-line" id="ln12"></div>
+      <div class="sp-item">
+        <div class="sp-num" id="spn2">2</div>
+        <span class="sp-label" id="spl2">Proximo passo</span>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 1 ═══ -->
+    <div class="step active" id="s1">
+      <div class="card">
+        <div class="card-title">Qual imovel voce quer cadastrar?</div>
+        <div class="card-sub">Apenas os dados de identificacao. Valores e contrato vem na proxima etapa.</div>
+
+        <!-- ALIAS — property.alias -->
+        <div class="fg">
+          <label for="falias">Como voce quer chamar este imovel?</label>
+          <input type="text" id="falias" placeholder="Ex: Ap. Centro, Casa da Praia..." maxlength="40" oninput="updateAlias(this.value)">
+          <div class="alias-prev" id="aliasPrev">
+            <span style="font-size:12px;color:var(--muted);font-weight:500">Aparecera no painel como:</span>
+            <span class="alias-badge" id="aliasTag"></span>
+          </div>
+          <div class="field-hint">Um apelido facil de identificar. So voce ve isso.</div>
+        </div>
+
+        <!-- SECTOR — property.occupation_sector -->
+        <div class="fg">
+          <label>Uso do imovel</label>
+          <div class="sector-wrap">
+            <div class="sector-opt sel" onclick="pickSector(this,'residential')" id="secRes">
+              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <div class="sector-opt-label">Residencial</div>
+              <div class="sector-opt-desc">Casa, apartamento, studio</div>
+            </div>
+            <div class="sector-opt" onclick="pickSector(this,'comercial')" id="secCom">
+              <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+              <div class="sector-opt-label">Comercial</div>
+              <div class="sector-opt-desc">Loja, sala, galpao</div>
+            </div>
+          </div>
+          <div class="field-hint" id="sectorHint">Lei do Inquilinato — clausulas residenciais padrao.</div>
+        </div>
+
+        <!-- CEP + ENDERECO — property.address -->
+        <div class="fg">
+          <label for="fcep">CEP</label>
+          <div class="cep-wrap">
+            <input type="text" id="fcep" placeholder="00000-000" maxlength="9" oninput="fmtCep(this)" onblur="lookupCep(this.value)">
+            <span class="cep-ico" id="cepIco"></span>
+          </div>
+        </div>
+
+        <div id="addrFields" style="display:none">
+          <div class="fg-row col3">
+            <div>
+              <label for="fstreet">Logradouro</label>
+              <input type="text" id="fstreet" placeholder="Rua, Av, Al...">
+            </div>
+            <div>
+              <label for="fnum">Numero</label>
+              <input type="text" id="fnum" placeholder="123">
+            </div>
+            <div>
+              <label for="fcomp">Complemento</label>
+              <input type="text" id="fcomp" placeholder="Apto, Bloco...">
+            </div>
+          </div>
+          <div class="fg-row col2">
+            <div>
+              <label for="fneigh">Bairro</label>
+              <input type="text" id="fneigh">
+            </div>
+            <div>
+              <label for="fcity">Cidade / UF</label>
+              <input type="text" id="fcity">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="actions">
+        <span></span>
+        <button class="btn-next" onclick="goTo(2)">
+          Continuar
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 2 — PROXIMO PASSO ═══ -->
+    <div class="step" id="s2">
+
+      <!-- RESUMO — property.alias + address_display + occupation_sector -->
+      <div class="summary-card">
+        <div class="sum-alias" id="sumAlias">—</div>
+        <div class="sum-address" id="sumAddr">—</div>
+        <div class="sum-tags">
+          <span class="sum-tag" id="sumSector">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+            Residencial
+          </span>
+          <span class="sum-tag">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span id="sumCep">—</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Imovel salvo. Qual o proximo passo?</div>
+        <div class="card-sub">Para ativar a cobranca automatica voce precisa de um contrato. Como prefere continuar?</div>
+
+        <div class="route-grid">
+          <div class="route-card sel" onclick="pickRoute(this,'new')">
+            <div class="route-icon">
+              <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+            </div>
+            <div class="route-title">Criar contrato novo</div>
+            <div class="route-desc">Monte o contrato passo a passo. A Moben guia voce em cada clausula — sem precisar saber de direito.</div>
+            <span class="route-badge rb-new">Recomendado</span>
+          </div>
+          <div class="route-card" onclick="pickRoute(this,'migrate')">
+            <div class="route-icon">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
+            </div>
+            <div class="route-title">Ja tenho contrato vigente</div>
+            <div class="route-desc">Faca upload do PDF. Nossa IA extrai os dados automaticamente e verifica o que precisa ser atualizado para ativar o faturamento.</div>
+            <span class="route-badge rb-migrate">Com IA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-back" onclick="goTo(1)">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          Voltar
+        </button>
+        <a href="contrato.html" class="btn-next" id="btnNext">
+          Criar contrato
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var cur = 1;
+var sector = 'residential';
+var route = 'new';
+
+function goTo(n) {
+  document.getElementById('s'+cur).classList.remove('active');
+  updateProgress(n);
+  cur = n;
+  document.getElementById('s'+cur).classList.add('active');
+  if (n === 2) { renderSummary(); }
+  window.scrollTo(0, 0);
+}
+
+function updateProgress(to) {
+  var spn1 = document.getElementById('spn1');
+  var spl1 = document.getElementById('spl1');
+  var spn2 = document.getElementById('spn2');
+  var spl2 = document.getElementById('spl2');
+  var ln12 = document.getElementById('ln12');
+  if (to === 1) {
+    spn1.className = 'sp-num active'; spn1.textContent = '1';
+    spl1.className = 'sp-label active';
+    spn2.className = 'sp-num'; spn2.textContent = '2';
+    spl2.className = 'sp-label';
+    ln12.className = 'sp-line';
+  } else {
+    spn1.className = 'sp-num done';
+    spn1.innerHTML = '<svg viewBox="0 0 12 10" width="10" height="10"><polyline points="1,5 4.5,9 11,1" stroke="white" stroke-width="2" fill="none"/></svg>';
+    spl1.className = 'sp-label';
+    spn2.className = 'sp-num active'; spn2.textContent = '2';
+    spl2.className = 'sp-label active';
+    ln12.className = 'sp-line done';
+  }
+}
+
+function updateAlias(v) {
+  var prev = document.getElementById('aliasPrev');
+  var tag = document.getElementById('aliasTag');
+  if (v.trim()) {
+    prev.style.display = 'flex';
+    tag.textContent = v.trim();
+  } else {
+    prev.style.display = 'none';
+  }
+}
+
+function pickSector(el, s) {
+  document.querySelectorAll('.sector-opt').forEach(function(o) { o.classList.remove('sel'); });
+  el.classList.add('sel');
+  sector = s;
+  var hint = document.getElementById('sectorHint');
+  hint.textContent = s === 'residential'
+    ? 'Lei do Inquilinato — clausulas residenciais padrao.'
+    : 'Locacao comercial — clausulas especificas para pessoa juridica ou atividade comercial.';
+}
+
+function fmtCep(el) {
+  var v = el.value.replace(/[^0-9]/g,'').substring(0,8);
+  el.value = v.length > 5 ? v.substring(0,5) + '-' + v.substring(5) : v;
+}
+
+function lookupCep(v) {
+  var digits = v.replace(/[^0-9]/g,'');
+  if (digits.length !== 8) { return; }
+  var ico = document.getElementById('cepIco');
+  ico.className = 'cep-ico loading';
+  ico.textContent = 'Buscando...';
+  fetch('https://viacep.com.br/ws/' + digits + '/json/')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.erro) {
+        ico.className = 'cep-ico err';
+        ico.textContent = 'CEP nao encontrado';
+        return;
+      }
+      ico.className = 'cep-ico ok';
+      ico.textContent = 'Encontrado';
+      var pref = function(id, val) {
+        var el = document.getElementById(id);
+        el.value = val || '';
+        if (val) { el.classList.add('prefilled'); }
+      };
+      pref('fstreet', d.logradouro);
+      pref('fneigh', d.bairro);
+      pref('fcity', (d.localidade || '') + (d.uf ? ' / ' + d.uf : ''));
+      document.getElementById('addrFields').style.display = 'block';
+      document.getElementById('fnum').focus();
+    })
+    .catch(function() {
+      ico.className = 'cep-ico err';
+      ico.textContent = 'Erro ao buscar';
+    });
+}
+
+function pickRoute(el, r) {
+  document.querySelectorAll('.route-card').forEach(function(c) { c.classList.remove('sel'); });
+  el.classList.add('sel');
+  route = r;
+  var btn = document.getElementById('btnNext');
+  btn.childNodes[0].textContent = r === 'new' ? 'Criar contrato ' : 'Fazer upload do contrato ';
+}
+
+function renderSummary() {
+  var alias = document.getElementById('falias').value || 'Imovel sem apelido';
+  var street = document.getElementById('fstreet').value;
+  var num = document.getElementById('fnum').value;
+  var comp = document.getElementById('fcomp').value;
+  var neigh = document.getElementById('fneigh').value;
+  var city = document.getElementById('fcity').value;
+  var cep = document.getElementById('fcep').value;
+  var parts = [street, num, comp].filter(Boolean).join(', ');
+  if (neigh) { parts += (parts ? ' — ' : '') + neigh; }
+  if (city) { parts += (parts ? ', ' : '') + city; }
+  document.getElementById('sumAlias').textContent = alias;
+  document.getElementById('sumAddr').textContent = parts || 'Endereco nao preenchido';
+  document.getElementById('sumCep').textContent = cep || '—';
+  var secTag = document.getElementById('sumSector');
+  secTag.childNodes[1] ? secTag.childNodes[1].textContent = (sector === 'residential' ? ' Residencial' : ' Comercial') : null;
+  secTag.querySelector('svg').innerHTML = sector === 'residential'
+    ? '<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'
+    : '<rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>';
+}
+</script>
+</body>
+</html>

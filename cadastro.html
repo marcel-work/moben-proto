@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moben - Criar conta</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--blue:#0101CD;--purple:#8301CD;--cyan:#01CCFF;--navy:#0C005F;--mint:#78FFD6;--grad:linear-gradient(135deg,#9CECFB 0%,#0052D4 50%,#8301CD 100%);--grad-h:linear-gradient(90deg,#9CECFB 0%,#0052D4 50%,#8301CD 100%);--white:#FFFFFF;--off:#F5F4FF;--off2:#EEF0FF;--text:#0C005F;--muted:#6B6B9A;--border:rgba(1,1,205,0.12);--error:#D32F2F;--success:#1B7F3A;}
+body{font-family:'Quicksand',sans-serif;background:var(--white);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+.page{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+@media(max-width:900px){.page{grid-template-columns:1fr}}
+.lp{background:var(--navy);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:48px;min-height:100vh}
+.lp::before{content:'';position:absolute;inset:0;opacity:0.05;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,0 60,52 0,52' fill='%239CECFB'/%3E%3C/svg%3E");background-size:60px 60px}
+.orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(1,204,255,0.12) 0%,rgba(131,1,205,0.06) 50%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.lc{position:relative;z-index:1}
+.logo{display:flex;align-items:center;margin-bottom:64px;text-decoration:none}
+.lh{font-family:'Nunito',sans-serif;font-size:clamp(28px,3vw,40px);font-weight:900;color:white;line-height:1.1;letter-spacing:-0.03em;margin-bottom:20px}
+.gt{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ls{font-size:15px;color:rgba(255,255,255,0.5);line-height:1.75;font-weight:500;max-width:380px;margin-bottom:48px}
+.fl{display:flex;flex-direction:column;gap:16px}
+.fi{display:flex;align-items:flex-start;gap:14px}
+.fic{width:36px;height:36px;background:rgba(1,204,255,0.1);border:1px solid rgba(1,204,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fic svg{width:16px;height:16px;stroke:var(--cyan);fill:none;stroke-width:2}
+.ft{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.55;font-weight:500}
+.ft strong{color:rgba(255,255,255,0.9);display:block;font-size:14px;font-weight:700;margin-bottom:2px}
+.lf{position:relative;z-index:1}
+.tb{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.4)}
+.td{width:6px;height:6px;background:var(--mint);border-radius:50%}
+@media(max-width:900px){.lp{display:none}}
+.rp{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 32px;background:var(--white);position:relative;min-height:100vh}
+.rp::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad-h)}
+.fc{width:100%;max-width:400px}
+.ml{display:none;margin-bottom:32px}
+@media(max-width:900px){.ml{display:block}}
+.step{display:none}
+.step.active{display:block;animation:fu 0.3s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fh{margin-bottom:28px}
+.fh-tag{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.fh-title{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:var(--navy);letter-spacing:-0.03em;margin-bottom:8px}
+.fh-sub{font-size:14px;color:var(--muted);line-height:1.6;font-weight:500}
+.sr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.sb{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border:1.5px solid var(--border);background:var(--white);font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;transition:all 0.2s}
+.sb:hover{border-color:var(--blue);background:var(--off)}
+.os{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.ol{flex:1;height:1px;background:var(--border)}
+.ot{font-size:12px;color:var(--muted);font-weight:600}
+.fg{margin-bottom:18px}
+label{display:block;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
+.iw{position:relative}
+input[type=email],input[type=password]{width:100%;padding:12px 14px;border:1.5px solid var(--border);background:var(--white);font-family:'Quicksand',sans-serif;font-size:14px;font-weight:600;color:var(--text);outline:none;transition:border-color 0.2s,background 0.2s;-webkit-appearance:none}
+input:focus{border-color:var(--blue);background:var(--off)}
+.eye{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:2px;display:flex;color:var(--muted)}
+.eye svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+.sbar{display:flex;gap:3px;margin-top:7px}
+.ss{height:3px;flex:1;background:var(--border);transition:background 0.25s}
+.ss.w{background:#ff5252}.ss.m{background:#ffab40}.ss.s{background:var(--success)}
+.slabel{font-size:11px;font-weight:600;margin-top:4px;min-height:14px}
+.tr{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px;cursor:pointer;user-select:none}
+.chk{width:17px;height:17px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.18s}
+.chk.on{background:var(--blue);border-color:var(--blue)}
+.chk svg{width:9px;height:9px;stroke:white;fill:none;stroke-width:2.5;display:none}
+.chk.on svg{display:block}
+.tt{font-size:12px;color:var(--muted);line-height:1.55;font-weight:500}
+.tt a{color:var(--purple);font-weight:700;text-decoration:underline}
+.cta{width:100%;padding:14px;font-family:'Quicksand',sans-serif;font-size:15px;font-weight:700;color:white;background:var(--grad-h);border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
+.cta:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(131,1,205,0.28)}
+.cta:active{transform:none}
+.cta:disabled{opacity:0.7;cursor:default;transform:none}
+.mc{text-align:center;font-size:12px;color:var(--muted);font-weight:500;margin-bottom:16px;line-height:1.6}
+.sl{text-align:center;font-size:13px;color:var(--muted);font-weight:500}
+.sl a{color:var(--blue);font-weight:700;text-decoration:none}
+.btr{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:20px;flex-wrap:wrap}
+.bi{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:600}
+.bi svg{width:11px;height:11px;stroke:var(--muted);fill:none;stroke-width:2}
+.bb{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;margin-bottom:24px;transition:color 0.2s}
+.bb:hover{color:var(--blue)}
+.bb svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5}
+.oc{text-align:center}
+.oi{width:64px;height:64px;background:var(--off2);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 22px}
+.oi svg{width:28px;height:28px;stroke:var(--blue);fill:none;stroke-width:1.5}
+.or2{display:flex;gap:8px;justify-content:center;margin:24px 0 10px}
+.oi2{width:46px;height:54px;border:1.5px solid var(--border);background:var(--white);font-family:'Nunito',sans-serif;font-size:24px;font-weight:900;color:var(--navy);text-align:center;outline:none;transition:border-color 0.18s;-webkit-appearance:none}
+.oi2:focus{border-color:var(--blue);background:var(--off)}
+.oi2.filled{border-color:var(--blue)}
+.rs{font-size:12px;color:var(--muted);font-weight:500;text-align:center;margin-bottom:22px}
+.rb{color:var(--purple);font-weight:700;cursor:pointer;text-decoration:underline}
+.tt2{color:var(--blue);font-weight:700}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.tc{border:1.5px solid var(--border);padding:24px 16px;cursor:pointer;transition:all 0.18s;text-align:center;position:relative}
+.tc:hover{border-color:var(--blue);background:var(--off)}
+.tc.sel{border-color:var(--blue);background:var(--off)}
+.tc.sel::after{content:'';position:absolute;top:8px;right:10px;width:18px;height:18px;background:var(--blue);color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.tci{width:44px;height:44px;background:var(--off2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.tci svg{width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.5}
+.tl{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.td2{font-size:12px;color:var(--muted);font-weight:500;line-height:1.45}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="lp">
+    <div class="lc">
+      <a href="index.html" class="logo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjEwNjAgMzcwIDY4MCAxMzUiPjxwYXRoIGZpbGw9IiM4MzAxY2QiIGQ9Ik0xMDcxLjkxLDQzMy4zN2w1Ny45My0yNi41LTU1LjQ5LTI1LjM4Yy02Ljk0LTMuMTctMTIuNjEuNDctMTIuNjEsOC4xdjExOC44NWMwLDcuNjMsNS4zNSwxMC42NiwxMS44OSw2LjczbDU2LjIxLTMzLjcyLTU4LjY2LTM1LjE5Yy02LjU0LTMuOTItNi4yMi05LjczLjcyLTEyLjlaIi8+PHBhdGggZmlsbD0iIzAxY2NmZiIgZD0iTTExODUuMzMsMzgxLjVsLTU1LjQ5LDI1LjM4LDU3LjkzLDI2LjVjNi45NCwzLjE3LDcuMjYsOC45OC43MiwxMi45bC01OC42NSwzNS4xOSw1Ni4yMSwzMy43MmM2LjU0LDMuOTIsMTEuODkuODksMTEuODktNi43M3YtMTE4Ljg1YzAtNy42My01LjY4LTExLjI3LTEyLjYxLTguMVoiLz48cGF0aCBmaWxsPSIjMDEwMWNkIiBkPSJNMTE4Ny43Nyw0MzMuMzdsLTU3LjkzLTI2LjUtNTcuOTMsMjYuNWMtNi45NCwzLjE3LTcuMjYsOC45OC0uNzIsMTIuOWw1OC42NiwzNS4xOSw1OC42NS0zNS4xOWM2LjU0LTMuOTIsNi4yMi05LjczLS43Mi0xMi45WiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0xMjQ1Ljg2LDQ4Ny42N2MwLDEuOTgtLjcsMy42NS0yLjExLDUtMS40MSwxLjQxLTMuMDgsMi4xMS01LDIuMTFoLS4yNGMtMS45MywwLTMuNTktLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi45OWMwLTkuNjksMy40NC0xOCwxMC4zMi0yNC45Myw2Ljg4LTYuODgsMTUuMTktMTAuMzIsMjQuOTMtMTAuMzIsMTEuNjIsMCwyMC45Nyw0LjY0LDI4LjA2LDEzLjkxLDcuMDQtOS4yNywxNi4zNi0xMy45MSwyNy45OC0xMy45MSw5Ljc0LDAsMTguMDYsMy40NCwyNC45MywxMC4zMiw2Ljg4LDYuOTMsMTAuMzIsMTUuMjQsMTAuMzIsMjQuOTN2NDIuOTljMCwxLjk4LS42OCwzLjY1LTIuMDMsNS0xLjQxLDEuNDEtMy4xLDIuMTEtNS4wOCwyLjExaC0uMTZjLTEuOTgsMC0zLjY1LS43LTUtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDMtMTAuNjMtNi4xLTE0LjY5LTQuMDYtNC4wNi04Ljk5LTYuMS0xNC43Ny02LjFzLTEwLjYzLDIuMDMtMTQuNjksNi4xYy00LjA2LDQuMDYtNi4xLDguOTYtNi4xLDE0LjY5djQyLjk5YzAsMS45OC0uNywzLjY1LTIuMTEsNS0xLjM2LDEuNDEtMy4wMiwyLjExLTUsMi4xMWgtLjE2Yy0xLjk4LDAtMy42Ny0uNy01LjA4LTIuMTEtMS40MS0xLjM1LTIuMTEtMy4wMi0yLjExLTV2LTQyLjk5YzAtNS43My0yLjAzLTEwLjYzLTYuMS0xNC42OS00LjA2LTQuMDYtOC45Ni02LjEtMTQuNjktNi4xcy0xMC42MywyLjAzLTE0LjY5LDYuMWMtNC4wNiw0LjA2LTYuMSw4Ljk2LTYuMSwxNC42OXY0Mi45OVoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTQwNy41LDQwOS40M2MxMS43OCwwLDIxLjgzLDQuMTcsMzAuMTcsMTIuNSw4LjMzLDguMzQsMTIuNSwxOC40LDEyLjUsMzAuMTdzLTQuMTcsMjEuODMtMTIuNSwzMC4xN2MtOC4zNCw4LjM0LTE4LjQsMTIuNTEtMzAuMTcsMTIuNTFzLTIxLjgzLTQuMTctMzAuMTctMTIuNTFjLTguMzQtOC4zNC0xMi41MS0xOC4zOS0xMi41MS0zMC4xN3M0LjE3LTIxLjgzLDEyLjUxLTMwLjE3YzguMzQtOC4zNCwxOC4zOS0xMi41LDMwLjE3LTEyLjVaTTE0MDcuNSw0MjQuMDRjLTcuODEsMC0xNC40OSwyLjc2LTIwLjAxLDguMjktNS40Nyw1LjUyLTguMjEsMTIuMTktOC4yMSwyMC4wMXMyLjczLDE0LjQxLDguMjEsMTkuOTNjNS41Miw1LjUzLDEyLjE5LDguMjksMjAuMDEsOC4yOXMxNC40Ni0yLjc2LDE5LjkzLTguMjljNS41My01LjUyLDguMjktMTIuMTcsOC4yOS0xOS45M3MtMi43Ni0xNC40OS04LjI5LTIwLjAxYy01LjQ3LTUuNTItMTIuMTItOC4yOS0xOS45My04LjI5WiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0xNDY0LjQxLDM3Ny4zOGMxLjkzLDAsMy41OS42OCw1LDIuMDMsMS40MSwxLjQxLDIuMTEsMy4xLDIuMTEsNS4wOHYzNS42NGM4LjAyLTcuMTQsMTcuNDMtMTAuNzEsMjguMjItMTAuNzEsMTEuNzcsMCwyMS44Myw0LjE3LDMwLjE3LDEyLjUsOC4zNCw4LjM0LDEyLjUxLDE4LjQsMTIuNTEsMzAuMTdzLTQuMTcsMjEuODMtMTIuNTEsMzAuMTdjLTguMzQsOC4zNC0xOC4zOSwxMi41MS0zMC4xNywxMi41MXMtMjEuODEtNC4xNC0zMC4wOS0xMi40M2MtOC4zNC04LjI5LTEyLjUzLTE4LjI5LTEyLjU4LTMwLjAxdi02Ny44NGMwLTEuOTguNy0zLjY3LDIuMTEtNS4wOCwxLjQxLTEuMzYsMy4wOC0yLjAzLDUtMi4wM2guMjNaTTE0OTkuNzQsNDI0LjA0Yy03LjgyLDAtMTQuNDksMi43Ni0yMC4wMSw4LjI5LTUuNDcsNS41Mi04LjIxLDEyLjE5LTguMjEsMjAuMDFzMi43NCwxNC40MSw4LjIxLDE5LjkzYzUuNTIsNS41MywxMi4xOSw4LjI5LDIwLjAxLDguMjlzMTQuNDYtMi43NiwxOS45My04LjI5YzUuNTItNS41Miw4LjI4LTEyLjE3LDguMjgtMTkuOTNzLTIuNzYtMTQuNDktOC4yOC0yMC4wMWMtNS40Ny01LjUyLTEyLjEyLTguMjktMTkuOTMtOC4yOVoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMTYzMi4xOCw0NTIuNDNjLjAyLDEuOTYtLjY2LDMuNjUtMi4wNSw1LjA4LTEuMzcsMS4zOC0zLjA2LDIuMDctNS4wNywyLjA3LTgtLjA0LTE4LjUyLS4wOC0zMS41NS0uMTItMTYuMTgtLjA0LTI2LjY4LS4wNy0zMS40OC0uMDksMi4xNCw4Ljg4LDcuMzgsMTUuMjEsMTUuNzMsMTkuMDIsNS41NSwyLjUzLDExLjMyLDMuMTgsMTcuMzEsMS45Niw1LjgxLTEuMTksMTAuNzUtMy45MiwxNC44MS04LjIsMi4zOC0yLjQ2LDUuMTQtMi45OCw4LjI3LTEuNTYsMi4yMywxLjAyLDMuNTksMi43NSw0LjA3LDUuMi40NiwyLjM5LS4xOCw0LjQ3LTEuOTEsNi4yNi02LjE1LDYuNDctMTMuNjMsMTAuNTctMjIuNDMsMTIuMjgtOS4wMSwxLjgtMTcuNjguNzktMjYuMDMtMy4wMS0xMC43Mi00Ljg4LTE4LjE0LTEyLjg0LTIyLjI3LTIzLjg5LTQuMTMtMTEuMDQtMy43Ni0yMS45MiwxLjEzLTMyLjY0LDQuODgtMTAuNzIsMTIuODQtMTguMTQsMjMuODktMjIuMjcsMTEuMDQtNC4xMywyMS45Mi0zLjc2LDMyLjY0LDEuMTIsNy43MywzLjUyLDEzLjgzLDguODUsMTguMzEsMTUuOTksNC40Myw3LDYuNjQsMTQuNTksNi42MywyMi43OFpNMTYwMS4xNyw0MjYuOTdjLTcuMTEtMy4yNC0xNC4zMy0zLjQ5LTIxLjY0LS43NS03LjI3LDIuNzYtMTIuNTIsNy42OS0xNS43NiwxNC44MS0uNTgsMS4yOC0xLjA2LDIuNTgtMS40MywzLjlsNTQuMjkuMTdjLTIuMzMtOC40NS03LjQ5LTE0LjQ5LTE1LjQ1LTE4LjEyWiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0xNjUyLjQ4LDQ4Ny42N2MwLDEuOTgtLjcsMy42NS0yLjExLDUtMS40MSwxLjQxLTMuMDcsMi4xMS01LDIuMTFoLS4yM2MtMS45MywwLTMuNTktLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTkuNzksMy40Ni0xOC4xNiwxMC4zOS0yNS4wOSw2LjkzLTYuOTMsMTUuMjktMTAuMzksMjUuMDktMTAuMzlzMTguMDgsMy40NiwyNS4wMSwxMC4zOWM2LjkzLDYuOTMsMTAuMzksMTUuMjksMTAuMzksMjUuMDl2NDIuNzVjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuNzVjMC01Ljc4LTIuMDMtMTAuNzMtNi4wOS0xNC44NS00LjEyLTQuMTItOS4wNy02LjE4LTE0Ljg1LTYuMThzLTEwLjgxLDIuMDYtMTQuOTMsNi4xOGMtNC4wNiw0LjEyLTYuMDksOS4wNy02LjA5LDE0Ljg1djQyLjc1WiIvPjwvc3ZnPg==" alt="Moben" style="height:32px;width:auto"></a>
+      <h2 class="lh">Administre seus<br><span class="gt">imoveis com seguranca.</span></h2>
+      <p class="ls">Tudo que voce precisa para ser seu proprio gestor, com respaldo juridico e financeiro.</p>
+      <div class="fl">
+        <div class="fi"><div class="fic"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><div class="ft"><strong>Analise de credito inclusa</strong>Decisao com informacao antes de assinar qualquer contrato</div></div>
+        <div class="fi"><div class="fic"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><div class="ft"><strong>Contrato digital personalizado</strong>Guia passo a passo - voce personaliza, a Moben emite para assinatura digital</div></div>
+        <div class="fi"><div class="fic"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></div><div class="ft"><strong>Cobranca e reajuste automaticos</strong>Boleto, Pix e IGPM/IPCA no piloto automatico, sem acao manual</div></div>
+        <div class="fi"><div class="fic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="ft"><strong>Painel do proprietario</strong>Visao completa dos seus imoveis, pagamentos e contratos em um so lugar</div></div>
+      </div>
+    </div>
+    <div class="lf"><div class="tb"><div class="td"></div>14 dias gratis - Sem cartao de credito</div></div>
+    <div class="orb"></div>
+  </div>
+  <div class="rp">
+    <div class="fc">
+      <div class="ml"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjQzMCA0MTUgMTA4MCAyMTUiPjxwYXRoIGZpbGw9IiM4MzAxY2QiIGQ9Ik00NDMuMTksNTE3LjNsOTUuNTMtNDMuNjktOTEuNS00MS44NWMtMTEuNDQtNS4yMy0yMC44Ljc4LTIwLjgsMTMuMzZ2MTk1Ljk4YzAsMTIuNTgsOC44MiwxNy41NywxOS42MSwxMS4xbDkyLjY5LTU1LjYtOTYuNzItNTguMDJjLTEwLjc5LTYuNDctMTAuMjUtMTYuMDUsMS4xOS0yMS4yOFoiLz48cGF0aCBmaWxsPSIjMDFjY2ZmIiBkPSJNNjMwLjIyLDQzMS43NmwtOTEuNSw0MS44NSw5NS41Myw0My42OWMxMS40NCw1LjIzLDExLjk3LDE0LjgxLDEuMTgsMjEuMjhsLTk2LjcxLDU4LjAyLDkyLjY4LDU1LjZjMTAuNzksNi40NywxOS42MSwxLjQ3LDE5LjYxLTExLjF2LTE5NS45OGMwLTEyLjU4LTkuMzYtMTguNTktMjAuOC0xMy4zNloiLz48cGF0aCBmaWxsPSIjMDEwMWNkIiBkPSJNNjM0LjI1LDUxNy4zbC05NS41My00My42OS05NS41Myw0My42OWMtMTEuNDQsNS4yMy0xMS45NywxNC44MS0xLjE5LDIxLjI4bDk2LjcyLDU4LjAyLDk2LjcxLTU4LjAyYzEwLjc5LTYuNDcsMTAuMjUtMTYuMDUtMS4xOC0yMS4yOFoiLz48cGF0aCBmaWxsPSIjMDEwMWNkIiBkPSJNNzMwLjA0LDYwNi44MmMwLDMuMjctMS4xNiw2LjAyLTMuNDgsOC4yNS0yLjMyLDIuMzItNS4wNywzLjQ4LTguMjUsMy40OGgtLjM4Yy0zLjE4LDAtNS45My0xLjE2LTguMjUtMy40OC0yLjMyLTIuMjMtMy40OC00Ljk4LTMuNDgtOC4yNXYtNzAuODljMC0xNS45OCw1LjY3LTI5LjY4LDE3LjAxLTQxLjExLDExLjM0LTExLjM0LDI1LjA0LTE3LjAxLDQxLjEyLTE3LjAxLDE5LjE2LDAsMzQuNTgsNy42NSw0Ni4yNywyMi45NCwxMS42LTE1LjI5LDI2Ljk4LTIyLjk0LDQ2LjE0LTIyLjk0LDE2LjA2LDAsMjkuNzcsNS42Nyw0MS4xMSwxNy4wMSwxMS4zNCwxMS40MywxNy4wMSwyNS4xNCwxNy4wMSw0MS4xMXY3MC44OWMwLDMuMjctMS4xMiw2LjAyLTMuMzUsOC4yNS0yLjMyLDIuMzItNS4xMSwzLjQ4LTguMzgsMy40OGgtLjI2Yy0zLjI3LDAtNi4wMi0xLjE2LTguMjUtMy40OC0yLjMyLTIuMjMtMy40OC00Ljk4LTMuNDgtOC4yNXYtNzAuODljMC05LjQ1LTMuMzUtMTcuNTMtMTAuMDUtMjQuMjMtNi43LTYuNy0xNC44Mi0xMC4wNi0yNC4zNi0xMC4wNnMtMTcuNTMsMy4zNS0yNC4yMywxMC4wNmMtNi43LDYuNy0xMC4wNSwxNC43OC0xMC4wNSwyNC4yM3Y3MC44OWMwLDMuMjctMS4xNiw2LjAyLTMuNDgsOC4yNS0yLjIzLDIuMzItNC45OCwzLjQ4LTguMjUsMy40OGgtLjI2Yy0zLjI3LDAtNi4wNi0xLjE2LTguMzgtMy40OC0yLjMyLTIuMjMtMy40OC00Ljk4LTMuNDgtOC4yNXYtNzAuODljMC05LjQ1LTMuMzUtMTcuNTMtMTAuMDUtMjQuMjMtNi43LTYuNy0xNC43OC0xMC4wNi0yNC4yMy0xMC4wNnMtMTcuNTMsMy4zNS0yNC4yMywxMC4wNmMtNi43LDYuNy0xMC4wNSwxNC43OC0xMC4wNSwyNC4yM3Y3MC44OVoiLz48cGF0aCBmaWxsPSIjMDEwMWNkIiBkPSJNOTk2LjU3LDQ3Ny44MWMxOS40MiwwLDM2LDYuODcsNDkuNzUsMjAuNjIsMTMuNzUsMTMuNzUsMjAuNjIsMzAuMzMsMjAuNjIsNDkuNzVzLTYuODcsMzYtMjAuNjIsNDkuNzVjLTEzLjc1LDEzLjc1LTMwLjMzLDIwLjYyLTQ5Ljc1LDIwLjYycy0zNi02Ljg4LTQ5Ljc1LTIwLjYyYy0xMy43NS0xMy43NS0yMC42Mi0zMC4zMy0yMC42Mi00OS43NXM2Ljg3LTM2LDIwLjYyLTQ5Ljc1YzEzLjc1LTEzLjc1LDMwLjMzLTIwLjYyLDQ5Ljc1LTIwLjYyWk05OTYuNTcsNTAxLjkxYy0xMi44OSwwLTIzLjg5LDQuNTYtMzIuOTksMTMuNjYtOS4wMiw5LjExLTEzLjUzLDIwLjEtMTMuNTMsMzNzNC41MSwyMy43NiwxMy41MywzMi44NmM5LjExLDkuMTEsMjAuMTEsMTMuNjYsMzIuOTksMTMuNjZzMjMuODQtNC41NSwzMi44Ny0xMy42NmM5LjExLTkuMSwxMy42Ni0yMC4wNiwxMy42Ni0zMi44NnMtNC41NS0yMy44OS0xMy42Ni0zM2MtOS4wMi05LjEtMTkuOTgtMTMuNjYtMzIuODctMTMuNjZaIi8+PHBhdGggZmlsbD0iIzAxMDFjZCIgZD0iTTE0MDAuNTIsNjA2LjgyYzAsMy4yNy0xLjE2LDYuMDItMy40OCw4LjI1LTIuMzIsMi4zMi01LjA3LDMuNDgtOC4yNSwzLjQ4aC0uMzljLTMuMTgsMC01LjkzLTEuMTYtOC4yNS0zLjQ4LTIuMzItMi4yMy0zLjQ4LTQuOTgtMy40OC04LjI1di03MC41YzAtMTYuMTUsNS43MS0yOS45NCwxNy4xNC00MS4zNywxMS40My0xMS40MywyNS4yMS0xNy4xNCw0MS4zNy0xNy4xNHMyOS44MSw1LjcxLDQxLjI0LDE3LjE0YzExLjQzLDExLjQzLDE3LjE0LDI1LjIyLDE3LjE0LDQxLjM3djcwLjVjMCwzLjI3LTEuMTYsNi4wMi0zLjQ4LDguMjUtMi4yNCwyLjMyLTQuOTgsMy40OC04LjI1LDMuNDhoLS4yNmMtMy4yNywwLTYuMDYtMS4xNi04LjM4LTMuNDgtMi4zMi0yLjIzLTMuNDgtNC45OC0zLjQ4LTguMjV2LTcwLjVjMC05LjU0LTMuMzUtMTcuNy0xMC4wNS0yNC40OC02Ljc5LTYuNzktMTQuOTUtMTAuMTgtMjQuNDktMTAuMThzLTE3LjgzLDMuNC0yNC42MiwxMC4xOGMtNi43LDYuNzktMTAuMDUsMTQuOTUtMTAuMDUsMjQuNDh2NzAuNVoiLz48L3N2Zz4=" alt="Moben" style="height:26px;width:auto"></div>
+      <div class="step active" id="s1">
+        <div class="fh"><h1 class="fh-title">Crie sua conta</h1><p class="fh-sub">Comece a profissionalizar seu aluguel.</p></div>
+        <div class="sr">
+          <button class="sb" type="button"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google</button>
+          <button class="sb" type="button"><svg viewBox="0 0 24 24" width="18" height="18" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Facebook</button>
+        </div>
+        <div class="os"><div class="ol"></div><span class="ot">ou use seu e-mail</span><div class="ol"></div></div>
+        <div class="fg"><label for="femail">E-mail</label><input type="email" id="femail" placeholder="voce@email.com" autocomplete="email"></div>
+        <div class="fg"><label for="fpass">Senha</label><div class="iw"><input type="password" id="fpass" placeholder="Minimo 8 caracteres" autocomplete="new-password" oninput="strength(this.value)"><button class="eye" type="button" onclick="togglePwd(this)" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div><div class="sbar"><div class="ss" id="sa1"></div><div class="ss" id="sa2"></div><div class="ss" id="sa3"></div><div class="ss" id="sa4"></div></div><div class="slabel" id="slbl"></div></div>
+        <div class="tr" onclick="toggleChk()"><div class="chk" id="chk"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,9 11,1"/></svg></div><div class="tt">Li e concordo com os <a href="#" onclick="return false">Termos de Uso</a> e a <a href="#" onclick="return false">Politica de Privacidade</a></div></div>
+        <button class="cta" type="button" onclick="goTo(2)">Criar conta gratis <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+        <p class="mc">Cancele quando quiser, sem burocracia.</p>
+        <p class="sl">Ja tem conta? <a href="#">Entrar agora</a></p>
+        <div class="btr"><div class="bi"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>SSL seguro</div><div class="bi"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>LGPD</div><div class="bi"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>+2.000 proprietarios</div></div>
+      </div>
+      <div class="step" id="s2">
+        <button class="bb" type="button" onclick="goTo(1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Voltar</button>
+        <div class="oc">
+          <div class="oi"><svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+          <div class="fh"><div class="fh-tag">Ultimo passo antes de entrar</div><h1 class="fh-title">Confirme seu e-mail</h1><p class="fh-sub">Codigo de 6 digitos enviado para<br><strong id="ed" style="color:var(--navy)">voce@email.com</strong></p></div>
+          <div class="or2"><input class="oi2" type="text" maxlength="1" id="o0" oninput="otp(this,0)" onkeydown="otpKey(event,0)"><input class="oi2" type="text" maxlength="1" id="o1" oninput="otp(this,1)" onkeydown="otpKey(event,1)"><input class="oi2" type="text" maxlength="1" id="o2" oninput="otp(this,2)" onkeydown="otpKey(event,2)"><input class="oi2" type="text" maxlength="1" id="o3" oninput="otp(this,3)" onkeydown="otpKey(event,3)"><input class="oi2" type="text" maxlength="1" id="o4" oninput="otp(this,4)" onkeydown="otpKey(event,4)"><input class="oi2" type="text" maxlength="1" id="o5" oninput="otp(this,5)" onkeydown="otpKey(event,5)"></div>
+          <div class="rs">Nao recebeu? <span class="rb" id="rb" onclick="resend()">Reenviar codigo</span><span id="ts" style="display:none">Reenviar em <span class="tt2" id="tc">60</span>s</span></div>
+          <button class="cta" type="button" onclick="goTo(3)">Confirmar e entrar <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <p class="mc">So confirmamos que e voce. Nada de spam.</p>
+        </div>
+      </div>
+      <div class="step" id="s3">
+        <div class="fh"><h1 class="fh-title">Quantos imoveis voce tem?</h1><p class="fh-sub">Vamos deixar tudo pronto para o seu perfil.</p></div>
+        <div class="tg">
+          <div class="tc" onclick="pick(this)"><div class="tci"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="tl">Ate 3 imoveis</div><div class="td2">Quero organizar minhas locacoes</div></div>
+          <div class="tc" onclick="pick(this)"><div class="tci"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div><div class="tl">4+ imoveis</div><div class="td2">Preciso otimizar meu portfolio</div></div>
+        </div>
+        <button class="cta" type="button" onclick="finish(this)">Ir para meu painel <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+        <p class="mc">Voce pode mudar isso depois nas configuracoes.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var agreed=false,cur=1;
+function goTo(n){document.getElementById('s'+cur).classList.remove('active');cur=n;document.getElementById('s'+cur).classList.add('active');if(n===2){var em=document.getElementById('femail').value||'voce@email.com';document.getElementById('ed').textContent=em;setTimeout(function(){document.getElementById('o0').focus();},100);}window.scrollTo(0,0);}
+function togglePwd(btn){var i=document.getElementById('fpass'),s=i.type==='password';i.type=s?'text':'password';btn.querySelector('svg').innerHTML=s?'<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>':'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';}
+function strength(v){var ss=['sa1','sa2','sa3','sa4'].map(function(id){return document.getElementById(id);});var l=document.getElementById('slbl');ss.forEach(function(s){s.className='ss';});if(!v){l.textContent='';return;}var sc=0;if(v.length>=8)sc++;if(/[A-Z]/.test(v))sc++;if(/[0-9]/.test(v))sc++;if(/[^A-Za-z0-9]/.test(v))sc++;var m={1:['w','Senha fraca','#ff5252'],2:['m','Poderia ser mais forte','#ffab40'],3:['m','Quase la','#ffab40'],4:['s','Senha forte','var(--success)']};var r=m[sc]||m[1];for(var i=0;i<sc;i++)ss[i].classList.add(r[0]);l.textContent=r[1];l.style.color=r[2];}
+function toggleChk(){agreed=!agreed;document.getElementById('chk').classList.toggle('on',agreed);}
+function otp(el,i){el.value=el.value.replace(/\D/g,'');el.classList.toggle('filled',el.value.length>0);if(el.value&&i<5)document.getElementById('o'+(i+1)).focus();}
+function otpKey(e,i){if(e.key==='Backspace'&&!e.target.value&&i>0)document.getElementById('o'+(i-1)).focus();}
+var ti=null;
+function resend(){document.getElementById('rb').style.display='none';document.getElementById('ts').style.display='inline';var c=60;document.getElementById('tc').textContent=c;ti=setInterval(function(){c--;document.getElementById('tc').textContent=c;if(c<=0){clearInterval(ti);document.getElementById('ts').style.display='none';document.getElementById('rb').style.display='inline';}},1000);}
+function pick(el){document.querySelectorAll('.tc').forEach(function(c){c.classList.remove('sel');});el.classList.add('sel');}
+function finish(btn){btn.textContent='Tudo pronto! Preparando seu painel...';btn.disabled=true;setTimeout(function(){window.location.href='onboarding.html';},1200);}
+</script>
+</body>
+</html>

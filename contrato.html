@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moben - Contrato digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#0101CD;--purple:#8301CD;--cyan:#01CCFF;--navy:#0C005F;
+  --grad:linear-gradient(135deg,#9CECFB 0%,#0052D4 50%,#8301CD 100%);
+  --grad-h:linear-gradient(90deg,#9CECFB 0%,#0052D4 50%,#8301CD 100%);
+  --white:#fff;--off:#F5F4FF;--off2:#EEF0FF;
+  --text:#0C005F;--muted:#6B6B9A;--border:rgba(1,1,205,0.12);
+  --success:#1B7F3A;--success-bg:#E8F5E9;
+  --warning:#92400E;--warning-bg:#FEF3C7;
+  --danger:#C62828;--danger-bg:#FFEBEE;
+  --sw:220px;--iw:256px;
+}
+body{font-family:'Quicksand',sans-serif;background:var(--off);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
+.app-sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--navy);display:flex;flex-direction:column;z-index:100}
+.app-sidebar::before{content:'';position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,0 60,52 0,52' fill='%239CECFB'/%3E%3C/svg%3E");background-size:60px 60px;pointer-events:none}
+.as-logo{padding:24px 20px;position:relative;z-index:1;border-bottom:1px solid rgba(255,255,255,.06)}
+.as-logo img{height:22px}
+.as-nav{flex:1;padding:12px 0;position:relative;z-index:1;overflow-y:auto}
+.as-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:10px 20px 4px}
+.as-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:12px;font-weight:600;color:rgba(255,255,255,.45);text-decoration:none;transition:all .15s}
+.as-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.as-item:hover{color:rgba(255,255,255,.75);background:rgba(255,255,255,.05)}
+.as-item.active{color:#fff;background:rgba(255,255,255,.1)}
+.as-item.active svg{stroke:var(--cyan)}
+.as-foot{padding:16px 20px;border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:1}
+.as-av{width:28px;height:28px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;color:#fff;flex-shrink:0}
+.as-uname{font-size:11px;font-weight:700;color:rgba(255,255,255,.7)}
+.as-uplan{font-size:10px;color:rgba(255,255,255,.3);font-weight:500}
+.wizard-index{position:fixed;top:0;left:var(--sw);width:var(--iw);height:100vh;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:90}
+.wi-header{padding:18px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.wi-prop{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.wi-propname{font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;color:var(--navy);margin-bottom:10px}
+.wi-bar{height:3px;background:var(--border)}
+.wi-bar-fill{height:3px;background:var(--grad-h);transition:width .4s ease;width:0%}
+.wi-bar-label{font-size:10px;font-weight:700;color:var(--muted);margin-top:4px}
+.wi-steps{flex:1;overflow-y:auto;padding:6px 0}
+.wi-step{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;cursor:pointer;transition:background .15s;border-left:3px solid transparent}
+.wi-step:hover{background:var(--off)}
+.wi-step.active{background:var(--off2);border-left-color:var(--blue)}
+.ws-num{width:20px;height:20px;border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--muted);flex-shrink:0;margin-top:1px;transition:all .2s}
+.wi-step.active .ws-num{border-color:var(--blue);color:var(--blue)}
+.wi-step.done .ws-num{background:var(--success);border-color:var(--success);color:#fff}
+.wi-step.partial .ws-num{background:var(--warning-bg);border-color:var(--warning);color:var(--warning)}
+.ws-info{flex:1}
+.ws-label{font-size:12px;font-weight:600;color:var(--muted);display:block;line-height:1.3;margin-bottom:2px}
+.wi-step.active .ws-label{color:var(--navy);font-weight:700}
+.ws-tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border:1px solid}
+.ws-tag.done{color:var(--success);border-color:rgba(27,127,58,.25);background:var(--success-bg)}
+.ws-tag.active{color:var(--blue);border-color:rgba(1,1,205,.2);background:var(--off2)}
+.ws-tag.partial{color:var(--warning);border-color:rgba(146,64,14,.25);background:var(--warning-bg)}
+.ws-tag.pending{color:var(--muted);border-color:var(--border);background:var(--off)}
+.wi-footer{padding:12px 14px;border-top:1px solid var(--border);flex-shrink:0}
+.wi-save{width:100%;padding:9px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:var(--blue);background:var(--off2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.wi-save:hover{background:var(--off);border-color:var(--blue)}
+.wi-save svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
+.main{margin-left:calc(var(--sw) + var(--iw));min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 28px;gap:10px;position:sticky;top:0;z-index:10}
+.back-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:none;transition:color .15s}
+.back-btn:hover{color:var(--blue)}
+.back-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5}
+.tb-sep{width:1px;height:18px;background:var(--border)}
+.page-title{font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:var(--navy)}
+.draft-pill{margin-left:auto;font-size:11px;font-weight:700;color:var(--warning);background:var(--warning-bg);border:1px solid rgba(146,64,14,.2);padding:3px 10px}
+.pending-banner{display:none;background:var(--warning-bg);border-bottom:1px solid rgba(146,64,14,.2);padding:10px 20px;align-items:center;justify-content:space-between;cursor:pointer}
+.pending-banner.show{display:flex}
+.pending-banner-txt{font-size:12px;font-weight:700;color:var(--warning)}
+.pending-banner-link{font-size:12px;font-weight:700;color:var(--blue);text-decoration:underline}
+.content{flex:1;padding:28px;max-width:680px}
+.sp{display:none;animation:fu .22s ease both}
+.sp.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.sh{margin-bottom:22px}
+.sh-num{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.sh-title{font-family:'Nunito',sans-serif;font-size:21px;font-weight:900;color:var(--navy);letter-spacing:-.02em;margin-bottom:5px}
+.sh-sub{font-size:13px;color:var(--muted);font-weight:500;line-height:1.6}
+.card{background:var(--white);border:1px solid var(--border);padding:24px;margin-bottom:14px}
+.cs{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.fg{margin-bottom:16px}
+.fg:last-child{margin-bottom:0}
+.fgr{display:grid;gap:12px;margin-bottom:16px}
+.fgr.c2{grid-template-columns:1fr 1fr}
+.fgr.c3{grid-template-columns:1fr 1fr 1fr}
+label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],input[type=file],select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);background:var(--white);font-family:'Quicksand',sans-serif;font-size:13px;font-weight:600;color:var(--text);outline:none;transition:border-color .2s,background .2s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);background:var(--off)}
+input[type=file]{padding:8px 12px;cursor:pointer;font-size:12px;color:var(--muted)}
+input[readonly]{background:var(--off);color:var(--muted)}
+select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B9A' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.curr-wrap{position:relative}
+.curr-pre{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:700;color:var(--muted);pointer-events:none;z-index:1}
+.curr-input{padding-left:38px !important}
+.fh{font-size:11px;color:var(--muted);margin-top:5px;font-weight:500;line-height:1.5}
+.fh.info{color:var(--blue);background:var(--off2);border-left:2px solid var(--blue);padding:8px 10px;margin-top:8px}
+.fh.warn{color:var(--warning);background:var(--warning-bg);border-left:2px solid var(--warning);padding:8px 10px;margin-top:8px}
+.fh.ok{color:var(--success);background:var(--success-bg);border-left:2px solid var(--success);padding:8px 10px;margin-top:8px}
+.fh strong{font-weight:700;display:block;margin-bottom:2px}
+.tog3{display:flex;flex-direction:column;gap:8px;margin-bottom:0}
+.tog{border:1.5px solid var(--border);padding:13px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:10px}
+.tog:hover{border-color:var(--blue);background:var(--off)}
+.tog.sel{border-color:var(--blue);background:var(--off2)}
+.tog-dot{width:15px;height:15px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.tog.sel .tog-dot{border-color:var(--blue)}
+.tog.sel .tog-dot::after{content:'';width:7px;height:7px;background:var(--blue);border-radius:50%;display:block}
+.tog-lbl{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.tog-desc{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px;line-height:1.4}
+.opt-list{display:flex;flex-direction:column;gap:8px}
+.opt{border:1.5px solid var(--border);padding:11px 13px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:10px}
+.opt:hover{border-color:var(--blue);background:var(--off)}
+.opt.sel{border-color:var(--blue);background:var(--off2)}
+.opt-r{width:14px;height:14px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;margin-top:3px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.opt.sel .opt-r{border-color:var(--blue)}
+.opt.sel .opt-r::after{content:'';width:7px;height:7px;background:var(--blue);border-radius:50%;display:block}
+.opt-lbl{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.opt-desc{font-size:11px;color:var(--muted);font-weight:500;margin-top:3px;line-height:1.45}
+.sub-list{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.sub{border:1px solid var(--border);padding:9px 12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--muted)}
+.sub:hover{border-color:var(--blue);color:var(--text)}
+.sub.sel{border-color:var(--blue);background:var(--off2);color:var(--navy)}
+.sub-dot{width:12px;height:12px;border:1.5px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.sub.sel .sub-dot{border-color:var(--blue)}
+.sub.sel .sub-dot::after{content:'';width:6px;height:6px;background:var(--blue);border-radius:50%;display:block}
+.cond{display:none;margin-top:12px;background:var(--off2);border-left:3px solid var(--blue);padding:14px 16px}
+.cond.show{display:block;animation:fu .2s ease both}
+.cond-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:12px}
+/* CONTAS BANCÁRIAS */
+.bank-account{border:1px solid var(--border);padding:16px;margin-bottom:10px;background:var(--white)}
+.bank-account-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.bank-account-title{font-size:12px;font-weight:700;color:var(--navy)}
+.bank-account-pct{font-size:11px;font-weight:700;color:var(--blue)}
+.bank-remove{background:none;border:none;cursor:pointer;color:var(--danger);font-size:11px;font-weight:700;padding:3px 6px;transition:opacity .15s}
+.bank-remove:hover{opacity:.7}
+.bank-add{width:100%;padding:10px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:var(--blue);background:var(--off2);border:1.5px dashed var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;margin-top:10px}
+.bank-add:hover{border-color:var(--blue);background:var(--off)}
+.bank-total{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--border);margin-top:10px;font-size:12px;font-weight:700}
+.bank-total-val{color:var(--blue)}
+.bank-total-val.invalid{color:var(--danger)}
+/* TOTALIZADOR */
+.total-box{background:var(--navy);padding:16px 20px;margin-bottom:14px}
+.total-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);margin-bottom:12px}
+.total-row{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:rgba(255,255,255,.65);padding:3px 0}
+.total-row.main{font-size:15px;font-weight:700;color:#fff;border-top:1px solid rgba(255,255,255,.15);margin-top:8px;padding-top:10px}
+.total-row.main span:last-child{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900}
+/* TOGGLE HISTÓRICO */
+.hist-toggle{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;padding:6px 0;text-decoration:underline}
+.hist-box{margin-top:12px;padding:14px;background:var(--off);border:1px solid var(--border)}
+.hist-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border)}
+.hist-row:last-child{border-bottom:none;font-weight:700}
+/* REVISÃO */
+.rv-sec{background:var(--white);border:1px solid var(--border);padding:18px;margin-bottom:10px}
+.rv-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.rv-edit{font-size:11px;color:var(--blue);cursor:pointer;font-weight:700}
+.rv-edit:hover{text-decoration:underline}
+.rv-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px}
+.rv-row:last-child{border-bottom:none}
+.rv-k{color:var(--muted);font-weight:500;flex-shrink:0;margin-right:12px}
+.rv-v{font-weight:700;color:var(--text);text-align:right}
+.rv-miss{color:var(--warning);font-weight:700}
+/* TESTEMUNHAS */
+.wit{border:1px solid var(--border);padding:16px;margin-bottom:10px}
+.wit:last-child{margin-bottom:0}
+.wit-n{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px}
+/* ASSINATURA */
+.sign-box{background:var(--white);border:1px solid var(--border);padding:24px;text-align:center;margin-bottom:14px}
+.sign-ico{width:52px;height:52px;background:var(--off2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.sign-ico svg{width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.5}
+.sign-title{font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;color:var(--navy);margin-bottom:5px}
+.sign-sub{font-size:12px;color:var(--muted);font-weight:500;line-height:1.6;margin-bottom:18px}
+.sign-parties{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;text-align:left}
+.party{border:1px solid var(--border);padding:12px}
+.party-role{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px}
+.party-name{font-size:13px;font-weight:700;color:var(--navy)}
+.party-email{font-size:11px;color:var(--muted);margin-top:2px}
+.party-st{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;margin-top:6px;color:var(--warning)}
+.btn-pdf{width:100%;padding:11px;font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;color:var(--blue);background:var(--off2);border:1.5px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:10px;transition:all .15s}
+.btn-pdf:hover{background:var(--off);border-color:var(--blue)}
+.btn-pdf svg,.btn-sign svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+.btn-sign{width:100%;padding:13px;font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;color:#fff;background:var(--grad-h);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s}
+.btn-sign:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(131,1,205,.28)}
+.btn-sign svg{stroke:#fff}
+/* AÇÕES */
+.actions{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.btn-back{display:inline-flex;align-items:center;gap:5px;padding:10px 16px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:var(--muted);background:transparent;border:1.5px solid var(--border);cursor:pointer;transition:all .2s}
+.btn-back:hover{border-color:var(--blue);color:var(--blue)}
+.btn-next{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;color:#fff;background:var(--grad-h);border:none;cursor:pointer;transition:all .2s}
+.btn-next:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(131,1,205,.28)}
+.btn-back svg,.btn-next svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5}
+.iptu-calc{font-size:12px;font-weight:700;color:var(--success);margin-top:5px;min-height:16px}
+@media(max-width:960px){
+  .app-sidebar,.wizard-index{display:none}
+  .main{margin-left:0}
+  .pending-banner{display:flex}
+  .content{padding:20px}
+  .fgr.c2,.fgr.c3{grid-template-columns:1fr}
+  .sign-parties{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<aside class="app-sidebar">
+  <div class="as-logo"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiPgogIDwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyOS44LjUsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiAyLjEuMSBCdWlsZCAyKSAgLS0+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5zdDAgewogICAgICAgIGZpbGw6ICMxZDFkMWI7CiAgICAgICAgZm9udC1mYW1pbHk6IFF1aWNrc2FuZC1MaWdodCwgUXVpY2tzYW5kOwogICAgICAgIGZvbnQtc2l6ZTogMzRweDsKICAgICAgICBmb250LXdlaWdodDogMzAwOwogICAgICAgIHN0cm9rZTogIzRkNGQ0ZDsKICAgICAgICBzdHJva2UtbWl0ZXJsaW1pdDogMTA7CiAgICAgIH0KCiAgICAgIC5zdDEgewogICAgICAgIGZpbGw6ICNlNmU2ZTY7CiAgICAgIH0KCiAgICAgIC5zdDIgewogICAgICAgIGZpbGw6ICMwMWNjZmY7CiAgICAgIH0KCiAgICAgIC5zdDMgewogICAgICAgIGZpbGw6ICMwMTAxY2Q7CiAgICAgIH0KCiAgICAgIC5zdDQgewogICAgICAgIGZpbGw6ICNmZmY7CiAgICAgIH0KCiAgICAgIC5zdDUgewogICAgICAgIGZpbGw6ICM4MzAxY2Q7CiAgICAgIH0KCiAgICAgIC5zdDYgewogICAgICAgIGZpbGw6ICMwYzAwNWY7CiAgICAgIH0KCiAgICAgIC5zdDcgewogICAgICAgIGZpbGw6ICMzMzM7CiAgICAgICAgZm9udC1mYW1pbHk6IFF1aWNrc2FuZC1Cb2xkLCBRdWlja3NhbmQ7CiAgICAgICAgZm9udC1zaXplOiA0M3B4OwogICAgICAgIGZvbnQtd2VpZ2h0OiA3MDA7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDx0ZXh0IGNsYXNzPSJzdDciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDc1NC4zNSA4NjAuNDUpIj48dHNwYW4geD0iMCIgeT0iMCI+YXBsaWNhw6fDo28gZGEgbWFyY2E8L3RzcGFuPjwvdGV4dD4KICA8dGV4dCBjbGFzcz0ic3QwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MDMuNDQgOTIzLjkyKSI+PHRzcGFuIHg9IjAiIHk9IjAiPnNvYnJlIGZ1bmRvIGNsYXJvIGUgZnVuZG8gZXNjdXJvPC90c3Bhbj48L3RleHQ+CiAgPHJlY3QgY2xhc3M9InN0NiIgeD0iMTAwNC4xMSIgeT0iMzIzLjY0IiB3aWR0aD0iNzYyIiBoZWlnaHQ9IjI0NyIvPgogIDxyZWN0IGNsYXNzPSJzdDEiIHg9IjE1My42NyIgeT0iMzIzLjY0IiB3aWR0aD0iNzYyIiBoZWlnaHQ9IjI0NyIvPgogIDxnPgogICAgPGc+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDUiIGQ9Ik0yMjEuMjYsNDMzLjM4bDU3LjkzLTI2LjUtNTUuNDktMjUuMzhjLTYuOTQtMy4xNy0xMi42MS40Ny0xMi42MSw4LjF2MTE4Ljg1YzAsNy42Myw1LjM1LDEwLjY2LDExLjg5LDYuNzNsNTYuMjEtMzMuNzItNTguNjYtMzUuMTljLTYuNTQtMy45Mi02LjIyLTkuNzMuNzItMTIuOVoiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MiIgZD0iTTMzNC42OCwzODEuNWwtNTUuNDksMjUuMzgsNTcuOTMsMjYuNWM2LjkzLDMuMTcsNy4yNiw4Ljk4LjcyLDEyLjlsLTU4LjY1LDM1LjE5LDU2LjIxLDMzLjcyYzYuNTQsMy45MiwxMS44OS44OSwxMS44OS02Ljczdi0xMTguODVjMC03LjYzLTUuNjgtMTEuMjctMTIuNjEtOC4xWiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNMzM3LjEzLDQzMy4zOGwtNTcuOTMtMjYuNS01Ny45MywyNi41Yy02Ljk0LDMuMTctNy4yNiw4Ljk4LS43MiwxMi45bDU4LjY2LDM1LjE5LDU4LjY1LTM1LjE5YzYuNTQtMy45Miw2LjIyLTkuNzMtLjcyLTEyLjlaIi8+CiAgICA8L2c+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTM5NS4yMSw0ODcuNjdjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuNDEsMS40MS0zLjA4LDIuMTEtNSwyLjExaC0uMjNjLTEuOTMsMC0zLjYtLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi45OWMwLTkuNjksMy40NC0xOCwxMC4zMi0yNC45Myw2Ljg4LTYuODgsMTUuMTktMTAuMzIsMjQuOTMtMTAuMzIsMTEuNjIsMCwyMC45Nyw0LjY0LDI4LjA2LDEzLjkxLDcuMDMtOS4yNywxNi4zNi0xMy45MSwyNy45OC0xMy45MSw5Ljc0LDAsMTguMDUsMy40NCwyNC45MywxMC4zMiw2Ljg4LDYuOTMsMTAuMzIsMTUuMjQsMTAuMzIsMjQuOTN2NDIuOTljMCwxLjk4LS42OCwzLjY1LTIuMDMsNS0xLjQxLDEuNDEtMy4xLDIuMTEtNS4wOCwyLjExaC0uMTZjLTEuOTgsMC0zLjY1LS43LTUtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDQtMTAuNjMtNi4xLTE0LjY5LTQuMDctNC4wNi04Ljk5LTYuMS0xNC43Ny02LjFzLTEwLjYzLDIuMDMtMTQuNyw2LjFjLTQuMDYsNC4wNi02LjEsOC45Ni02LjEsMTQuNjl2NDIuOTljMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDMtMTAuNjMtNi4xLTE0LjY5LTQuMDctNC4wNi04Ljk2LTYuMS0xNC42OS02LjFzLTEwLjYzLDIuMDMtMTQuNjksNi4xYy00LjA2LDQuMDYtNi4xLDguOTYtNi4xLDE0LjY5djQyLjk5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNNTU2Ljg1LDQwOS40M2MxMS43OCwwLDIxLjgzLDQuMTcsMzAuMTcsMTIuNSw4LjM0LDguMzQsMTIuNSwxOC40LDEyLjUsMzAuMTdzLTQuMTcsMjEuODMtMTIuNSwzMC4xN2MtOC4zNCw4LjM0LTE4LjM5LDEyLjUxLTMwLjE3LDEyLjUxcy0yMS44My00LjE3LTMwLjE3LTEyLjUxYy04LjM0LTguMzQtMTIuNS0xOC4zOS0xMi41LTMwLjE3czQuMTctMjEuODMsMTIuNS0zMC4xN2M4LjM0LTguMzQsMTguMzktMTIuNSwzMC4xNy0xMi41Wk01NTYuODUsNDI0LjA0Yy03LjgxLDAtMTQuNDksMi43Ni0yMC4wMSw4LjI5LTUuNDcsNS41Mi04LjIxLDEyLjE5LTguMjEsMjAuMDFzMi43NCwxNC40MSw4LjIxLDE5LjkzYzUuNTIsNS41MywxMi4xOSw4LjI5LDIwLjAxLDguMjlzMTQuNDYtMi43NiwxOS45My04LjI5YzUuNTItNS41Miw4LjI5LTEyLjE3LDguMjktMTkuOTNzLTIuNzYtMTQuNDktOC4yOS0yMC4wMWMtNS40Ny01LjUyLTEyLjEyLTguMjktMTkuOTMtOC4yOVoiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTYxMy43NiwzNzcuMzhjMS45MywwLDMuNi42OCw1LDIuMDMsMS40MSwxLjQxLDIuMTEsMy4xLDIuMTEsNS4wOHYzNS42NGM4LjAyLTcuMTQsMTcuNDMtMTAuNzEsMjguMjItMTAuNzEsMTEuNzcsMCwyMS44Myw0LjE3LDMwLjE3LDEyLjUsOC4zNCw4LjM0LDEyLjUsMTguNCwxMi41LDMwLjE3cy00LjE3LDIxLjgzLTEyLjUsMzAuMTdjLTguMzQsOC4zNC0xOC4zOSwxMi41MS0zMC4xNywxMi41MXMtMjEuODEtNC4xNC0zMC4wOS0xMi40M2MtOC4zNC04LjI5LTEyLjUzLTE4LjI5LTEyLjU4LTMwLjAxdi02Ny44NGMwLTEuOTguNy0zLjY3LDIuMTEtNS4wOCwxLjQxLTEuMzYsMy4wNy0yLjAzLDUtMi4wM2guMjNaTTY0OS4wOSw0MjQuMDRjLTcuODIsMC0xNC40OSwyLjc2LTIwLjAxLDguMjktNS40Nyw1LjUyLTguMjEsMTIuMTktOC4yMSwyMC4wMXMyLjc0LDE0LjQxLDguMjEsMTkuOTNjNS41Miw1LjUzLDEyLjE5LDguMjksMjAuMDEsOC4yOXMxNC40Ni0yLjc2LDE5LjkzLTguMjljNS41Mi01LjUyLDguMjgtMTIuMTcsOC4yOC0xOS45M3MtMi43Ni0xNC40OS04LjI4LTIwLjAxYy01LjQ3LTUuNTItMTIuMTItOC4yOS0xOS45My04LjI5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNNzgxLjUzLDQ1Mi40M2MuMDIsMS45Ni0uNjYsMy42NS0yLjA1LDUuMDgtMS4zNywxLjM4LTMuMDYsMi4wNy01LjA3LDIuMDctOC0uMDQtMTguNTItLjA4LTMxLjU1LS4xMi0xNi4xOC0uMDQtMjYuNjgtLjA3LTMxLjQ4LS4wOSwyLjE0LDguODgsNy4zOCwxNS4yMSwxNS43MywxOS4wMiw1LjU1LDIuNTMsMTEuMzIsMy4xOCwxNy4zMiwxLjk2LDUuODEtMS4xOSwxMC43NC0zLjkyLDE0LjgxLTguMiwyLjM4LTIuNDYsNS4xNC0yLjk4LDguMjctMS41NiwyLjIzLDEuMDIsMy41OCwyLjc1LDQuMDcsNS4yLjQ2LDIuMzktLjE4LDQuNDctMS45MSw2LjI2LTYuMTYsNi40Ny0xMy42MywxMC41Ny0yMi40MywxMi4yOC05LjAxLDEuOC0xNy42OC43OS0yNi4wMy0zLjAxLTEwLjcyLTQuODgtMTguMTQtMTIuODQtMjIuMjctMjMuODktNC4xMy0xMS4wNC0zLjc2LTIxLjkyLDEuMTMtMzIuNjQsNC44OC0xMC43MiwxMi44NC0xOC4xNCwyMy44OS0yMi4yNywxMS4wNC00LjEzLDIxLjkyLTMuNzYsMzIuNjQsMS4xMiw3LjczLDMuNTIsMTMuODMsOC44NSwxOC4zMSwxNS45OSw0LjQzLDcsNi42NCwxNC41OSw2LjYzLDIyLjc4Wk03NTAuNTMsNDI2Ljk3Yy03LjExLTMuMjQtMTQuMzMtMy40OS0yMS42NS0uNzUtNy4yNywyLjc2LTEyLjUyLDcuNjktMTUuNzYsMTQuODEtLjU4LDEuMjgtMS4wNiwyLjU4LTEuNDMsMy45bDU0LjI5LjE3Yy0yLjMzLTguNDUtNy40OS0xNC40OS0xNS40NS0xOC4xMloiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTgwMS44Myw0ODcuNjdjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuNDEsMS40MS0zLjA3LDIuMTEtNSwyLjExaC0uMjNjLTEuOTMsMC0zLjYtLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTkuNzksMy40Ni0xOC4xNiwxMC4zOS0yNS4wOSw2LjkzLTYuOTMsMTUuMjktMTAuMzksMjUuMDktMTAuMzlzMTguMDgsMy40NiwyNS4wMSwxMC4zOWM2LjkzLDYuOTMsMTAuMzksMTUuMywxMC4zOSwyNS4wOXY0Mi43NWMwLDEuOTgtLjcsMy42NS0yLjExLDUtMS4zNiwxLjQxLTMuMDIsMi4xMS01LDIuMTFoLS4xNmMtMS45OCwwLTMuNjctLjctNS4wOC0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTUuNzgtMi4wMy0xMC43My02LjEtMTQuODUtNC4xMi00LjEyLTkuMDctNi4xOC0xNC44NS02LjE4cy0xMC44MSwyLjA2LTE0LjkzLDYuMThjLTQuMDYsNC4xMi02LjEsOS4wNy02LjEsMTQuODV2NDIuNzVaIi8+CiAgICA8L2c+CiAgPC9nPgogIDxnPgogICAgPGc+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDUiIGQ9Ik0xMDcxLjkxLDQzMy4zN2w1Ny45My0yNi41LTU1LjQ5LTI1LjM4Yy02Ljk0LTMuMTctMTIuNjEuNDctMTIuNjEsOC4xdjExOC44NWMwLDcuNjMsNS4zNSwxMC42NiwxMS44OSw2LjczbDU2LjIxLTMzLjcyLTU4LjY2LTM1LjE5Yy02LjU0LTMuOTItNi4yMi05LjczLjcyLTEyLjlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xMTg1LjMzLDM4MS41bC01NS40OSwyNS4zOCw1Ny45MywyNi41YzYuOTQsMy4xNyw3LjI2LDguOTguNzIsMTIuOWwtNTguNjUsMzUuMTksNTYuMjEsMzMuNzJjNi41NCwzLjkyLDExLjg5Ljg5LDExLjg5LTYuNzN2LTExOC44NWMwLTcuNjMtNS42OC0xMS4yNy0xMi42MS04LjFaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDMiIGQ9Ik0xMTg3Ljc3LDQzMy4zN2wtNTcuOTMtMjYuNS01Ny45MywyNi41Yy02Ljk0LDMuMTctNy4yNiw4Ljk4LS43MiwxMi45bDU4LjY2LDM1LjE5LDU4LjY1LTM1LjE5YzYuNTQtMy45Miw2LjIyLTkuNzMtLjcyLTEyLjlaIi8+CiAgICA8L2c+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9InN0NCIgZD0iTTEyNDUuODYsNDg3LjY3YzAsMS45OC0uNywzLjY1LTIuMTEsNS0xLjQxLDEuNDEtMy4wOCwyLjExLTUsMi4xMWgtLjI0Yy0xLjkzLDAtMy41OS0uNy01LTIuMTEtMS40MS0xLjM1LTIuMTEtMy4wMi0yLjExLTV2LTQyLjk5YzAtOS42OSwzLjQ0LTE4LDEwLjMyLTI0LjkzLDYuODgtNi44OCwxNS4xOS0xMC4zMiwyNC45My0xMC4zMiwxMS42MiwwLDIwLjk3LDQuNjQsMjguMDYsMTMuOTEsNy4wNC05LjI3LDE2LjM2LTEzLjkxLDI3Ljk4LTEzLjkxLDkuNzQsMCwxOC4wNiwzLjQ0LDI0LjkzLDEwLjMyLDYuODgsNi45MywxMC4zMiwxNS4yNCwxMC4zMiwyNC45M3Y0Mi45OWMwLDEuOTgtLjY4LDMuNjUtMi4wMyw1LTEuNDEsMS40MS0zLjEsMi4xMS01LjA4LDIuMTFoLS4xNmMtMS45OCwwLTMuNjUtLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi45OWMwLTUuNzMtMi4wMy0xMC42My02LjEtMTQuNjktNC4wNi00LjA2LTguOTktNi4xLTE0Ljc3LTYuMXMtMTAuNjMsMi4wMy0xNC42OSw2LjFjLTQuMDYsNC4wNi02LjEsOC45Ni02LjEsMTQuNjl2NDIuOTljMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDMtMTAuNjMtNi4xLTE0LjY5LTQuMDYtNC4wNi04Ljk2LTYuMS0xNC42OS02LjFzLTEwLjYzLDIuMDMtMTQuNjksNi4xYy00LjA2LDQuMDYtNi4xLDguOTYtNi4xLDE0LjY5djQyLjk5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3Q0IiBkPSJNMTQwNy41LDQwOS40M2MxMS43OCwwLDIxLjgzLDQuMTcsMzAuMTcsMTIuNSw4LjMzLDguMzQsMTIuNSwxOC40LDEyLjUsMzAuMTdzLTQuMTcsMjEuODMtMTIuNSwzMC4xN2MtOC4zNCw4LjM0LTE4LjQsMTIuNTEtMzAuMTcsMTIuNTFzLTIxLjgzLTQuMTctMzAuMTctMTIuNTFjLTguMzQtOC4zNC0xMi41MS0xOC4zOS0xMi41MS0zMC4xN3M0LjE3LTIxLjgzLDEyLjUxLTMwLjE3YzguMzQtOC4zNCwxOC4zOS0xMi41LDMwLjE3LTEyLjVaTTE0MDcuNSw0MjQuMDRjLTcuODEsMC0xNC40OSwyLjc2LTIwLjAxLDguMjktNS40Nyw1LjUyLTguMjEsMTIuMTktOC4yMSwyMC4wMXMyLjczLDE0LjQxLDguMjEsMTkuOTNjNS41Miw1LjUzLDEyLjE5LDguMjksMjAuMDEsOC4yOXMxNC40Ni0yLjc2LDE5LjkzLTguMjljNS41My01LjUyLDguMjktMTIuMTcsOC4yOS0xOS45M3MtMi43Ni0xNC40OS04LjI5LTIwLjAxYy01LjQ3LTUuNTItMTIuMTItOC4yOS0xOS45My04LjI5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3Q0IiBkPSJNMTQ2NC40MSwzNzcuMzhjMS45MywwLDMuNTkuNjgsNSwyLjAzLDEuNDEsMS40MSwyLjExLDMuMSwyLjExLDUuMDh2MzUuNjRjOC4wMi03LjE0LDE3LjQzLTEwLjcxLDI4LjIyLTEwLjcxLDExLjc3LDAsMjEuODMsNC4xNywzMC4xNywxMi41LDguMzQsOC4zNCwxMi41MSwxOC40LDEyLjUxLDMwLjE3cy00LjE3LDIxLjgzLTEyLjUxLDMwLjE3Yy04LjM0LDguMzQtMTguMzksMTIuNTEtMzAuMTcsMTIuNTFzLTIxLjgxLTQuMTQtMzAuMDktMTIuNDNjLTguMzQtOC4yOS0xMi41My0xOC4yOS0xMi41OC0zMC4wMXYtNjcuODRjMC0xLjk4LjctMy42NywyLjExLTUuMDgsMS40MS0xLjM2LDMuMDgtMi4wMyw1LTIuMDNoLjIzWk0xNDk5Ljc0LDQyNC4wNGMtNy44MiwwLTE0LjQ5LDIuNzYtMjAuMDEsOC4yOS01LjQ3LDUuNTItOC4yMSwxMi4xOS04LjIxLDIwLjAxczIuNzQsMTQuNDEsOC4yMSwxOS45M2M1LjUyLDUuNTMsMTIuMTksOC4yOSwyMC4wMSw4LjI5czE0LjQ2LTIuNzYsMTkuOTMtOC4yOWM1LjUyLTUuNTIsOC4yOC0xMi4xNyw4LjI4LTE5Ljkzcy0yLjc2LTE0LjQ5LTguMjgtMjAuMDFjLTUuNDctNS41Mi0xMi4xMi04LjI5LTE5LjkzLTguMjlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDQiIGQ9Ik0xNjMyLjE4LDQ1Mi40M2MuMDIsMS45Ni0uNjYsMy42NS0yLjA1LDUuMDgtMS4zNywxLjM4LTMuMDYsMi4wNy01LjA3LDIuMDctOC0uMDQtMTguNTItLjA4LTMxLjU1LS4xMi0xNi4xOC0uMDQtMjYuNjgtLjA3LTMxLjQ4LS4wOSwyLjE0LDguODgsNy4zOCwxNS4yMSwxNS43MywxOS4wMiw1LjU1LDIuNTMsMTEuMzIsMy4xOCwxNy4zMSwxLjk2LDUuODEtMS4xOSwxMC43NS0zLjkyLDE0LjgxLTguMiwyLjM4LTIuNDYsNS4xNC0yLjk4LDguMjctMS41NiwyLjIzLDEuMDIsMy41OSwyLjc1LDQuMDcsNS4yLjQ2LDIuMzktLjE4LDQuNDctMS45MSw2LjI2LTYuMTUsNi40Ny0xMy42MywxMC41Ny0yMi40MywxMi4yOC05LjAxLDEuOC0xNy42OC43OS0yNi4wMy0zLjAxLTEwLjcyLTQuODgtMTguMTQtMTIuODQtMjIuMjctMjMuODktNC4xMy0xMS4wNC0zLjc2LTIxLjkyLDEuMTMtMzIuNjQsNC44OC0xMC43MiwxMi44NC0xOC4xNCwyMy44OS0yMi4yNywxMS4wNC00LjEzLDIxLjkyLTMuNzYsMzIuNjQsMS4xMiw3LjczLDMuNTIsMTMuODMsOC44NSwxOC4zMSwxNS45OSw0LjQzLDcsNi42NCwxNC41OSw2LjYzLDIyLjc4Wk0xNjAxLjE3LDQyNi45N2MtNy4xMS0zLjI0LTE0LjMzLTMuNDktMjEuNjQtLjc1LTcuMjcsMi43Ni0xMi41Miw3LjY5LTE1Ljc2LDE0LjgxLS41OCwxLjI4LTEuMDYsMi41OC0xLjQzLDMuOWw1NC4yOS4xN2MtMi4zMy04LjQ1LTcuNDktMTQuNDktMTUuNDUtMTguMTJaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDQiIGQ9Ik0xNjUyLjQ4LDQ4Ny42N2MwLDEuOTgtLjcsMy42NS0yLjExLDUtMS40MSwxLjQxLTMuMDcsMi4xMS01LDIuMTFoLS4yM2MtMS45MywwLTMuNTktLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTkuNzksMy40Ni0xOC4xNiwxMC4zOS0yNS4wOSw2LjkzLTYuOTMsMTUuMjktMTAuMzksMjUuMDktMTAuMzlzMTguMDgsMy40NiwyNS4wMSwxMC4zOWM2LjkzLDYuOTMsMTAuMzksMTUuMjksMTAuMzksMjUuMDl2NDIuNzVjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuNzVjMC01Ljc4LTIuMDMtMTAuNzMtNi4wOS0xNC44NS00LjEyLTQuMTItOS4wNy02LjE4LTE0Ljg1LTYuMThzLTEwLjgxLDIuMDYtMTQuOTMsNi4xOGMtNC4wNiw0LjEyLTYuMDksOS4wNy02LjA5LDE0Ljg1djQyLjc1WiIvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+" alt="Moben"></div>
+  <nav class="as-nav">
+    <div class="as-label">Principal</div>
+    <a class="as-item" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Meu painel</a>
+    <a class="as-item" href="imovel.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Meus imoveis</a>
+    <a class="as-item" href="pretendentes.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Pretendentes</a>
+    <a class="as-item active" href="contrato.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Contratos</a>
+    <a class="as-item" href="financeiro.html"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cobrancas</a>
+    <div class="as-label">Financeiro</div>
+    <a class="as-item" href="financeiro.html"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Financeiro</a>
+    <a class="as-item" href="#"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>IRPF</a>
+    <div class="as-label">Conta</div>
+    <a class="as-item" href="#"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Meu perfil</a>
+  </nav>
+  <div class="as-foot"><div class="as-user" style="display:flex;align-items:center;gap:8px"><div class="as-av">JS</div><div><div class="as-uname">Joao Silva</div><div class="as-uplan">Plano Essencial</div></div></div></div>
+</aside>
+<aside class="wizard-index">
+  <div class="wi-header">
+    <div class="wi-prop">Contrato</div>
+    <div class="wi-propname">Ap. Centro</div>
+    <div class="wi-bar"><div class="wi-bar-fill" id="barFill"></div></div>
+    <div class="wi-bar-label" id="barLabel">0 de 8 etapas concluidas</div>
+  </div>
+  <div class="wi-steps" id="wiSteps"></div>
+  <div class="wi-footer">
+    <button class="wi-save" onclick="saveDraft()">
+      <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Salvar rascunho
+    </button>
+  </div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <a href="imovel.html" class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Voltar</a>
+    <div class="tb-sep"></div>
+    <span class="page-title">Contrato digital</span>
+    <span class="draft-pill">Rascunho</span>
+  </div>
+  <div class="pending-banner" id="pendingBanner" onclick="showMobileIndex()">
+    <span class="pending-banner-txt" id="pendingTxt">3 etapas pendentes</span>
+    <span class="pending-banner-link">Ver pendencias</span>
+  </div>
+  <div class="content">
+
+<!-- ETAPA 1: PROPRIETÁRIO -->
+<div class="sp active" id="sp1">
+  <div class="sh"><div class="sh-num">Etapa 1 de 8</div><h1 class="sh-title">Dados do proprietario</h1><p class="sh-sub">Insira os dados de quem vai assinar o contrato como proprietario.</p></div>
+  <div class="card">
+    <div class="cs">Quem vai assinar</div>
+    <div class="tog3" id="owner-togs">
+      <div class="tog sel" onclick="pickOwnerRole(this,'proprio')"><div class="tog-dot"></div><div><div class="tog-lbl">Sou o Proprietario</div><div class="tog-desc">Voce mesmo assina o contrato. Seus dados ja estao preenchidos.</div></div></div>
+      <div class="tog" onclick="pickOwnerRole(this,'admin')"><div class="tog-dot"></div><div><div class="tog-lbl">Sou o Administrador e tenho a procuracao para assinar</div><div class="tog-desc">Voce assina em nome do proprietario com poderes de procuracao</div></div></div>
+      <div class="tog" onclick="pickOwnerRole(this,'outro')"><div class="tog-dot"></div><div><div class="tog-lbl">Nao sou o Proprietario e o Proprietario vai assinar</div><div class="tog-desc">Voce preenche, mas o proprietario recebe o contrato para assinar digitalmente</div></div></div>
+    </div>
+  </div>
+  <div class="card" id="card-owner">
+    <div class="cs" id="owner-cs">Seus dados</div>
+    <div class="fgr c2"><div class="fg"><label>Nome completo</label><input type="text" id="o-name" placeholder="Nome completo"></div><div class="fg"><label>Nacionalidade</label><input type="text" id="o-nation" value="Brasileira"></div></div>
+    <div class="fgr c3"><div class="fg"><label>Estado civil</label><select id="o-civil"><option>Selecione...</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option><option>Viuvo(a)</option><option>Uniao estavel</option></select></div><div class="fg"><label>CPF</label><input type="text" id="o-cpf" placeholder="000.000.000-00"></div><div class="fg"><label>RG</label><input type="text" id="o-rg" placeholder="00.000.000-0"></div></div>
+    <div class="fg"><label>Profissao</label><input type="text" id="o-prof" placeholder="Profissao"></div>
+    <div class="fg"><label>Email (para assinatura digital)</label><input type="email" id="o-email" placeholder="proprietario@email.com"></div>
+    <div class="fg"><label>Endereco — Rua e numero</label><input type="text" id="o-addr1" placeholder="Rua das Flores, 123"></div>
+    <div class="fgr c2"><div class="fg"><label>Complemento</label><input type="text" id="o-addr2" placeholder="Apto 42"></div><div class="fg"><label>Bairro</label><input type="text" id="o-bairro" placeholder="Centro"></div></div>
+    <div class="fgr c3"><div class="fg"><label>Cidade</label><input type="text" id="o-cidade" placeholder="Sao Paulo"></div><div class="fg"><label>Estado</label><select id="o-estado"><option value="">UF</option><option>SP</option><option>RJ</option><option>MG</option><option>RS</option><option>PR</option><option>SC</option><option>BA</option><option>GO</option><option>DF</option><option>Outro</option></select></div><div class="fg"><label>CEP</label><input type="text" id="o-cep" placeholder="00000-000"></div></div>
+  </div>
+  <!-- Bloco procurador — só aparece quando admin -->
+  <div class="cond" id="cond-admin">
+    <div class="cond-t">Dados do administrador (voce)</div>
+    <div class="fh warn" style="margin-bottom:14px"><strong>Procuracao obrigatoria</strong>O contrato exige procuracao com poderes especificos para firmar, alterar, rescindir e receber valores em nome do proprietario. Esses dados constam no Anexo I do contrato.</div>
+    <div class="fg"><label>Arquivo da procuracao</label><input type="file" id="admin-proc" accept=".pdf,.jpg,.jpeg,.png"><div class="fh">Envie o arquivo da procuracao em PDF ou imagem.</div></div>
+    <div class="fgr c2" style="margin-top:14px"><div class="fg"><label>Nome do administrador</label><input type="text" id="adm-name" placeholder="Seu nome completo"></div><div class="fg"><label>Nacionalidade</label><input type="text" id="adm-nation" value="Brasileira"></div></div>
+    <div class="fgr c3"><div class="fg"><label>Estado civil</label><select id="adm-civil"><option>Selecione...</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option></select></div><div class="fg"><label>CPF</label><input type="text" id="adm-cpf" placeholder="000.000.000-00"></div><div class="fg"><label>RG</label><input type="text" id="adm-rg" placeholder="00.000.000-0"></div></div>
+    <div class="fg"><label>Email (para assinatura digital)</label><input type="email" id="adm-email" placeholder="administrador@email.com"></div>
+  </div>
+  <!-- Contas bancárias -->
+  <div class="card">
+    <div class="cs">Contas para recebimento do aluguel</div>
+    <div class="fh info" style="margin-bottom:14px">O aluguel recebido e transferido diretamente para a conta cadastrada. E possivel cadastrar mais de uma conta e definir o percentual de divisao entre elas — util para imoveis com dois proprietarios.</div>
+    <div id="bank-list"></div>
+    <div class="bank-total"><span>Total das divisoes</span><span class="bank-total-val" id="bank-total-pct">0%</span></div>
+    <div class="fh warn" id="bank-warn" style="display:none"><strong>Atencao</strong>O total das divisoes deve ser igual a 100%.</div>
+    <button class="bank-add" onclick="addBankAccount()">
+      <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Adicionar conta bancaria
+    </button>
+  </div>
+  <div class="actions"><span></span><button class="btn-next" onclick="goTo(2)">Proximo <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+</div>
+
+<!-- ETAPA 2: INQUILINO -->
+<div class="sp" id="sp2">
+  <div class="sh"><div class="sh-num">Etapa 2 de 8</div><h1 class="sh-title">Dados do inquilino</h1><p class="sh-sub">Dados de quem vai alugar o imovel. Se vier de uma proposta aprovada, os campos ja estarao preenchidos.</p></div>
+  <div class="card">
+    <div class="cs">Identificacao</div>
+    <div class="fgr c2"><div class="fg"><label>Nome completo</label><input type="text" id="t-name" placeholder="Nome do inquilino"></div><div class="fg"><label>Nacionalidade</label><input type="text" id="t-nation" value="Brasileira"></div></div>
+    <div class="fgr c3"><div class="fg"><label>Estado civil</label><select id="t-civil"><option>Selecione...</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option><option>Viuvo(a)</option><option>Uniao estavel</option></select></div><div class="fg"><label>CPF</label><input type="text" id="t-cpf" placeholder="000.000.000-00"></div><div class="fg"><label>RG</label><input type="text" id="t-rg" placeholder="00.000.000-0"></div></div>
+    <div class="fg"><label>Profissao</label><input type="text" id="t-prof" placeholder="Profissao do inquilino"></div>
+    <div class="fg"><label>Endereco residencial atual</label><input type="text" id="t-addr" placeholder="Rua, numero, bairro, cidade, estado"><div class="fh">Endereco atual do inquilino — diferente do imovel que sera alugado.</div></div>
+  </div>
+  <div class="card">
+    <div class="cs">Contato</div>
+    <div class="fgr c2"><div class="fg"><label>Email</label><input type="email" id="t-email" placeholder="inquilino@email.com"></div><div class="fg"><label>Telefone</label><input type="tel" id="t-phone" placeholder="(11) 99999-9999"></div></div>
+  </div>
+  <div class="card" id="card-ativ" style="display:none">
+    <div class="cs">Atividade comercial (item II.c.ii)</div>
+    <div class="fg"><label>Atividade a ser exercida no imovel</label><input type="text" id="t-ativ" placeholder="Ex: Comercio varejista, consultorio medico..."></div>
+    <div class="fh info">O inquilino e responsavel por obter o alvara de funcionamento e responde por impostos, taxas e multas decorrentes da atividade exercida.</div>
+  </div>
+  <div class="actions"><button class="btn-back" onclick="goTo(1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</button><button class="btn-next" onclick="goTo(3)">Proximo <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+</div>
+
+<!-- ETAPA 3: OBJETO -->
+<div class="sp" id="sp3">
+  <div class="sh"><div class="sh-num">Etapa 3 de 8</div><h1 class="sh-title">Objeto do contrato</h1><p class="sh-sub">Dados do imovel conforme cadastrado na plataforma.</p></div>
+  <div class="card">
+    <div class="fg"><label>Endereco do imovel</label><input type="text" id="obj-addr" value="Rua das Flores, 123, Apto 42 — Centro, Sao Paulo/SP, CEP 01310-100" readonly><div class="fh">Preenchido automaticamente a partir do cadastro do imovel.</div></div>
+    <div class="fgr c2">
+      <div class="fg"><label>Uso do imovel</label><input type="text" id="obj-uso" value="Residencial" readonly></div>
+      <div class="fg"><label>Vagas de garagem (item II.b)</label><select id="obj-vagas" onchange="onVagasChange()"><option value="0">Sem vaga</option><option value="1">1 vaga</option><option value="2">2 vagas</option><option value="3">3 vagas</option><option value="outro">Especificar...</option></select></div>
+    </div>
+    <div class="cond" id="cond-vagas"><div class="cond-t">Descricao das vagas</div><input type="text" id="obj-vagas-desc" placeholder="Ex: Vaga coberta n. 15, subsolo 1"></div>
+  </div>
+  <div class="actions"><button class="btn-back" onclick="goTo(2)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</button><button class="btn-next" onclick="goTo(4)">Proximo <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+</div>
+
+<!-- ETAPA 4: VALORES, PRAZO E ENCARGOS -->
+<div class="sp" id="sp4">
+  <div class="sh"><div class="sh-num">Etapa 4 de 8</div><h1 class="sh-title">Valores, prazo e encargos</h1><p class="sh-sub">Defina os valores financeiros, a duracao do contrato e como cada encargo sera cobrado.</p></div>
+  <div class="card">
+    <div class="cs">Aluguel e reajuste (itens III.a e III.b)</div>
+    <div class="fgr c2">
+      <div class="fg"><label>Valor do aluguel mensal</label><div class="curr-wrap"><span class="curr-pre">R$</span><input type="text" id="v-rent" class="curr-input" placeholder="0,00" oninput="fmtC(this);updateTotal()"></div></div>
+      <div class="fg">
+        <label>Indice de reajuste anual</label>
+        <select id="v-index" onchange="onIndexChange()"><option value="igpm">IGP-M / FGV</option><option value="ipca">IPCA</option></select>
+        <button class="hist-toggle" onclick="toggleHist()" id="hist-btn">Ver historico dos indices</button>
+        <div class="hist-box" id="hist-box" style="display:none">
+          <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:8px">IGP-M vs IPCA — contexto para sua decisao</div>
+          <div class="fh" style="margin-top:0;margin-bottom:10px">O <strong>IGP-M</strong> (FGV) e o indice historicamente mais usado em contratos de aluguel. Porem, durante a pandemia chegou a +30% ao ano, gerando muitos pedidos de renegociacao. O <strong>IPCA</strong> (IBGE) e a inflacao oficial do pais e costuma ser mais estavel. Contratos reajustados por IPCA tiveram menos disputas nos ultimos anos.</div>
+          <div class="hist-row"><span>Cenario de alta inflacao</span><span style="color:var(--warning);font-weight:700">IGP-M pode subir muito mais que o IPCA</span></div>
+          <div class="hist-row"><span>Aceitacao pelo inquilino</span><span>IPCA tende a ser mais bem aceito</span></div>
+          <div class="hist-row"><span>Pratica do mercado</span><span>IGP-M ainda e o mais comum</span></div>
+          <div class="hist-row"><span>Recomendacao Moben</span><span style="color:var(--blue);font-weight:700">Depende do momento economico</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="cs">Prazo e vencimento (itens IV e VII)</div>
+    <div class="fgr c2"><div class="fg"><label>Data de inicio</label><input type="date" id="v-start" oninput="calcEnd()"></div><div class="fg"><label>Duracao do contrato</label><select id="v-dur" onchange="onDurChange()"><option value="30">30 meses (recomendado)</option><option value="24">24 meses</option><option value="12">12 meses</option><option value="custom">Outro prazo</option></select></div></div>
+    <div class="cond" id="cond-dur">
+      <div class="cond-t">Prazo personalizado</div>
+      <div class="fg"><label>Duracao em meses (minimo 3)</label><input type="number" id="v-dur-n" placeholder="Ex: 18" min="3" oninput="calcEnd()"><div class="fh warn"><strong>Atencao — prazo inferior a 30 meses</strong>Ao fim do prazo, se o inquilino permanecer no imovel, o contrato se prorroga automaticamente por prazo indeterminado. A retomada so sera possivel nos casos do art. 47 da Lei 8.245/91.</div></div>
+    </div>
+    <div class="fg"><label>Termino previsto</label><input type="text" id="v-end" readonly placeholder="Calculado automaticamente"></div>
+    <div class="fg"><label>Dia de vencimento do aluguel</label><select id="v-due" onchange="updateTotal()"><option value="">Selecione o dia...</option><option>1</option><option>5</option><option>10</option><option>15</option><option>20</option><option>25</option><option>30</option></select><div class="fh">O boleto ou PIX vence neste dia todo mes. O primeiro boleto sera proporcional aos dias ate a primeira data de vencimento apos o inicio do contrato.</div></div>
+  </div>
+  <div class="card">
+    <div class="cs">Condominio (itens III.c e VIII)</div>
+    <div class="fgr c2"><div class="fg"><label>Valor mensal do condominio</label><div class="curr-wrap"><span class="curr-pre">R$</span><input type="text" id="v-cond" class="curr-input" placeholder="0,00" oninput="fmtC(this);updateTotal()"></div><div class="fh">Deixe em branco se o imovel nao integra condominio.</div></div></div>
+    <div class="fg" style="margin-top:4px"><label>Como o condominio e cobrado</label>
+      <div class="opt-list">
+        <div class="opt sel" onclick="pickOpt(this,'cond-resp')"><div class="opt-r"></div><div><div class="opt-lbl">Incluido no boleto — proprietario quita com o condominio</div><div class="opt-desc">Recomendado. Evita que a inadimplencia do inquilino gere protesto e penhora do imovel. O condominio e uma divida propter rem — vinculada ao bem, nao a pessoa.</div></div></div>
+        <div class="opt" onclick="pickOpt(this,'cond-resp')"><div class="opt-r"></div><div><div class="opt-lbl">Inquilino paga diretamente ao condominio</div><div class="opt-desc">Atencao: se o inquilino nao pagar, o condominio pode protestar a divida e penhorar o imovel, afetando o proprietario como titular do bem.</div></div></div>
+        <div class="opt" onclick="pickOpt(this,'cond-resp')"><div class="opt-r"></div><div><div class="opt-lbl">Imovel nao integra condominio</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="cs">IPTU (itens III.d e IX)</div>
+    <div class="fgr c2">
+      <div class="fg">
+        <label>Valor do IPTU — <strong style="color:var(--danger)">ANUAL</strong></label>
+        <div class="curr-wrap"><span class="curr-pre">R$</span><input type="text" id="v-iptu" class="curr-input" placeholder="0,00" oninput="fmtC(this);calcIptu()"></div>
+        <div class="iptu-calc" id="iptu-label"></div>
+        <div class="fh warn"><strong>Informe o valor anual do IPTU</strong>A Moben divide por 12 e inclui mensalmente no boleto. Evita parcelamento irregular e protege em caso de rescisao — nao ha devolucao proporcional das parcelas ja cobradas.</div>
+      </div>
+    </div>
+    <div class="fg" style="margin-top:4px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <input type="checkbox" id="iptu-isento" onchange="onIptuIsento()" style="width:auto;margin:0">
+        <label for="iptu-isento" style="text-transform:none;letter-spacing:0;font-size:12px;cursor:pointer;margin:0">Meu imovel e isento de IPTU</label>
+      </div>
+      <div class="cond" id="cond-iptu-isento"><div class="fh warn"><strong>Confirmacao de isencao</strong>Estou ciente de que, caso o IPTU volte a ser cobrado sobre este imovel, serei responsavel pelo pagamento e o contrato preve esta possibilidade.</div><div style="display:flex;align-items:center;gap:8px;margin-top:10px"><input type="checkbox" id="iptu-isento-confirm" style="width:auto;margin:0"><label for="iptu-isento-confirm" style="text-transform:none;letter-spacing:0;font-size:12px;cursor:pointer;margin:0">Confirmo que estou ciente</label></div></div>
+      <label>Como o IPTU e cobrado</label>
+      <div class="opt-list" id="iptu-resp-opts">
+        <div class="opt sel" onclick="pickOpt(this,'iptu-resp')"><div class="opt-r"></div><div><div class="opt-lbl">Incluido no boleto — proprietario quita com a prefeitura</div><div class="opt-desc">Recomendado. O IPTU e uma divida tributaria propter rem — se nao for pago, pode gerar inscricao em divida ativa municipal e penhora do imovel.</div></div></div>
+        <div class="opt" onclick="pickOpt(this,'iptu-resp')"><div class="opt-r"></div><div><div class="opt-lbl">Inquilino paga diretamente a prefeitura</div><div class="opt-desc">Atencao: inadimplencia do IPTU nao negativita CPF em bureaus de credito, mas pode gerar penhora do imovel e inscricao em divida ativa municipal.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="total-box">
+    <div class="total-title">Composicao do boleto mensal</div>
+    <div class="total-row"><span>Aluguel</span><span id="tot-rent">—</span></div>
+    <div class="total-row"><span>Condominio</span><span id="tot-cond">—</span></div>
+    <div class="total-row"><span>IPTU (1/12 do anual)</span><span id="tot-iptu">—</span></div>
+    <div class="total-row main"><span>Total do boleto</span><span id="tot-total">—</span></div>
+  </div>
+  <div class="actions"><button class="btn-back" onclick="goTo(3)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</button><button class="btn-next" onclick="goTo(5)">Proximo <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+</div>
+
+<!-- ETAPA 5: CONDIÇÕES -->
+<div class="sp" id="sp5">
+  <div class="sh"><div class="sh-num">Etapa 5 de 8</div><h1 class="sh-title">Condicoes da locacao</h1><p class="sh-sub">Cada escolha e registrada com validade juridica no contrato.</p></div>
+  <div class="card">
+    <div class="cs">Animais de estimacao (item V)</div>
+    <div class="opt-list" style="flex-direction:row;gap:8px">
+      <div class="opt sel" style="flex:1" onclick="pickOpt(this,'pets')"><div class="opt-r"></div><div><div class="opt-lbl">Permitidos</div></div></div>
+      <div class="opt" style="flex:1" onclick="pickOpt(this,'pets')"><div class="opt-r"></div><div><div class="opt-lbl">Nao permitidos</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="cs">Forma de pagamento (item X)</div>
+    <div class="opt-list">
+      <div class="opt sel" onclick="pickOpt(this,'pagto')"><div class="opt-r"></div><div><div class="opt-lbl">Boleto Moben</div><div class="opt-desc">Emissao automatica todo mes, notificacoes ao proprietario, alertas de prazo, calculo automatico de juros e multa por atraso — sem reemissao manual. Essencial para o controle completo da locacao pela plataforma.</div></div></div>
+      <div class="opt" onclick="pickOpt(this,'pagto')"><div class="opt-r"></div><div><div class="opt-lbl">PIX via Moben</div><div class="opt-desc">Chave com codigo enviada mensalmente ao inquilino pela Moben, com os mesmos recursos de notificacao, controle de prazo e calculo automatico de juros e multa.</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="cs">Multa por rescisao antecipada (item XII)</div>
+    <div class="fh info" style="margin-bottom:12px">Alem da multa de rescisao, o contrato preve automaticamente: multa de 3 alugueis por descumprimento contratual e multa de 3 alugueis por inadimplencia. A opcao abaixo se refere apenas ao encerramento antecipado.</div>
+    <div class="opt-list">
+      <div class="opt sel" onclick="pickOpt(this,'multa')"><div class="opt-r"></div><div><div class="opt-lbl">3 meses de aluguel, proporcional ao periodo remanescente</div><div class="opt-desc">Opcao padrao do mercado. Conforme art. 4 da Lei 8.245/91. Se o inquilino sair no 6 mes de um contrato de 30, paga proporcional aos 24 meses restantes.</div></div></div>
+      <div class="opt" onclick="pickOpt(this,'multa-isentar12')"><div class="opt-r"></div><div><div class="opt-lbl">3 meses proporcional, sem multa apos o primeiro ano</div><div class="opt-desc">Atrativo para o inquilino — pode facilitar locacao de imoveis mais dificeis de alugar.</div></div></div>
+      <div class="opt" onclick="pickGarOpt(this,'multa','from')"><div class="opt-r"></div><div><div class="opt-lbl">Isentar a partir de um mes especifico</div><div class="opt-desc">Defina o mes exato a partir do qual nao havera mais multa por rescisao.</div></div></div>
+      <div class="opt" onclick="pickOpt(this,'multa')"><div class="opt-r"></div><div><div class="opt-lbl">Sem multa</div></div></div>
+    </div>
+    <div class="cond" id="cond-multa-from">
+      <div class="cond-t">A partir de qual mes fica isento</div>
+      <div class="fg"><label>Mes de isencao (contado do inicio do contrato)</label><input type="number" id="multa-from-month" placeholder="Ex: 18" min="1"><div class="fh">Exemplo: ao digitar 18, o inquilino ficara isento de multa a partir do 18 mes do contrato.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="cs">Vistoria (item XIII)</div>
+    <div class="opt-list">
+      <div class="opt sel" onclick="pickOpt(this,'vistoria')"><div class="opt-r"></div><div><div class="opt-lbl">Com vistoria</div><div class="opt-desc">O laudo de vistoria de entrada sera anexado ao contrato, registrando o estado do imovel na data de entrega das chaves. Protege ambas as partes na devolucao do imovel.</div></div></div>
+      <div class="opt" onclick="pickOpt(this,'vistoria')"><div class="opt-r"></div><div><div class="opt-lbl">Sem vistoria</div><div class="opt-desc">Sem registro formal do estado do imovel. Nao recomendado — pode gerar disputas na devolucao.</div></div></div>
+    </div>
+  </div>
+  <div class="actions"><button class="btn-back" onclick="goTo(4)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</button><button class="btn-next" onclick="goTo(6)">Proximo <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+</div>
+
+<!-- ETAPA 6: GARANTIA -->
+<div class="sp" id="sp6">
+  <div class="sh"><div class="sh-num">Etapa 6 de 8</div><h1 class="sh-title">Garantia locaticia</h1><p class="sh-sub">A garantia protege o proprietario em caso de inadimplencia ou danos ao imovel.</p></div>
+  <div class="card">
+    <div class="opt-list" id="gar-list">
+      <div class="opt" onclick="pickGar('none')"><div class="opt-r"></div><div><div class="opt-lbl">Sem garantia</div><div class="opt-desc">Permite cobranca antecipada (o inquilino paga antes de ocupar) e, em caso de inadimplencia, possibilita despejo por liminar — acelerando a retomada do imovel na via judicial.</div></div></div>
+      <div class="opt" onclick="pickGar('caucao')"><div class="opt-r"></div><div><div class="opt-lbl">Caucao</div><div class="opt-desc">Deposito em dinheiro, titulo de capitalizacao ou bens imoveis como garantia.</div></div></div>
+      <div class="opt sel" onclick="pickGar('fianca')"><div class="opt-r"></div><div><div class="opt-lbl">Fianca</div><div class="opt-desc">Fiador pessoal ou carta fianca bancaria responsavel pelo pagamento em caso de inadimplencia.</div></div></div>
+      <div class="opt" onclick="pickGar('seguro')"><div class="opt-r"></div><div><div class="opt-lbl">Seguro-fianca</div><div class="opt-desc">Uma seguradora garante ao proprietario o recebimento do aluguel e encargos em caso de inadimplencia.</div></div></div>
+    </div>
+    <!-- SEM GARANTIA -->
+    <div class="cond" id="cond-none">
+      <div class="cond-t">Cobranca do primeiro boleto</div>
+      <div class="sub-list">
+        <div class="sub sel" onclick="pickSub(this,'ng','before')" id="sng-bef"><div class="sub-dot"></div>Receber antes — inquilino paga antes de ocupar o imovel</div>
+        <div class="sub" onclick="pickSub(this,'ng','after')" id="sng-aft"><div class="sub-dot"></div>Receber depois — cobranca normal no vencimento</div>
+      </div>
+      <div class="fg" style="margin-top:12px"><label>Data do primeiro boleto</label><input type="date" id="ng-first-date"><div class="fh">Defina quando sera gerado o primeiro boleto para este inquilino.</div></div>
+    </div>
+    <!-- CAUCAO -->
+    <div class="cond" id="cond-caucao">
+      <div class="cond-t">Modalidade de caucao (item VI.b)</div>
+      <div class="sub-list">
+        <div class="sub sel" onclick="pickSub(this,'ct','din')" id="sc-din"><div class="sub-dot"></div>Caucao em dinheiro (maximo 3 alugueis)</div>
+        <div class="sub" onclick="pickSub(this,'ct','cap')" id="sc-cap"><div class="sub-dot"></div>Titulo de capitalizacao</div>
+        <div class="sub" onclick="pickSub(this,'ct','imovel')" id="sc-im"><div class="sub-dot"></div>Caucao em bens imoveis</div>
+      </div>
+      <div class="cond show" id="cond-ct-din" style="margin-top:10px">
+        <div class="cond-t">Caucao em dinheiro</div>
+        <div class="fg"><label>Valor da caucao</label><div class="curr-wrap"><span class="curr-pre">R$</span><input type="text" id="g-cau-val" class="curr-input" placeholder="0,00" oninput="fmtC(this)"></div><div class="fh">Maximo 3 alugueis. Depositado em conta poupanca conjunta, nao solidaria. Devolvido ao final da locacao se nao houver debitos.</div></div>
+      </div>
+      <div class="cond" id="cond-ct-cap" style="margin-top:10px">
+        <div class="cond-t">Titulo de capitalizacao</div>
+        <div class="fh info" style="margin-bottom:12px">Pode ultrapassar 3 alugueis, participa de sorteios mensais e o saldo pode ser resgatado pelo inquilino ao final do contrato. O proprietario pode resgatar em caso de inadimplencia (Circulares SUSEP 569/2018 e 576/2018).</div>
+        <div class="fgr c2"><div class="fg"><label>Sociedade de capitalizacao</label><input type="text" id="g-cap-soc" placeholder="Nome da empresa emissora"></div><div class="fg"><label>Numero do titulo</label><input type="text" id="g-cap-num" placeholder="Numero do titulo"></div></div>
+        <div class="fg"><label>Valor do titulo</label><div class="curr-wrap"><span class="curr-pre">R$</span><input type="text" id="g-cap-val" class="curr-input" placeholder="0,00" oninput="fmtC(this)"></div></div>
+      </div>
+      <div class="cond" id="cond-ct-imovel" style="margin-top:10px">
+        <div class="cond-t">Caucao em bens imoveis</div>
+        <div class="fh info" style="margin-bottom:12px">O proprietario recebe procuracao para averbar a caucao na matricula do imovel caucionado no Cartorio de Registro de Imoveis. Garantia solida, mas exige documentacao do imovel caucionado.</div>
+        <div class="fg"><label>Descricao do imovel caucionado</label><textarea id="g-im-desc" rows="2" placeholder="Endereco completo, bairro, cidade, estado"></textarea></div>
+        <div class="fgr c2"><div class="fg"><label>Numero da matricula</label><input type="text" id="g-im-mat" placeholder="Matricula no CRI"></div><div class="fg"><label>Cartorio de Registro (CRI)</label><input type="text" id="g-im-cri" placeholder="Nome e comarca"></div></div>
+        <div class="fg"><label>Nome do caucionante</label><input type="text" id="g-im-caut" placeholder="Proprietario do imovel caucionado"></div>
+      </div>
+    </div>
+    <!-- FIANCA -->
+    <div class="cond show" id="cond-fianca">
+      <div class="cond-t">Modalidade de fianca (item VI.c)</div>
+      <div class="sub-list">
+        <div class="sub sel" onclick="pickSub(this,'ft','fiador')" id="sf-fiad"><div class="sub-dot"></div>Fiador pessoal</div>
+        <div class="sub" onclick="pickSub(this,'ft','bancaria')" id="sf-banc"><div class="sub-dot"></div>Carta fianca bancaria</div>
+      </div>
+      <div class="cond show" id="cond-ft-fiador" style="margin-top:10px">
+        <div class="cond-t">Dados do fiador</div>
+        <div class="fh info" style="margin-bottom:12px">Se o inquilino incluiu um fiador ao se cadastrar e a analise de credito foi aprovada, os dados ja estarao preenchidos abaixo.</div>
+        <div class="fgr c2"><div class="fg"><label>Nome completo</label><input type="text" id="g-fiad-name" placeholder="Nome do fiador"></div><div class="fg"><label>Nacionalidade</label><input type="text" id="g-fiad-nat" value="Brasileira"></div></div>
+        <div class="fgr c3"><div class="fg"><label>Estado civil</label><select id="g-fiad-civ"><option>Selecione...</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option></select></div><div class="fg"><label>CPF</label><input type="text" id="g-fiad-cpf" placeholder="000.000.000-00"></div><div class="fg"><label>RG</label><input type="text" id="g-fiad-rg" placeholder="00.000.000-0"></div></div>
+        <div class="fgr c2"><div class="fg"><label>Profissao</label><input type="text" id="g-fiad-prof" placeholder="Profissao do fiador"></div><div class="fg"><label>Email</label><input type="email" id="g-fiad-email" placeholder="fiador@email.com"></div></div>
+        <div class="fg"><label>Endereco completo</label><input type="text" id="g-fiad-addr" placeholder="Rua, numero, bairro, cidade, estado"></div>
+      </div>
+      <div class="cond" id="cond-ft-bancaria" style="margin-top:10px">
+        <div class="cond-t">Carta fianca bancaria</div>
+        <div class="fh info" style="margin-bottom:12px">As clausulas especificas serao inseridas pela instituicao financeira emissora. Informe banco e numero da carta para referencia no contrato.</div>
+        <div class="fgr c2"><div class="fg"><label>Banco emissor</label><input type="text" id="g-banc-banco" placeholder="Nome do banco"></div><div class="fg"><label>Numero da carta fianca</label><input type="text" id="g-banc-num" placeholder="Numero de referencia"></div></div>
+      </div>
+    </div>
+    <!-- SEGURO-FIANCA -->
+    <div class="cond" id="cond-seguro">
+      <div class="cond-t">Quem paga o premio do seguro-fianca (item VI.d)</div>
+      <div class="fh" style="margin-bottom:12px">O premio e o custo pago a seguradora para que ela assuma o risco de inadimplencia. Nao e devolvido ao final da vigencia.</div>
+      <div class="sub-list">
+        <div class="sub sel" onclick="pickSub(this,'sf','inq')" id="ss-inq"><div class="sub-dot"></div>Inquilino paga o premio (conforme art. 23 da Lei do Inquilinato)</div>
+        <div class="sub" onclick="pickSub(this,'sf','prop')" id="ss-prop"><div class="sub-dot"></div>Proprietario paga o premio</div>
+        <div class="sub" onclick="pickSub(this,'sf','rep')" id="ss-rep"><div class="sub-dot"></div>Proprietario paga e repassa no boleto mensal ao inquilino</div>
+      </div>
+    </div>
+  </div>
+  <div class="actions"><button class="btn-back" onclick="goTo(5)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</button><button class="btn-next" onclick="goTo(7)">Proximo <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+</div>
+
+<!-- ETAPA 7: SEGURO INCÊNDIO E FORO -->
+<div class="sp" id="sp7">
+  <div class="sh"><div class="sh-num">Etapa 7 de 8</div><h1 class="sh-title">Seguro incendio e foro</h1><p class="sh-sub">Ultimas definicoes antes da revisao final.</p></div>
+  <div class="card">
+    <div class="cs">Seguro contra incendio (item XI)</div>
+    <div class="fh" style="margin-bottom:12px">Por lei a contratacao do seguro incendio e responsabilidade do proprietario. Voce pode repassar essa obrigacao ao inquilino especificando no contrato.</div>
+    <div class="opt-list" id="fire-list">
+      <div class="opt sel" onclick="pickFire('owner')"><div class="opt-r"></div><div><div class="opt-lbl">Proprietario contrata e paga, sem repasse ao inquilino</div></div></div>
+      <div class="opt" onclick="pickFire('tenant')"><div class="opt-r"></div><div><div class="opt-lbl">Inquilino contrata e paga</div></div></div>
+      <div class="opt" onclick="pickFire('repasse')"><div class="opt-r"></div><div><div class="opt-lbl">Proprietario contrata, inquilino paga junto ao aluguel</div><div class="opt-desc">O valor do premio e incluido no boleto mensal.</div></div></div>
+    </div>
+    <div class="cond" id="cond-fire">
+      <div class="cond-t">Valores do seguro</div>
+      <div class="fgr c2">
+        <div class="fg"><label>Importancia assegurada (cobertura)</label><div class="curr-wrap"><span class="curr-pre">R$</span><input type="text" id="fire-cob" class="curr-input" placeholder="0,00" oninput="fmtC(this)"></div><div class="fh">Valor maximo que a seguradora paga em caso de sinistro. Sugerimos ate 200x o valor do aluguel.</div></div>
+        <div class="fg" id="fire-premio-wrap"><label>Premio mensal (incluso no boleto)</label><div class="curr-wrap"><span class="curr-pre">R$</span><input type="text" id="fire-premio" class="curr-input" placeholder="0,00" oninput="fmtC(this);updateTotal()"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="cs">Eleicao de foro (item XIV)</div>
+    <div class="opt-list">
+      <div class="opt sel" onclick="pickOpt(this,'foro')"><div class="opt-r"></div><div><div class="opt-lbl">Arbitragem — Arbitralis</div><div class="opt-desc">Resolucao extrajudicial rapida. Disputas resolvidas pela Arbitralis (arbitralis.com.br), conforme Lei 9.307/96. Conduzida em portugues, por 1 arbitro. As partes podem buscar medidas de urgencia na justica comum sem renunciar a arbitragem.</div></div></div>
+      <div class="opt" onclick="pickOpt(this,'foro')"><div class="opt-r"></div><div><div class="opt-lbl">Justica Comum</div><div class="opt-desc">Fica eleito o foro da comarca onde o imovel esta localizado para dirimir litigios decorrentes deste contrato.</div></div></div>
+    </div>
+  </div>
+  <div class="actions"><button class="btn-back" onclick="goTo(6)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</button><button class="btn-next" onclick="goTo(8)">Revisar contrato <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button></div>
+</div>
+
+<!-- ETAPA 8: REVISÃO E ASSINATURA -->
+<div class="sp" id="sp8">
+  <div class="sh"><div class="sh-num">Etapa 8 de 8</div><h1 class="sh-title">Revisao e assinatura</h1><p class="sh-sub">Confira todos os dados. Voce pode editar qualquer secao antes de gerar o documento.</p></div>
+  <div class="rv-sec"><div class="rv-title">Proprietario <span class="rv-edit" onclick="goTo(1)">Editar</span></div>
+    <div class="rv-row"><span class="rv-k">Nome</span><span class="rv-v" id="rv-owner">Joao Silva</span></div>
+    <div class="rv-row"><span class="rv-k">Assina como</span><span class="rv-v" id="rv-role">Proprio proprietario</span></div>
+    <div class="rv-row"><span class="rv-k">Contas bancarias</span><span class="rv-v rv-miss" id="rv-bank">Nenhuma cadastrada</span></div>
+  </div>
+  <div class="rv-sec"><div class="rv-title">Inquilino <span class="rv-edit" onclick="goTo(2)">Editar</span></div>
+    <div class="rv-row"><span class="rv-k">Nome</span><span class="rv-v rv-miss" id="rv-tenant">Nao preenchido</span></div>
+    <div class="rv-row"><span class="rv-k">CPF</span><span class="rv-v rv-miss" id="rv-tcpf">Nao preenchido</span></div>
+    <div class="rv-row"><span class="rv-k">Garantia</span><span class="rv-v" id="rv-gar">Fiador pessoal</span></div>
+  </div>
+  <div class="rv-sec"><div class="rv-title">Objeto <span class="rv-edit" onclick="goTo(3)">Editar</span></div>
+    <div class="rv-row"><span class="rv-k">Imovel</span><span class="rv-v">Ap. Centro</span></div>
+    <div class="rv-row"><span class="rv-k">Vagas</span><span class="rv-v" id="rv-vagas">Sem vaga</span></div>
+  </div>
+  <div class="rv-sec"><div class="rv-title">Valores e encargos <span class="rv-edit" onclick="goTo(4)">Editar</span></div>
+    <div class="rv-row"><span class="rv-k">Aluguel</span><span class="rv-v rv-miss" id="rv-rent">Nao preenchido</span></div>
+    <div class="rv-row"><span class="rv-k">Reajuste</span><span class="rv-v" id="rv-index">IGP-M / FGV</span></div>
+    <div class="rv-row"><span class="rv-k">Duracao</span><span class="rv-v">30 meses</span></div>
+    <div class="rv-row"><span class="rv-k">Vencimento</span><span class="rv-v rv-miss" id="rv-due">Nao preenchido</span></div>
+    <div class="rv-row"><span class="rv-k">Condominio</span><span class="rv-v" id="rv-cond">—</span></div>
+    <div class="rv-row"><span class="rv-k">IPTU anual</span><span class="rv-v" id="rv-iptu">—</span></div>
+  </div>
+  <div class="rv-sec"><div class="rv-title">Condicoes <span class="rv-edit" onclick="goTo(5)">Editar</span></div>
+    <div class="rv-row"><span class="rv-k">Animais</span><span class="rv-v">Permitidos</span></div>
+    <div class="rv-row"><span class="rv-k">Pagamento</span><span class="rv-v">Boleto Moben</span></div>
+    <div class="rv-row"><span class="rv-k">Multa rescisao</span><span class="rv-v">3 meses proporcional</span></div>
+    <div class="rv-row"><span class="rv-k">Vistoria</span><span class="rv-v">Com vistoria</span></div>
+    <div class="rv-row"><span class="rv-k">Seguro incendio</span><span class="rv-v">Proprietario paga</span></div>
+    <div class="rv-row"><span class="rv-k">Foro</span><span class="rv-v">Arbitragem — Arbitralis</span></div>
+  </div>
+  <div class="total-box" id="totalBoxRv">
+    <div class="total-title">Composicao do boleto mensal</div>
+    <div class="total-row"><span>Aluguel</span><span id="rvt-rent">—</span></div>
+    <div class="total-row"><span>Condominio</span><span id="rvt-cond">—</span></div>
+    <div class="total-row"><span>IPTU (1/12)</span><span id="rvt-iptu">—</span></div>
+    <div class="total-row main"><span>Total do boleto</span><span id="rvt-total">—</span></div>
+  </div>
+  <div class="card">
+    <div class="cs">Testemunhas (2 obrigatorias)</div>
+    <div class="wit"><div class="wit-n">1a Testemunha</div>
+      <div class="fgr c2"><div class="fg"><label>Nome completo</label><input type="text" id="w1-name" placeholder="Nome da testemunha"></div><div class="fg"><label>Email (para DocuSign)</label><input type="email" id="w1-email" placeholder="testemunha@email.com"></div></div>
+    </div>
+    <div class="wit"><div class="wit-n">2a Testemunha</div>
+      <div class="fgr c2"><div class="fg"><label>Nome completo</label><input type="text" id="w2-name" placeholder="Nome da testemunha"></div><div class="fg"><label>Email (para DocuSign)</label><input type="email" id="w2-email" placeholder="testemunha@email.com"></div></div>
+    </div>
+  </div>
+  <div class="sign-box">
+    <div class="sign-ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+    <div class="sign-title">Pronto para enviar ao inquilino</div>
+    <div class="sign-sub">Gere o PDF para leitura antes de enviar. O inquilino recebera o contrato para ler e aprovar. Apos a aprovacao dele, ambas as partes recebem o link de assinatura digital via DocuSign.</div>
+    <div class="sign-parties">
+      <div class="party"><div class="party-role">Proprietario</div><div class="party-name">Joao Silva</div><div class="party-email">joao@email.com</div><div class="party-st"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Aguardando envio</div></div>
+      <div class="party"><div class="party-role">Inquilino</div><div class="party-name rv-miss" id="rv-t-sign">Nao informado</div><div class="party-email rv-miss" id="rv-e-sign">Email nao informado</div><div class="party-st"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Aguardando dados</div></div>
+    </div>
+    <button class="btn-pdf" onclick="gerarPDF(this)">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Gerar PDF para revisao
+    </button>
+    <button class="btn-sign">
+      <svg viewBox="0 0 24 24" style="stroke:#fff;fill:none;stroke-width:2"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+      Enviar para o inquilino aprovar
+    </button>
+    <div class="fh" style="margin-top:10px;text-align:center">O inquilino recebera por email um link para ler e aprovar o contrato. Apos a aprovacao, ambas as partes recebem o link de assinatura digital.</div>
+  </div>
+  <div class="actions"><button class="btn-back" onclick="goTo(7)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Voltar</button><span></span></div>
+</div>
+
+</div><!-- .content -->
+</div><!-- .main -->
+<script>
+var cur = 1, TOTAL = 8;
+var steps = [
+  {id:1,label:'Proprietario',st:'active'},
+  {id:2,label:'Inquilino',st:'pending'},
+  {id:3,label:'Objeto do contrato',st:'pending'},
+  {id:4,label:'Valores, prazo e encargos',st:'pending'},
+  {id:5,label:'Condicoes',st:'pending'},
+  {id:6,label:'Garantia',st:'pending'},
+  {id:7,label:'Seguro e foro',st:'pending'},
+  {id:8,label:'Revisao e assinatura',st:'pending'}
+];
+
+// CONTAS BANCÁRIAS
+var bankAccounts = [];
+var bankCount = 0;
+
+function addBankAccount() {
+  bankCount++;
+  var id = 'bank_' + bankCount;
+  bankAccounts.push({id: id, banco: '', agencia: '', conta: '', titular: '', pct: bankAccounts.length === 0 ? 100 : 0});
+  renderBankAccounts();
+}
+
+function removeBankAccount(id) {
+  bankAccounts = bankAccounts.filter(function(a){return a.id !== id;});
+  renderBankAccounts();
+}
+
+function renderBankAccounts() {
+  var el = document.getElementById('bank-list');
+  if (!bankAccounts.length) { el.innerHTML = ''; updateBankTotal(); return; }
+  var h = '';
+  bankAccounts.forEach(function(acc) {
+    h += '<div class="bank-account" id="wrap_'+acc.id+'">'
+      + '<div class="bank-account-header"><span class="bank-account-title">Conta bancaria</span>'
+      + '<button class="bank-remove" onclick="removeBankAccount(\''+acc.id+'\')">Remover</button></div>'
+      + '<div class="fgr c2"><div class="fg"><label>Banco</label><input type="text" placeholder="Ex: Nubank, Itau..." oninput="updateBankField(\''+acc.id+'\',\'banco\',this.value)"></div>'
+      + '<div class="fg"><label>Tipo</label><select onchange="updateBankField(\''+acc.id+'\',\'tipo\',this.value)"><option value="">Selecione...</option><option>Conta corrente</option><option>Conta poupanca</option></select></div></div>'
+      + '<div class="fgr c3"><div class="fg"><label>Agencia</label><input type="text" placeholder="0000" oninput="updateBankField(\''+acc.id+'\',\'agencia\',this.value)"></div>'
+      + '<div class="fg"><label>Conta</label><input type="text" placeholder="00000000-0" oninput="updateBankField(\''+acc.id+'\',\'conta\',this.value)"></div>'
+      + '<div class="fg"><label>CPF / CNPJ do titular</label><input type="text" placeholder="CPF ou CNPJ" oninput="updateBankField(\''+acc.id+'\',\'doc\',this.value)"></div></div>'
+      + '<div class="fgr c2"><div class="fg"><label>Nome do titular</label><input type="text" placeholder="Como consta no banco" oninput="updateBankField(\''+acc.id+'\',\'titular\',this.value)"></div>'
+      + '<div class="fg"><label>Percentual de recebimento (%)</label><input type="number" min="0" max="100" value="'+acc.pct+'" oninput="updateBankPct(\''+acc.id+'\',this.value)"></div></div>'
+      + '</div>';
+  });
+  el.innerHTML = h;
+  updateBankTotal();
+}
+
+function updateBankField(id, field, val) {
+  var acc = bankAccounts.find(function(a){return a.id===id;});
+  if (acc) acc[field] = val;
+}
+
+function updateBankPct(id, val) {
+  var acc = bankAccounts.find(function(a){return a.id===id;});
+  if (acc) acc.pct = parseInt(val) || 0;
+  updateBankTotal();
+}
+
+function updateBankTotal() {
+  var total = bankAccounts.reduce(function(s,a){return s + (a.pct||0);}, 0);
+  var el = document.getElementById('bank-total-pct');
+  var warn = document.getElementById('bank-warn');
+  el.textContent = total + '%';
+  el.className = 'bank-total-val' + (total !== 100 && bankAccounts.length > 0 ? ' invalid' : '');
+  warn.style.display = (total !== 100 && bankAccounts.length > 0) ? 'block' : 'none';
+}
+
+// ÍNDICE WIZARD
+function renderIdx() {
+  var done = steps.filter(function(s){return s.st==='done';}).length;
+  var pend = steps.filter(function(s){return s.st==='pending'||s.st==='partial';}).length;
+  document.getElementById('barFill').style.width = (done/TOTAL*100) + '%';
+  document.getElementById('barLabel').textContent = done + ' de ' + TOTAL + ' etapas concluidas';
+  var pb = document.getElementById('pendingBanner');
+  var pt = document.getElementById('pendingTxt');
+  if (pend > 0) { pb.classList.add('show'); pt.textContent = pend + ' etapa' + (pend>1?'s':'') + ' pendente' + (pend>1?'s':''); }
+  else { pb.classList.remove('show'); }
+  var h = '';
+  steps.forEach(function(s) {
+    var numH = s.st==='done' ? '<svg viewBox="0 0 12 10" width="9" height="9"><polyline points="1,5 4.5,9 11,1" stroke="white" stroke-width="2" fill="none"/></svg>' : s.id;
+    var tl = s.st==='done'?'Concluido':s.st==='active'?'Em andamento':s.st==='partial'?'Incompleto':'Pendente';
+    h += '<div class="wi-step '+s.st+'" onclick="goTo('+s.id+')">'
+      + '<div class="ws-num">'+numH+'</div>'
+      + '<div class="ws-info"><span class="ws-label">'+s.label+'</span><span class="ws-tag '+s.st+'">'+tl+'</span></div>'
+      + '</div>';
+  });
+  document.getElementById('wiSteps').innerHTML = h;
+}
+
+function goTo(n) {
+  document.getElementById('sp'+cur).classList.remove('active');
+  if (steps[cur-1].st==='active') steps[cur-1].st = 'partial';
+  steps[n-1].st = 'active';
+  cur = n;
+  document.getElementById('sp'+cur).classList.add('active');
+  renderIdx();
+  if (n===8) updateReview();
+  window.scrollTo(0,0);
+}
+
+function showMobileIndex() { alert('No mobile: abrir sheet com indice — a implementar no React'); }
+
+// PROPRIETÁRIO
+function pickOwnerRole(el, role) {
+  document.querySelectorAll('#owner-togs .tog').forEach(function(t){t.classList.remove('sel');});
+  el.classList.add('sel');
+  var ca = document.getElementById('cond-admin');
+  var cs = document.getElementById('owner-cs');
+  ca.classList.remove('show');
+  if (role==='proprio') {
+    cs.textContent = 'Seus dados';
+    document.getElementById('o-name').value = 'Joao Silva';
+    document.getElementById('o-email').value = 'joao@email.com';
+  } else if (role==='admin') {
+    cs.textContent = 'Dados do proprietario';
+    document.getElementById('o-name').value = '';
+    document.getElementById('o-email').value = '';
+    ca.classList.add('show');
+    document.getElementById('adm-name').value = 'Joao Silva';
+    document.getElementById('adm-email').value = 'joao@email.com';
+  } else {
+    cs.textContent = 'Dados do proprietario';
+    document.getElementById('o-name').value = '';
+    document.getElementById('o-email').value = '';
+  }
+  var rv = {proprio:'Proprio proprietario',admin:'Administrador com procuracao',outro:'Outro — proprietario vai assinar'};
+  setRv('rv-role', rv[role], '');
+}
+
+function pickOpt(el, g) {
+  el.parentElement.querySelectorAll('.opt').forEach(function(o){o.classList.remove('sel');});
+  el.classList.add('sel');
+}
+
+function pickGarOpt(el, g, val) {
+  pickOpt(el, g);
+  var c = document.getElementById('cond-multa-from');
+  if (val==='from') c.classList.add('show'); else c.classList.remove('show');
+}
+
+function pickGar(type) {
+  document.querySelectorAll('#gar-list .opt').forEach(function(o){o.classList.remove('sel');});
+  var map = {none:0,caucao:1,fianca:2,seguro:3};
+  document.querySelectorAll('#gar-list .opt')[map[type]].classList.add('sel');
+  ['cond-none','cond-caucao','cond-fianca','cond-seguro'].forEach(function(id){document.getElementById(id).classList.remove('show');});
+  if (type!=='none') document.getElementById('cond-'+type).classList.add('show');
+  else document.getElementById('cond-none').classList.add('show');
+  var labels = {none:'Sem garantia',caucao:'Caucao em dinheiro',fianca:'Fiador pessoal',seguro:'Seguro-fianca'};
+  setRv('rv-gar', labels[type]||'', '');
+}
+
+function pickSub(el, g, val) {
+  el.closest('.sub-list').querySelectorAll('.sub').forEach(function(s){s.classList.remove('sel');});
+  el.classList.add('sel');
+  if (g==='ct') {
+    ['cond-ct-din','cond-ct-cap','cond-ct-imovel'].forEach(function(id){document.getElementById(id).classList.remove('show');});
+    var m = {din:'cond-ct-din',cap:'cond-ct-cap',imovel:'cond-ct-imovel'};
+    if (m[val]) document.getElementById(m[val]).classList.add('show');
+  }
+  if (g==='ft') {
+    ['cond-ft-fiador','cond-ft-bancaria'].forEach(function(id){document.getElementById(id).classList.remove('show');});
+    var mf = {fiador:'cond-ft-fiador',bancaria:'cond-ft-bancaria'};
+    if (mf[val]) document.getElementById(mf[val]).classList.add('show');
+  }
+}
+
+function pickFire(type) {
+  document.querySelectorAll('#fire-list .opt').forEach(function(o){o.classList.remove('sel');});
+  var idx = {owner:0,tenant:1,repasse:2};
+  document.querySelectorAll('#fire-list .opt')[idx[type]].classList.add('sel');
+  var c = document.getElementById('cond-fire');
+  var pw = document.getElementById('fire-premio-wrap');
+  c.classList.remove('show');
+  if (type==='tenant') { c.classList.add('show'); pw.style.display='none'; }
+  if (type==='repasse') { c.classList.add('show'); pw.style.display='block'; }
+}
+
+function onVagasChange() {
+  var v = document.getElementById('obj-vagas').value;
+  var c = document.getElementById('cond-vagas');
+  if (v==='outro') c.classList.add('show'); else c.classList.remove('show');
+}
+
+function onDurChange() {
+  var v = document.getElementById('v-dur').value;
+  var c = document.getElementById('cond-dur');
+  if (v==='custom') c.classList.add('show'); else { c.classList.remove('show'); calcEnd(); }
+}
+
+function onIptuIsento() {
+  var cb = document.getElementById('iptu-isento');
+  var c = document.getElementById('cond-iptu-isento');
+  var opts = document.getElementById('iptu-resp-opts');
+  if (cb.checked) { c.classList.add('show'); opts.style.display='none'; }
+  else { c.classList.remove('show'); opts.style.display='flex'; }
+}
+
+function toggleHist() {
+  var box = document.getElementById('hist-box');
+  var btn = document.getElementById('hist-btn');
+  if (box.style.display==='none') { box.style.display='block'; btn.textContent='Fechar historico dos indices'; }
+  else { box.style.display='none'; btn.textContent='Ver historico dos indices'; }
+}
+
+function onIndexChange() {
+  var v = document.getElementById('v-index').value;
+  var labels = {igpm:'IGP-M / FGV', ipca:'IPCA'};
+  setRv('rv-index', labels[v]||'', '');
+}
+
+function calcEnd() {
+  var start = document.getElementById('v-start').value;
+  var durSel = document.getElementById('v-dur').value;
+  var months = durSel==='custom' ? parseInt(document.getElementById('v-dur-n').value||'0') : parseInt(durSel||'0');
+  var el = document.getElementById('v-end');
+  if (!start || !months) { el.value=''; return; }
+  var d = new Date(start+'T12:00:00');
+  d.setMonth(d.getMonth()+months);
+  el.value = d.toLocaleDateString('pt-BR');
+}
+
+function fmtC(el) {
+  var v = el.value.replace(/[^0-9]/g,'');
+  if (!v) { el.value=''; return; }
+  var n = (parseInt(v)/100).toFixed(2);
+  el.value = n.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+
+function parseBRL(s) {
+  if (!s) return 0;
+  return parseFloat(s.replace(/\./g,'').replace(',','.')) || 0;
+}
+
+function fmtBRL(n) {
+  if (!n) return '—';
+  return 'R$ ' + n.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+
+function calcIptu() {
+  var anual = parseBRL(document.getElementById('v-iptu').value);
+  var lbl = document.getElementById('iptu-label');
+  if (!anual) { lbl.textContent=''; return; }
+  lbl.innerHTML = '= ' + fmtBRL(anual/12) + ' / mes (anual ÷ 12)';
+  updateTotal();
+}
+
+function updateTotal() {
+  var rent = parseBRL(document.getElementById('v-rent').value);
+  var cond = parseBRL(document.getElementById('v-cond').value);
+  var iptuAnual = parseBRL(document.getElementById('v-iptu').value);
+  var iptuMes = iptuAnual/12;
+  var total = rent + cond + iptuMes;
+  document.getElementById('tot-rent').textContent = rent ? fmtBRL(rent) : '—';
+  document.getElementById('tot-cond').textContent = cond ? fmtBRL(cond) : '—';
+  document.getElementById('tot-iptu').textContent = iptuMes ? fmtBRL(iptuMes) : '—';
+  document.getElementById('tot-total').textContent = total ? fmtBRL(total) : '—';
+}
+
+function updateReview() {
+  var tname = document.getElementById('t-name').value;
+  var temail = document.getElementById('t-email').value;
+  var tcpf = document.getElementById('t-cpf').value;
+  var rent = document.getElementById('v-rent').value;
+  var due = document.getElementById('v-due').value;
+  var cond = document.getElementById('v-cond').value;
+  var iptu = document.getElementById('v-iptu').value;
+  var vagas = document.getElementById('obj-vagas').value;
+  var bankLen = bankAccounts.length;
+  setRv('rv-tenant', tname, 'Nao preenchido');
+  setRv('rv-tcpf', tcpf, 'Nao preenchido');
+  setRv('rv-rent', rent?'R$ '+rent:'', 'Nao preenchido');
+  setRv('rv-due', due?'Dia '+due:'', 'Nao preenchido');
+  setRv('rv-cond', cond?'R$ '+cond:'—', '');
+  setRv('rv-iptu', iptu?'R$ '+iptu+' / ano':'—', '');
+  setRv('rv-bank', bankLen ? bankLen+' conta'+(bankLen>1?'s':'')+' cadastrada'+(bankLen>1?'s':'') : '', 'Nenhuma cadastrada');
+  setRv('rv-t-sign', tname, 'Nao informado');
+  setRv('rv-e-sign', temail, 'Email nao informado');
+  var vl = vagas==='0'?'Sem vaga':vagas==='outro'?'Ver descricao':vagas+' vaga(s)';
+  setRv('rv-vagas', vl, '');
+  var r2 = parseBRL(rent), c2 = parseBRL(cond), i2 = parseBRL(iptu)/12, tot = r2+c2+i2;
+  document.getElementById('rvt-rent').textContent = r2?fmtBRL(r2):'—';
+  document.getElementById('rvt-cond').textContent = c2?fmtBRL(c2):'—';
+  document.getElementById('rvt-iptu').textContent = i2?fmtBRL(i2):'—';
+  document.getElementById('rvt-total').textContent = tot?fmtBRL(tot):'—';
+}
+
+function setRv(id, val, empty) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  if (val) { el.textContent=val; el.classList.remove('rv-miss'); }
+  else { el.textContent=empty; el.classList.add('rv-miss'); }
+}
+
+function saveDraft() {
+  var btn = document.querySelector('.wi-save');
+  btn.textContent = 'Rascunho salvo!';
+  setTimeout(function() {
+    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar rascunho';
+  }, 2000);
+}
+
+function gerarPDF(btn) {
+  btn.textContent = 'Gerando PDF...';
+  setTimeout(function() {
+    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> PDF gerado — clique para visualizar';
+  }, 1500);
+}
+
+// Init
+document.getElementById('o-name').value = 'Joao Silva';
+document.getElementById('o-nation').value = 'Brasileira';
+document.getElementById('o-email').value = 'joao@email.com';
+renderIdx();
+</script>
+</body>
+</html>
