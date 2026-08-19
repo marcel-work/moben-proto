@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Moben — Bem-vindo</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#0101CD;--purple:#8301CD;--cyan:#01CCFF;--navy:#0C005F;
+  --grad-h:linear-gradient(90deg,#9CECFB 0%,#0052D4 50%,#8301CD 100%);
+  --white:#fff;--off:#F5F4FF;--off2:#EEF0FF;
+  --text:#0C005F;--muted:#6B6B9A;--border:rgba(1,1,205,0.12);
+}
+html,body{height:100%;-webkit-text-size-adjust:100%}
+body{font-family:'Quicksand',sans-serif;background:var(--white);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px}
+body::before{content:'';position:fixed;top:0;left:0;right:0;height:3px;background:var(--grad-h)}
+
+.logo{margin-bottom:40px}
+.logo img{height:22px}
+
+.card{width:100%;max-width:400px}
+
+.avatar-wrap{display:flex;justify-content:center;margin-bottom:28px}
+.avatar{width:64px;height:64px;background:var(--off2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--blue);transition:all .2s}
+
+.titulo{font-family:'Nunito',sans-serif;font-size:24px;font-weight:900;color:var(--navy);letter-spacing:-.02em;margin-bottom:6px;text-align:center}
+.sub{font-size:14px;color:var(--muted);line-height:1.6;font-weight:500;margin-bottom:32px;text-align:center}
+
+.campo{margin-bottom:16px}
+.campo label{display:block;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
+input[type=text],input[type=tel]{width:100%;padding:15px 16px;border:1.5px solid var(--border);background:var(--white);font-family:'Quicksand',sans-serif;font-size:16px;font-weight:600;color:var(--text);outline:none;transition:border-color .2s;-webkit-appearance:none;border-radius:0}
+input:focus{border-color:var(--blue);background:var(--off)}
+
+.tel-wrap{display:flex;gap:8px}
+.ddi{padding:15px 8px;border:1.5px solid var(--border);background:var(--white);font-family:'Quicksand',sans-serif;font-size:15px;font-weight:600;color:var(--text);outline:none;cursor:pointer;-webkit-appearance:none;border-radius:0;flex-shrink:0;width:72px}
+.ddi:focus{border-color:var(--blue)}
+.tel-input{flex:1;padding:15px 16px;border:1.5px solid var(--border);background:var(--white);font-family:'Quicksand',sans-serif;font-size:16px;font-weight:600;color:var(--text);outline:none;transition:border-color .2s;-webkit-appearance:none;border-radius:0}
+.tel-input:focus{border-color:var(--blue);background:var(--off)}
+
+.nota-tel{font-size:11px;color:var(--muted);font-weight:500;margin-top:5px;line-height:1.5}
+
+.cta{width:100%;padding:17px;font-family:'Quicksand',sans-serif;font-size:16px;font-weight:700;color:#fff;background:var(--grad-h);border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;-webkit-tap-highlight-color:transparent;border-radius:0}
+.cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(131,1,205,.25)}
+.cta:active{transform:scale(.99)}
+.cta:disabled{opacity:.6;cursor:default;transform:none}
+.cta svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2.5}
+
+.pular{display:block;text-align:center;font-size:13px;color:var(--muted);font-weight:500;margin-top:14px;cursor:pointer;background:none;border:none;width:100%}
+.pular:hover{color:var(--blue)}
+</style>
+</head>
+<body>
+
+<div class="logo">
+  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiPgogIDwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyOS44LjUsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiAyLjEuMSBCdWlsZCAyKSAgLS0+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5zdDAgewogICAgICAgIGZpbGw6ICMxZDFkMWI7CiAgICAgICAgZm9udC1mYW1pbHk6IFF1aWNrc2FuZC1MaWdodCwgUXVpY2tzYW5kOwogICAgICAgIGZvbnQtc2l6ZTogMzRweDsKICAgICAgICBmb250LXdlaWdodDogMzAwOwogICAgICAgIHN0cm9rZTogIzRkNGQ0ZDsKICAgICAgICBzdHJva2UtbWl0ZXJsaW1pdDogMTA7CiAgICAgIH0KCiAgICAgIC5zdDEgewogICAgICAgIGZpbGw6ICMwMWNjZmY7CiAgICAgIH0KCiAgICAgIC5zdDIgewogICAgICAgIGZpbGw6ICMwMTAxY2Q7CiAgICAgIH0KCiAgICAgIC5zdDMgewogICAgICAgIGZpbGw6ICM4MzAxY2Q7CiAgICAgIH0KCiAgICAgIC5zdDQgewogICAgICAgIGZpbGw6ICMzMzM7CiAgICAgICAgZm9udC1mYW1pbHk6IFF1aWNrc2FuZC1Cb2xkLCBRdWlja3NhbmQ7CiAgICAgICAgZm9udC1zaXplOiA0M3B4OwogICAgICAgIGZvbnQtd2VpZ2h0OiA3MDA7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxnPgogICAgPGc+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDMiIGQ9Ik00NDMuMTksNTE3LjNsOTUuNTMtNDMuNjktOTEuNS00MS44NWMtMTEuNDQtNS4yMy0yMC44Ljc4LTIwLjgsMTMuMzZ2MTk1Ljk4YzAsMTIuNTgsOC44MiwxNy41NywxOS42MSwxMS4xbDkyLjY5LTU1LjYtOTYuNzItNTguMDJjLTEwLjc5LTYuNDctMTAuMjUtMTYuMDUsMS4xOS0yMS4yOFoiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MSIgZD0iTTYzMC4yMiw0MzEuNzZsLTkxLjUsNDEuODUsOTUuNTMsNDMuNjljMTEuNDQsNS4yMywxMS45NywxNC44MSwxLjE4LDIxLjI4bC05Ni43MSw1OC4wMiw5Mi42OCw1NS42YzEwLjc5LDYuNDcsMTkuNjEsMS40NywxOS42MS0xMS4xdi0xOTUuOThjMC0xMi41OC05LjM2LTE4LjU5LTIwLjgtMTMuMzZaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik02MzQuMjUsNTE3LjNsLTk1LjUzLTQzLjY5LTk1LjUzLDQzLjY5Yy0xMS40NCw1LjIzLTExLjk3LDE0LjgxLTEuMTksMjEuMjhsOTYuNzIsNTguMDIsOTYuNzEtNTguMDJjMTAuNzktNi40NywxMC4yNS0xNi4wNS0xLjE4LTIxLjI4WiIvPgogICAgPC9nPgogICAgPGc+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik03MzAuMDQsNjA2LjgyYzAsMy4yNy0xLjE2LDYuMDItMy40OCw4LjI1LTIuMzIsMi4zMi01LjA3LDMuNDgtOC4yNSwzLjQ4aC0uMzhjLTMuMTgsMC01LjkzLTEuMTYtOC4yNS0zLjQ4LTIuMzItMi4yMy0zLjQ4LTQuOTgtMy40OC04LjI1di03MC44OWMwLTE1Ljk4LDUuNjctMjkuNjgsMTcuMDEtNDEuMTEsMTEuMzQtMTEuMzQsMjUuMDQtMTcuMDEsNDEuMTItMTcuMDEsMTkuMTYsMCwzNC41OCw3LjY1LDQ2LjI3LDIyLjk0LDExLjYtMTUuMjksMjYuOTgtMjIuOTQsNDYuMTQtMjIuOTQsMTYuMDYsMCwyOS43Nyw1LjY3LDQxLjExLDE3LjAxLDExLjM0LDExLjQzLDE3LjAxLDI1LjE0LDE3LjAxLDQxLjExdjcwLjg5YzAsMy4yNy0xLjEyLDYuMDItMy4zNSw4LjI1LTIuMzIsMi4zMi01LjExLDMuNDgtOC4zOCwzLjQ4aC0uMjZjLTMuMjcsMC02LjAyLTEuMTYtOC4yNS0zLjQ4LTIuMzItMi4yMy0zLjQ4LTQuOTgtMy40OC04LjI1di03MC44OWMwLTkuNDUtMy4zNS0xNy41My0xMC4wNS0yNC4yMy02LjctNi43LTE0LjgyLTEwLjA2LTI0LjM2LTEwLjA2cy0xNy41MywzLjM1LTI0LjIzLDEwLjA2Yy02LjcsNi43LTEwLjA1LDE0Ljc4LTEwLjA1LDI0LjIzdjcwLjg5YzAsMy4yNy0xLjE2LDYuMDItMy40OCw4LjI1LTIuMjMsMi4zMi00Ljk4LDMuNDgtOC4yNSwzLjQ4aC0uMjZjLTMuMjcsMC02LjA2LTEuMTYtOC4zOC0zLjQ4LTIuMzItMi4yMy0zLjQ4LTQuOTgtMy40OC04LjI1di03MC44OWMwLTkuNDUtMy4zNS0xNy41My0xMC4wNS0yNC4yMy02LjctNi43LTE0Ljc4LTEwLjA2LTI0LjIzLTEwLjA2cy0xNy41MywzLjM1LTI0LjIzLDEwLjA2Yy02LjcsNi43LTEwLjA1LDE0Ljc4LTEwLjA1LDI0LjIzdjcwLjg5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3QyIiBkPSJNOTk2LjU3LDQ3Ny44MWMxOS40MiwwLDM2LDYuODcsNDkuNzUsMjAuNjIsMTMuNzUsMTMuNzUsMjAuNjIsMzAuMzMsMjAuNjIsNDkuNzVzLTYuODcsMzYtMjAuNjIsNDkuNzVjLTEzLjc1LDEzLjc1LTMwLjMzLDIwLjYyLTQ5Ljc1LDIwLjYycy0zNi02Ljg4LTQ5Ljc1LTIwLjYyYy0xMy43NS0xMy43NS0yMC42Mi0zMC4zMy0yMC42Mi00OS43NXM2Ljg3LTM2LDIwLjYyLTQ5Ljc1YzEzLjc1LTEzLjc1LDMwLjMzLTIwLjYyLDQ5Ljc1LTIwLjYyWk05OTYuNTcsNTAxLjkxYy0xMi44OSwwLTIzLjg5LDQuNTYtMzIuOTksMTMuNjYtOS4wMiw5LjExLTEzLjUzLDIwLjEtMTMuNTMsMzNzNC41MSwyMy43NiwxMy41MywzMi44NmM5LjExLDkuMTEsMjAuMTEsMTMuNjYsMzIuOTksMTMuNjZzMjMuODQtNC41NSwzMi44Ny0xMy42NmM5LjExLTkuMSwxMy42Ni0yMC4wNiwxMy42Ni0zMi44NnMtNC41NS0yMy44OS0xMy42Ni0zM2MtOS4wMi05LjEtMTkuOTgtMTMuNjYtMzIuODctMTMuNjZaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xMDkwLjQxLDQyNC45N2MzLjE4LDAsNS45MywxLjEyLDguMjUsMy4zNSwyLjMyLDIuMzIsMy40OCw1LjExLDMuNDgsOC4zOHY1OC43N2MxMy4yMy0xMS43NywyOC43NC0xNy42Niw0Ni41My0xNy42NiwxOS40MiwwLDM2LDYuODcsNDkuNzUsMjAuNjIsMTMuNzUsMTMuNzUsMjAuNjIsMzAuMzMsMjAuNjIsNDkuNzVzLTYuODgsMzYtMjAuNjIsNDkuNzVjLTEzLjc1LDEzLjc1LTMwLjMzLDIwLjYyLTQ5Ljc1LDIwLjYycy0zNS45Ni02LjgzLTQ5LjYyLTIwLjQ5Yy0xMy43NS0xMy42Ni0yMC42Ni0zMC4xNi0yMC43NS00OS40OXYtMTExLjg3YzAtMy4yNywxLjE2LTYuMDYsMy40OC04LjM4LDIuMzItMi4yNCw1LjA3LTMuMzUsOC4yNS0zLjM1aC4zOVpNMTE0OC42Nyw1MDEuOTFjLTEyLjg5LDAtMjMuODksNC41Ni0zMi45OSwxMy42Ni05LjAyLDkuMTEtMTMuNTMsMjAuMS0xMy41MywzM3M0LjUxLDIzLjc2LDEzLjUzLDMyLjg2YzkuMTEsOS4xMSwyMC4xMSwxMy42NiwzMi45OSwxMy42NnMyMy44NC00LjU1LDMyLjg3LTEzLjY2YzkuMTEtOS4xLDEzLjY2LTIwLjA2LDEzLjY2LTMyLjg2cy00LjU2LTIzLjg5LTEzLjY2LTMzYy05LjAyLTkuMS0xOS45OC0xMy42Ni0zMi44Ny0xMy42NloiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MiIgZD0iTTEzNjcuMDUsNTQ4LjczYy4wNCwzLjIzLTEuMDksNi4wMi0zLjM5LDguMzctMi4yNywyLjI3LTUuMDUsMy40MS04LjM2LDMuNDItMTMuMTktLjA2LTMwLjU0LS4xMy01Mi4wMy0uMTktMjYuNjktLjA3LTQzLjk5LS4xMi01MS45MS0uMTQsMy41MywxNC42NCwxMi4xNywyNS4wOSwyNS45NCwzMS4zNiw5LjE1LDQuMTcsMTguNjYsNS4yNSwyOC41NSwzLjIzLDkuNTgtMS45NiwxNy43Mi02LjQ2LDI0LjQzLTEzLjUxLDMuOTMtNC4wNiw4LjQ3LTQuOTIsMTMuNjMtMi41NywzLjY3LDEuNjcsNS45MSw0LjU0LDYuNzEsOC41OC43NiwzLjk0LS4yOSw3LjM4LTMuMTQsMTAuMzMtMTAuMTUsMTAuNjctMjIuNDgsMTcuNDMtMzYuOTksMjAuMjUtMTQuODUsMi45Ni0yOS4xNiwxLjMxLTQyLjkyLTQuOTYtMTcuNjctOC4wNS0yOS45MS0yMS4xOC0zNi43Mi0zOS4zOS02LjgxLTE4LjIxLTYuMTktMzYuMTUsMS44Ni01My44Miw4LjA1LTE3LjY3LDIxLjE4LTI5LjkxLDM5LjM5LTM2LjczLDE4LjIxLTYuODEsMzYuMTUtNi4xOSw1My44MiwxLjg2LDEyLjc0LDUuODEsMjIuODEsMTQuNiwzMC4xOSwyNi4zNiw3LjMsMTEuNTQsMTAuOTUsMjQuMDYsMTAuOTQsMzcuNTZaTTEzMTUuOTMsNTA2Ljc0Yy0xMS43My01LjM0LTIzLjYzLTUuNzUtMzUuNjktMS4yNC0xMS45OSw0LjU1LTIwLjY1LDEyLjY5LTI1Ljk5LDI0LjQxLS45NiwyLjExLTEuNzUsNC4yNS0yLjM2LDYuNDNsODkuNTIuMjhjLTMuODUtMTMuOTMtMTIuMzQtMjMuODktMjUuNDgtMjkuODhaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xNDAwLjUyLDYwNi44MmMwLDMuMjctMS4xNiw2LjAyLTMuNDgsOC4yNS0yLjMyLDIuMzItNS4wNywzLjQ4LTguMjUsMy40OGgtLjM5Yy0zLjE4LDAtNS45My0xLjE2LTguMjUtMy40OC0yLjMyLTIuMjMtMy40OC00Ljk4LTMuNDgtOC4yNXYtNzAuNWMwLTE2LjE1LDUuNzEtMjkuOTQsMTcuMTQtNDEuMzcsMTEuNDMtMTEuNDMsMjUuMjEtMTcuMTQsNDEuMzctMTcuMTRzMjkuODEsNS43MSw0MS4yNCwxNy4xNGMxMS40MywxMS40MywxNy4xNCwyNS4yMiwxNy4xNCw0MS4zN3Y3MC41YzAsMy4yNy0xLjE2LDYuMDItMy40OCw4LjI1LTIuMjQsMi4zMi00Ljk4LDMuNDgtOC4yNSwzLjQ4aC0uMjZjLTMuMjcsMC02LjA2LTEuMTYtOC4zOC0zLjQ4LTIuMzItMi4yMy0zLjQ4LTQuOTgtMy40OC04LjI1di03MC41YzAtOS41NC0zLjM1LTE3LjctMTAuMDUtMjQuNDgtNi43OS02Ljc5LTE0Ljk1LTEwLjE4LTI0LjQ5LTEwLjE4cy0xNy44MywzLjQtMjQuNjIsMTAuMThjLTYuNyw2Ljc5LTEwLjA1LDE0Ljk1LTEwLjA1LDI0LjQ4djcwLjVaIi8+CiAgICA8L2c+CiAgPC9nPgogIDx0ZXh0IGNsYXNzPSJzdDQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY1MC43MSA5MzAuMTEpIj48dHNwYW4geD0iMCIgeT0iMCI+dmVyc8OjbyBwcmVmZXJlbmNpYWwgZGEgbWFyY2E8L3RzcGFuPjwvdGV4dD4KICA8dGV4dCBjbGFzcz0ic3QwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0OTIuODUgOTkzLjU5KSI+PHRzcGFuIHg9IjAiIHk9IjAiPkRldmVtb3MgdXRpbGl6YXIgZXN0YSB2ZXJzw6NvIGRhIG1hcmNhIHNlbXByZSBxdWUgcG9zc8OtdmVsLjwvdHNwYW4+PC90ZXh0Pgo8L3N2Zz4=" alt="Moben">
+</div>
+
+<div class="card">
+  <div class="avatar-wrap">
+    <div class="avatar" id="avatar">?</div>
+  </div>
+
+  <h1 class="titulo">Como podemos te chamar?</h1>
+  <p class="sub">Só mais dois campos e seu painel estará pronto.</p>
+
+  <div class="campo">
+    <label for="fnome">Nome completo</label>
+    <input type="text" id="fnome" placeholder="João Silva" autocomplete="name" oninput="atualizarAvatar(this.value)">
+  </div>
+
+  <div class="campo">
+    <label for="ftel">Celular</label>
+    <div class="tel-wrap">
+      <select class="ddi"><option>+55</option></select>
+      <input type="tel" class="tel-input" id="ftel" placeholder="(11) 99999-9999" autocomplete="tel" inputmode="tel">
+    </div>
+    <div class="nota-tel">Para notificações importantes sobre seus imóveis. Não compartilhamos com terceiros.</div>
+  </div>
+
+  <button class="cta" type="button" onclick="continuar()">
+    Ir para meu painel
+    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+
+  <button class="pular" type="button" onclick="window.location.href='dashboard.html'">Preencher depois</button>
+</div>
+
+<script>
+function atualizarAvatar(v) {
+  var partes = v.trim().split(' ');
+  var iniciais = partes.length >= 2
+    ? (partes[0][0] + partes[partes.length-1][0]).toUpperCase()
+    : (v.trim()[0] || '?').toUpperCase();
+  document.getElementById('avatar').textContent = iniciais;
+}
+
+function continuar() {
+  var btn = document.querySelector('.cta');
+  btn.innerHTML = 'Preparando seu painel...<svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2.5"><polyline points="9 18 15 12 9 6"/></svg>';
+  btn.disabled = true;
+  setTimeout(function(){ window.location.href = 'dashboard.html'; }, 900);
+}
+
+document.getElementById('fnome').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') document.getElementById('ftel').focus();
+});
+document.getElementById('ftel').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') continuar();
+});
+</script>
+</body>
+</html>
