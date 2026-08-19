@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Moben - Pretendentes</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#0101CD;--purple:#8301CD;--cyan:#01CCFF;--navy:#0C005F;
+  --grad-h:linear-gradient(90deg,#9CECFB 0%,#0052D4 50%,#8301CD 100%);
+  --white:#fff;--off:#F5F4FF;--off2:#EEF0FF;
+  --text:#0C005F;--muted:#6B6B9A;--border:rgba(1,1,205,0.12);
+  --success:#1B7F3A;--success-bg:#E8F5E9;
+  --warning:#92400E;--warning-bg:#FEF3C7;
+  --danger:#C62828;--danger-bg:#FFEBEE;
+  --wa:#25D366;--wa-bg:#E8F8EE;
+  --sw:220px;
+}
+body{font-family:'Quicksand',sans-serif;background:var(--off);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* SIDEBAR */
+.app-sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--navy);display:flex;flex-direction:column;z-index:100}
+.app-sidebar::before{content:'';position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,0 60,52 0,52' fill='%239CECFB'/%3E%3C/svg%3E");background-size:60px 60px;pointer-events:none}
+.as-logo{padding:24px 20px;position:relative;z-index:1;border-bottom:1px solid rgba(255,255,255,.06)}
+.as-logo img{height:22px}
+.as-nav{flex:1;padding:12px 0;position:relative;z-index:1;overflow-y:auto}
+.as-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:10px 20px 4px}
+.as-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:12px;font-weight:600;color:rgba(255,255,255,.45);text-decoration:none;transition:all .15s}
+.as-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.as-item:hover{color:rgba(255,255,255,.75);background:rgba(255,255,255,.05)}
+.as-item.active{color:#fff;background:rgba(255,255,255,.1)}
+.as-item.active svg{stroke:var(--cyan)}
+.as-foot{padding:16px 20px;border-top:1px solid rgba(255,255,255,.06);position:relative;z-index:1}
+.as-av{width:28px;height:28px;background:var(--grad-h);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;color:#fff;flex-shrink:0}
+.as-uname{font-size:11px;font-weight:700;color:rgba(255,255,255,.7)}
+.as-uplan{font-size:10px;color:rgba(255,255,255,.3);font-weight:500}
+
+/* MAIN */
+.main{margin-left:var(--sw);min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 28px;gap:10px;position:sticky;top:0;z-index:50}
+.back-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:none;transition:color .15s}
+.back-btn:hover{color:var(--blue)}
+.back-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5}
+.tb-sep{width:1px;height:18px;background:var(--border)}
+.page-title{font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:var(--navy)}
+.prop-pill{margin-left:auto;font-size:11px;font-weight:700;color:var(--muted);background:var(--off);border:1px solid var(--border);padding:3px 10px}
+
+/* CONTENT */
+.content{flex:1;padding:28px;max-width:720px}
+.view{display:none;animation:fu .22s ease both}
+.view.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* TYPOGRAPHY */
+.sh{margin-bottom:22px}
+.sh-title{font-family:'Nunito',sans-serif;font-size:21px;font-weight:900;color:var(--navy);letter-spacing:-.02em;margin-bottom:5px}
+.sh-sub{font-size:13px;color:var(--muted);font-weight:500;line-height:1.6}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--border);padding:22px;margin-bottom:14px}
+.cs{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+
+/* AÇÕES DE ENTRADA */
+.entry-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px}
+.ea{border:1.5px solid var(--border);padding:16px;cursor:pointer;transition:all .15s;text-align:left;background:var(--white);display:flex;flex-direction:column;gap:6px}
+.ea:hover{border-color:var(--blue);background:var(--off)}
+.ea.primary{border-color:var(--blue);background:var(--off2)}
+.ea-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--off2);margin-bottom:4px}
+.ea-icon svg{width:15px;height:15px;stroke:var(--blue);fill:none;stroke-width:2}
+.ea.primary .ea-icon{background:var(--blue)}
+.ea.primary .ea-icon svg{stroke:#fff}
+.ea-label{font-size:12px;font-weight:700;color:var(--navy);line-height:1.3}
+.ea-desc{font-size:11px;color:var(--muted);font-weight:500;line-height:1.4}
+.ea-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;background:var(--blue);color:#fff;margin-top:2px}
+
+/* LISTA DE PROPOSTAS */
+.proposal-item{border:1.5px solid var(--border);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:12px;background:var(--white)}
+.proposal-item:hover{border-color:var(--blue);background:var(--off)}
+.proposal-item.selected{border-color:var(--success);background:var(--success-bg)}
+.pi-avatars{display:flex}
+.pi-av{width:36px;height:36px;border-radius:50%;background:var(--grad-h);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;color:#fff;border:2px solid #fff;flex-shrink:0}
+.pi-av:not(:first-child){margin-left:-10px}
+.pi-info{flex:1}
+.pi-name{font-size:13px;font-weight:700;color:var(--navy)}
+.pi-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.pi-badge{font-size:10px;font-weight:700;padding:2px 8px;border:1px solid;white-space:nowrap}
+.pi-badge.selected{color:var(--success);border-color:rgba(27,127,58,.3);background:var(--success-bg)}
+.pi-badge.pending{color:var(--warning);border-color:rgba(146,64,14,.3);background:var(--warning-bg)}
+.pi-badge.analyzed{color:var(--blue);border-color:rgba(1,1,205,.2);background:var(--off2)}
+.pi-arrow svg{width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px 24px}
+.empty-ico{width:64px;height:64px;background:var(--off2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.empty-ico svg{width:28px;height:28px;stroke:var(--blue);fill:none;stroke-width:1.5}
+.empty-title{font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;color:var(--navy);margin-bottom:6px}
+.empty-sub{font-size:13px;color:var(--muted);font-weight:500;line-height:1.6;max-width:320px;margin:0 auto}
+
+/* DRAWER */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(12,0,95,.35);z-index:200}
+.drawer-overlay.show{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:100vw;background:var(--white);z-index:201;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+.drawer.open{transform:translateX(0)}
+.drawer-header{padding:20px 22px 16px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.drawer-title{font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;color:var(--navy)}
+.drawer-sub{font-size:12px;color:var(--muted);font-weight:500;margin-top:3px;line-height:1.5}
+.drawer-close{background:none;border:none;cursor:pointer;color:var(--muted);padding:2px;flex-shrink:0}
+.drawer-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5}
+.drawer-body{flex:1;overflow-y:auto;padding:20px 22px}
+.drawer-footer{padding:16px 22px;border-top:1px solid var(--border);flex-shrink:0}
+
+/* CANAIS DE CONVITE */
+.invite-step{display:none}
+.invite-step.active{display:block;animation:fu .2s ease both}
+.channel-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.ch{border:1.5px solid var(--border);padding:13px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s}
+.ch:hover{border-color:var(--blue);background:var(--off)}
+.ch.wa{border-color:rgba(37,211,102,.35);background:var(--wa-bg)}
+.ch-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--off2)}
+.ch-icon svg{width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:2}
+.ch.wa .ch-icon{background:var(--wa-bg)}
+.ch.wa .ch-icon svg{stroke:var(--wa)}
+.ch-info{flex:1}
+.ch-label{font-size:13px;font-weight:700;color:var(--navy)}
+.ch-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.ch-action{font-size:12px;font-weight:700;color:var(--blue);white-space:nowrap}
+.copy-row{display:flex;align-items:center;gap:8px;background:var(--off);padding:10px 12px;border:1px solid var(--border)}
+.copy-url{font-size:11px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.copy-btn{font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;flex-shrink:0;padding:2px 8px}
+.copy-btn:hover{text-decoration:underline}
+.divider-text{text-align:center;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:16px 0;position:relative}
+.divider-text::before,.divider-text::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border)}
+.divider-text::before{left:0}
+.divider-text::after{right:0}
+
+/* CAMPOS */
+.fg{margin-bottom:14px}
+.fg:last-child{margin-bottom:0}
+.fgr{display:grid;gap:12px;margin-bottom:14px}
+.fgr.c2{grid-template-columns:1fr 1fr}
+.fgr.c3{grid-template-columns:1fr 1fr 1fr}
+label{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+input[type=text],input[type=email],input[type=tel],input[type=date],select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);background:var(--white);font-family:'Quicksand',sans-serif;font-size:13px;font-weight:600;color:var(--text);outline:none;transition:border-color .2s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);background:var(--off)}
+select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B9A' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.fh{font-size:11px;color:var(--muted);margin-top:5px;font-weight:500;line-height:1.5}
+.fh.info{color:var(--blue);background:var(--off2);border-left:2px solid var(--blue);padding:8px 10px;margin-top:8px}
+.fh.warn{color:var(--warning);background:var(--warning-bg);border-left:2px solid var(--warning);padding:8px 10px;margin-top:8px}
+.fh strong{font-weight:700;display:block;margin-bottom:2px}
+
+/* DETALHE DA PROPOSTA */
+.interested-card{border:1px solid var(--border);padding:18px;margin-bottom:12px;background:var(--white)}
+.ic-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.ic-av-lg{width:44px;height:44px;border-radius:50%;background:var(--grad-h);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
+.ic-name{font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:var(--navy)}
+.ic-meta{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+.ic-status{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;margin-top:5px}
+.ic-status.pending{color:var(--warning)}
+.ic-status.ok{color:var(--success)}
+.ic-status svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2}
+.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.data-item{padding:8px 10px;background:var(--off);border:1px solid var(--border)}
+.data-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.data-val{font-size:13px;font-weight:700;color:var(--text)}
+
+/* ANÁLISE */
+.analysis-section{margin-top:16px}
+.analysis-header{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.gen-btn{font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;text-decoration:underline}
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.indicator{border:1px solid var(--border);padding:12px;cursor:pointer;transition:border-color .15s;position:relative}
+.indicator:hover{border-color:var(--navy)}
+.ind-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.ind-score{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:var(--navy);margin-bottom:4px}
+.ind-desc{font-size:11px;color:var(--muted);font-weight:500;line-height:1.4}
+.ind-tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:0;right:0;background:var(--navy);color:rgba(255,255,255,.9);font-size:11px;font-weight:500;padding:10px 12px;line-height:1.5;z-index:10}
+.ind-tooltip::after{content:'';position:absolute;top:100%;left:20px;border:5px solid transparent;border-top-color:var(--navy)}
+.indicator:hover .ind-tooltip{display:block}
+
+/* CONSENTIMENTO */
+.consent-box{background:var(--warning-bg);border:1px solid rgba(146,64,14,.2);padding:14px 16px;margin-bottom:14px}
+.consent-title{font-size:12px;font-weight:700;color:var(--warning);margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.consent-title svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.consent-body{font-size:11px;color:var(--warning);font-weight:500;line-height:1.5;margin-bottom:8px}
+.consent-resend{font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;text-decoration:underline;padding:0}
+
+/* RENDA CONSOLIDADA */
+.renda-box{background:var(--off2);border:1px solid var(--border);padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.renda-val{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--navy)}
+.renda-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.renda-ratio{font-size:12px;color:var(--muted);font-weight:600;margin-top:4px}
+
+/* ADD MORADOR */
+.add-morador{border:1.5px dashed var(--border);padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .15s;background:transparent;width:100%;margin-top:10px}
+.add-morador:hover{border-color:var(--blue);background:var(--off)}
+.add-morador-icon{width:32px;height:32px;background:var(--off2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.add-morador-icon svg{width:14px;height:14px;stroke:var(--blue);fill:none;stroke-width:2.5}
+.add-morador-info{text-align:left}
+.add-morador-label{font-size:12px;font-weight:700;color:var(--navy)}
+.add-morador-desc{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* BOTÕES */
+.btn-primary{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px 24px;font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;color:#fff;background:var(--grad-h);border:none;cursor:pointer;transition:all .2s}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(131,1,205,.28)}
+.btn-primary svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2}
+.btn-secondary{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:11px 20px;font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;color:var(--blue);background:var(--off2);border:1.5px solid var(--border);cursor:pointer;transition:all .15s;margin-top:10px}
+.btn-secondary:hover{border-color:var(--blue)}
+.btn-secondary svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+.btn-ghost{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px 20px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:var(--danger);background:none;border:1px solid rgba(198,40,40,.2);cursor:pointer;transition:all .15s;margin-top:10px}
+.btn-ghost:hover{background:var(--danger-bg)}
+.btn-back{display:inline-flex;align-items:center;gap:5px;padding:10px 16px;font-family:'Quicksand',sans-serif;font-size:12px;font-weight:700;color:var(--muted);background:transparent;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;margin-bottom:16px}
+.btn-back:hover{border-color:var(--blue);color:var(--blue)}
+.btn-back svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5}
+.btn-drawer{width:100%;padding:12px;font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;color:#fff;background:var(--grad-h);border:none;cursor:pointer;transition:all .2s}
+.btn-drawer:hover{opacity:.92}
+.btn-drawer-sec{width:100%;padding:11px;font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;color:var(--blue);background:var(--off2);border:1.5px solid var(--border);cursor:pointer;margin-top:8px}
+
+/* MEMBRO CONFIRMADO */
+.membro-card{border:1px solid var(--border);padding:13px 16px;margin-bottom:10px;background:var(--white);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.membro-card.fiador{border-color:rgba(131,1,205,.2);background:rgba(131,1,205,.02)}
+.mc-left{display:flex;align-items:center;gap:10px}
+.mc-av{width:36px;height:36px;border-radius:50%;background:var(--grad-h);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;color:#fff;flex-shrink:0}
+.mc-name{font-size:13px;font-weight:700;color:var(--navy)}
+.mc-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.mc-renda{font-size:11px;font-weight:700;color:var(--blue);margin-top:2px}
+.mc-remove{font-size:11px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;flex-shrink:0}
+
+/* DEV TOGGLE */
+.dev-toggle{margin-top:24px;padding-top:14px;border-top:1px dashed var(--border);display:flex;align-items:center;gap:8px}
+.dev-toggle input{cursor:pointer}
+.dev-toggle label{font-size:11px;font-weight:700;color:var(--muted);text-transform:none;letter-spacing:0;cursor:pointer;margin:0}
+
+@media(max-width:768px){
+  .app-sidebar{display:none}.main{margin-left:0;padding-bottom:64px}
+  .bottom-nav{display:flex}
+  .topbar{padding:0 14px;height:48px}
+  .page-title{font-size:14px}
+  .prop-grid{grid-template-columns:1fr}
+  .analysis-grid,.cand-grid{grid-template-columns:1fr}idth:100%;top:auto;border-radius:16px 16px 0 0}
+}
+
+/* BOTTOM NAV MOBILE */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:64px;background:var(--navy);z-index:100;border-top:1px solid rgba(255,255,255,.1);box-shadow:0 -4px 20px rgba(12,0,95,.25)}
+.bn-inner{display:flex;width:100%;height:100%}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:rgba(255,255,255,.38);border:none;background:none;cursor:pointer;padding:0;min-width:0;-webkit-tap-highlight-color:transparent}
+.bn-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
+.bn-item span{font-family:'Quicksand',sans-serif;font-size:10px;font-weight:700;white-space:nowrap;max-width:56px}
+.bn-item.active{color:var(--cyan)}
+</style>
+</head>
+<body>
+<aside class="app-sidebar">
+  <div class="as-logo"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAxOTIwIDEwODAiPgogIDwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyOS44LjUsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiAyLjEuMSBCdWlsZCAyKSAgLS0+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5zdDAgewogICAgICAgIGZpbGw6ICMxZDFkMWI7CiAgICAgICAgZm9udC1mYW1pbHk6IFF1aWNrc2FuZC1MaWdodCwgUXVpY2tzYW5kOwogICAgICAgIGZvbnQtc2l6ZTogMzRweDsKICAgICAgICBmb250LXdlaWdodDogMzAwOwogICAgICAgIHN0cm9rZTogIzRkNGQ0ZDsKICAgICAgICBzdHJva2UtbWl0ZXJsaW1pdDogMTA7CiAgICAgIH0KCiAgICAgIC5zdDEgewogICAgICAgIGZpbGw6ICNlNmU2ZTY7CiAgICAgIH0KCiAgICAgIC5zdDIgewogICAgICAgIGZpbGw6ICMwMWNjZmY7CiAgICAgIH0KCiAgICAgIC5zdDMgewogICAgICAgIGZpbGw6ICMwMTAxY2Q7CiAgICAgIH0KCiAgICAgIC5zdDQgewogICAgICAgIGZpbGw6ICNmZmY7CiAgICAgIH0KCiAgICAgIC5zdDUgewogICAgICAgIGZpbGw6ICM4MzAxY2Q7CiAgICAgIH0KCiAgICAgIC5zdDYgewogICAgICAgIGZpbGw6ICMwYzAwNWY7CiAgICAgIH0KCiAgICAgIC5zdDcgewogICAgICAgIGZpbGw6ICMzMzM7CiAgICAgICAgZm9udC1mYW1pbHk6IFF1aWNrc2FuZC1Cb2xkLCBRdWlja3NhbmQ7CiAgICAgICAgZm9udC1zaXplOiA0M3B4OwogICAgICAgIGZvbnQtd2VpZ2h0OiA3MDA7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDx0ZXh0IGNsYXNzPSJzdDciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDc1NC4zNSA4NjAuNDUpIj48dHNwYW4geD0iMCIgeT0iMCI+YXBsaWNhw6fDo28gZGEgbWFyY2E8L3RzcGFuPjwvdGV4dD4KICA8dGV4dCBjbGFzcz0ic3QwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MDMuNDQgOTIzLjkyKSI+PHRzcGFuIHg9IjAiIHk9IjAiPnNvYnJlIGZ1bmRvIGNsYXJvIGUgZnVuZG8gZXNjdXJvPC90c3Bhbj48L3RleHQ+CiAgPHJlY3QgY2xhc3M9InN0NiIgeD0iMTAwNC4xMSIgeT0iMzIzLjY0IiB3aWR0aD0iNzYyIiBoZWlnaHQ9IjI0NyIvPgogIDxyZWN0IGNsYXNzPSJzdDEiIHg9IjE1My42NyIgeT0iMzIzLjY0IiB3aWR0aD0iNzYyIiBoZWlnaHQ9IjI0NyIvPgogIDxnPgogICAgPGc+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDUiIGQ9Ik0yMjEuMjYsNDMzLjM4bDU3LjkzLTI2LjUtNTUuNDktMjUuMzhjLTYuOTQtMy4xNy0xMi42MS40Ny0xMi42MSw4LjF2MTE4Ljg1YzAsNy42Myw1LjM1LDEwLjY2LDExLjg5LDYuNzNsNTYuMjEtMzMuNzItNTguNjYtMzUuMTljLTYuNTQtMy45Mi02LjIyLTkuNzMuNzItMTIuOVoiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MiIgZD0iTTMzNC42OCwzODEuNWwtNTUuNDksMjUuMzgsNTcuOTMsMjYuNWM2LjkzLDMuMTcsNy4yNiw4Ljk4LjcyLDEyLjlsLTU4LjY1LDM1LjE5LDU2LjIxLDMzLjcyYzYuNTQsMy45MiwxMS44OS44OSwxMS44OS02Ljczdi0xMTguODVjMC03LjYzLTUuNjgtMTEuMjctMTIuNjEtOC4xWiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNMzM3LjEzLDQzMy4zOGwtNTcuOTMtMjYuNS01Ny45MywyNi41Yy02Ljk0LDMuMTctNy4yNiw4Ljk4LS43MiwxMi45bDU4LjY2LDM1LjE5LDU4LjY1LTM1LjE5YzYuNTQtMy45Miw2LjIyLTkuNzMtLjcyLTEyLjlaIi8+CiAgICA8L2c+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTM5NS4yMSw0ODcuNjdjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuNDEsMS40MS0zLjA4LDIuMTEtNSwyLjExaC0uMjNjLTEuOTMsMC0zLjYtLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi45OWMwLTkuNjksMy40NC0xOCwxMC4zMi0yNC45Myw2Ljg4LTYuODgsMTUuMTktMTAuMzIsMjQuOTMtMTAuMzIsMTEuNjIsMCwyMC45Nyw0LjY0LDI4LjA2LDEzLjkxLDcuMDMtOS4yNywxNi4zNi0xMy45MSwyNy45OC0xMy45MSw5Ljc0LDAsMTguMDUsMy40NCwyNC45MywxMC4zMiw2Ljg4LDYuOTMsMTAuMzIsMTUuMjQsMTAuMzIsMjQuOTN2NDIuOTljMCwxLjk4LS42OCwzLjY1LTIuMDMsNS0xLjQxLDEuNDEtMy4xLDIuMTEtNS4wOCwyLjExaC0uMTZjLTEuOTgsMC0zLjY1LS43LTUtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDQtMTAuNjMtNi4xLTE0LjY5LTQuMDctNC4wNi04Ljk5LTYuMS0xNC43Ny02LjFzLTEwLjYzLDIuMDMtMTQuNyw2LjFjLTQuMDYsNC4wNi02LjEsOC45Ni02LjEsMTQuNjl2NDIuOTljMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDMtMTAuNjMtNi4xLTE0LjY5LTQuMDctNC4wNi04Ljk2LTYuMS0xNC42OS02LjFzLTEwLjYzLDIuMDMtMTQuNjksNi4xYy00LjA2LDQuMDYtNi4xLDguOTYtNi4xLDE0LjY5djQyLjk5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNNTU2Ljg1LDQwOS40M2MxMS43OCwwLDIxLjgzLDQuMTcsMzAuMTcsMTIuNSw4LjM0LDguMzQsMTIuNSwxOC40LDEyLjUsMzAuMTdzLTQuMTcsMjEuODMtMTIuNSwzMC4xN2MtOC4zNCw4LjM0LTE4LjM5LDEyLjUxLTMwLjE3LDEyLjUxcy0yMS44My00LjE3LTMwLjE3LTEyLjUxYy04LjM0LTguMzQtMTIuNS0xOC4zOS0xMi41LTMwLjE3czQuMTctMjEuODMsMTIuNS0zMC4xN2M4LjM0LTguMzQsMTguMzktMTIuNSwzMC4xNy0xMi41Wk01NTYuODUsNDI0LjA0Yy03LjgxLDAtMTQuNDksMi43Ni0yMC4wMSw4LjI5LTUuNDcsNS41Mi04LjIxLDEyLjE5LTguMjEsMjAuMDFzMi43NCwxNC40MSw4LjIxLDE5LjkzYzUuNTIsNS41MywxMi4xOSw4LjI5LDIwLjAxLDguMjlzMTQuNDYtMi43NiwxOS45My04LjI5YzUuNTItNS41Miw4LjI5LTEyLjE3LDguMjktMTkuOTNzLTIuNzYtMTQuNDktOC4yOS0yMC4wMWMtNS40Ny01LjUyLTEyLjEyLTguMjktMTkuOTMtOC4yOVoiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTYxMy43NiwzNzcuMzhjMS45MywwLDMuNi42OCw1LDIuMDMsMS40MSwxLjQxLDIuMTEsMy4xLDIuMTEsNS4wOHYzNS42NGM4LjAyLTcuMTQsMTcuNDMtMTAuNzEsMjguMjItMTAuNzEsMTEuNzcsMCwyMS44Myw0LjE3LDMwLjE3LDEyLjUsOC4zNCw4LjM0LDEyLjUsMTguNCwxMi41LDMwLjE3cy00LjE3LDIxLjgzLTEyLjUsMzAuMTdjLTguMzQsOC4zNC0xOC4zOSwxMi41MS0zMC4xNywxMi41MXMtMjEuODEtNC4xNC0zMC4wOS0xMi40M2MtOC4zNC04LjI5LTEyLjUzLTE4LjI5LTEyLjU4LTMwLjAxdi02Ny44NGMwLTEuOTguNy0zLjY3LDIuMTEtNS4wOCwxLjQxLTEuMzYsMy4wNy0yLjAzLDUtMi4wM2guMjNaTTY0OS4wOSw0MjQuMDRjLTcuODIsMC0xNC40OSwyLjc2LTIwLjAxLDguMjktNS40Nyw1LjUyLTguMjEsMTIuMTktOC4yMSwyMC4wMXMyLjc0LDE0LjQxLDguMjEsMTkuOTNjNS41Miw1LjUzLDEyLjE5LDguMjksMjAuMDEsOC4yOXMxNC40Ni0yLjc2LDE5LjkzLTguMjljNS41Mi01LjUyLDguMjgtMTIuMTcsOC4yOC0xOS45M3MtMi43Ni0xNC40OS04LjI4LTIwLjAxYy01LjQ3LTUuNTItMTIuMTItOC4yOS0xOS45My04LjI5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNNzgxLjUzLDQ1Mi40M2MuMDIsMS45Ni0uNjYsMy42NS0yLjA1LDUuMDgtMS4zNywxLjM4LTMuMDYsMi4wNy01LjA3LDIuMDctOC0uMDQtMTguNTItLjA4LTMxLjU1LS4xMi0xNi4xOC0uMDQtMjYuNjgtLjA3LTMxLjQ4LS4wOSwyLjE0LDguODgsNy4zOCwxNS4yMSwxNS43MywxOS4wMiw1LjU1LDIuNTMsMTEuMzIsMy4xOCwxNy4zMiwxLjk2LDUuODEtMS4xOSwxMC43NC0zLjkyLDE0LjgxLTguMiwyLjM4LTIuNDYsNS4xNC0yLjk4LDguMjctMS41NiwyLjIzLDEuMDIsMy41OCwyLjc1LDQuMDcsNS4yLjQ2LDIuMzktLjE4LDQuNDctMS45MSw2LjI2LTYuMTYsNi40Ny0xMy42MywxMC41Ny0yMi40MywxMi4yOC05LjAxLDEuOC0xNy42OC43OS0yNi4wMy0zLjAxLTEwLjcyLTQuODgtMTguMTQtMTIuODQtMjIuMjctMjMuODktNC4xMy0xMS4wNC0zLjc2LTIxLjkyLDEuMTMtMzIuNjQsNC44OC0xMC43MiwxMi44NC0xOC4xNCwyMy44OS0yMi4yNywxMS4wNC00LjEzLDIxLjkyLTMuNzYsMzIuNjQsMS4xMiw3LjczLDMuNTIsMTMuODMsOC44NSwxOC4zMSwxNS45OSw0LjQzLDcsNi42NCwxNC41OSw2LjYzLDIyLjc4Wk03NTAuNTMsNDI2Ljk3Yy03LjExLTMuMjQtMTQuMzMtMy40OS0yMS42NS0uNzUtNy4yNywyLjc2LTEyLjUyLDcuNjktMTUuNzYsMTQuODEtLjU4LDEuMjgtMS4wNiwyLjU4LTEuNDMsMy45bDU0LjI5LjE3Yy0yLjMzLTguNDUtNy40OS0xNC40OS0xNS40NS0xOC4xMloiLz4KICAgICAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTgwMS44Myw0ODcuNjdjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuNDEsMS40MS0zLjA3LDIuMTEtNSwyLjExaC0uMjNjLTEuOTMsMC0zLjYtLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTkuNzksMy40Ni0xOC4xNiwxMC4zOS0yNS4wOSw2LjkzLTYuOTMsMTUuMjktMTAuMzksMjUuMDktMTAuMzlzMTguMDgsMy40NiwyNS4wMSwxMC4zOWM2LjkzLDYuOTMsMTAuMzksMTUuMywxMC4zOSwyNS4wOXY0Mi43NWMwLDEuOTgtLjcsMy42NS0yLjExLDUtMS4zNiwxLjQxLTMuMDIsMi4xMS01LDIuMTFoLS4xNmMtMS45OCwwLTMuNjctLjctNS4wOC0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTUuNzgtMi4wMy0xMC43My02LjEtMTQuODUtNC4xMi00LjEyLTkuMDctNi4xOC0xNC44NS02LjE4cy0xMC44MSwyLjA2LTE0LjkzLDYuMThjLTQuMDYsNC4xMi02LjEsOS4wNy02LjEsMTQuODV2NDIuNzVaIi8+CiAgICA8L2c+CiAgPC9nPgogIDxnPgogICAgPGc+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDUiIGQ9Ik0xMDcxLjkxLDQzMy4zN2w1Ny45My0yNi41LTU1LjQ5LTI1LjM4Yy02Ljk0LTMuMTctMTIuNjEuNDctMTIuNjEsOC4xdjExOC44NWMwLDcuNjMsNS4zNSwxMC42NiwxMS44OSw2LjczbDU2LjIxLTMzLjcyLTU4LjY2LTM1LjE5Yy02LjU0LTMuOTItNi4yMi05LjczLjcyLTEyLjlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0xMTg1LjMzLDM4MS41bC01NS40OSwyNS4zOCw1Ny45MywyNi41YzYuOTQsMy4xNyw3LjI2LDguOTguNzIsMTIuOWwtNTguNjUsMzUuMTksNTYuMjEsMzMuNzJjNi41NCwzLjkyLDExLjg5Ljg5LDExLjg5LTYuNzN2LTExOC44NWMwLTcuNjMtNS42OC0xMS4yNy0xMi42MS04LjFaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDMiIGQ9Ik0xMTg3Ljc3LDQzMy4zN2wtNTcuOTMtMjYuNS01Ny45MywyNi41Yy02Ljk0LDMuMTctNy4yNiw4Ljk4LS43MiwxMi45bDU4LjY2LDM1LjE5LDU4LjY1LTM1LjE5YzYuNTQtMy45Miw2LjIyLTkuNzMtLjcyLTEyLjlaIi8+CiAgICA8L2c+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9InN0NCIgZD0iTTEyNDUuODYsNDg3LjY3YzAsMS45OC0uNywzLjY1LTIuMTEsNS0xLjQxLDEuNDEtMy4wOCwyLjExLTUsMi4xMWgtLjI0Yy0xLjkzLDAtMy41OS0uNy01LTIuMTEtMS40MS0xLjM1LTIuMTEtMy4wMi0yLjExLTV2LTQyLjk5YzAtOS42OSwzLjQ0LTE4LDEwLjMyLTI0LjkzLDYuODgtNi44OCwxNS4xOS0xMC4zMiwyNC45My0xMC4zMiwxMS42MiwwLDIwLjk3LDQuNjQsMjguMDYsMTMuOTEsNy4wNC05LjI3LDE2LjM2LTEzLjkxLDI3Ljk4LTEzLjkxLDkuNzQsMCwxOC4wNiwzLjQ0LDI0LjkzLDEwLjMyLDYuODgsNi45MywxMC4zMiwxNS4yNCwxMC4zMiwyNC45M3Y0Mi45OWMwLDEuOTgtLjY4LDMuNjUtMi4wMyw1LTEuNDEsMS40MS0zLjEsMi4xMS01LjA4LDIuMTFoLS4xNmMtMS45OCwwLTMuNjUtLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi45OWMwLTUuNzMtMi4wMy0xMC42My02LjEtMTQuNjktNC4wNi00LjA2LTguOTktNi4xLTE0Ljc3LTYuMXMtMTAuNjMsMi4wMy0xNC42OSw2LjFjLTQuMDYsNC4wNi02LjEsOC45Ni02LjEsMTQuNjl2NDIuOTljMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuOTljMC01LjczLTIuMDMtMTAuNjMtNi4xLTE0LjY5LTQuMDYtNC4wNi04Ljk2LTYuMS0xNC42OS02LjFzLTEwLjYzLDIuMDMtMTQuNjksNi4xYy00LjA2LDQuMDYtNi4xLDguOTYtNi4xLDE0LjY5djQyLjk5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3Q0IiBkPSJNMTQwNy41LDQwOS40M2MxMS43OCwwLDIxLjgzLDQuMTcsMzAuMTcsMTIuNSw4LjMzLDguMzQsMTIuNSwxOC40LDEyLjUsMzAuMTdzLTQuMTcsMjEuODMtMTIuNSwzMC4xN2MtOC4zNCw4LjM0LTE4LjQsMTIuNTEtMzAuMTcsMTIuNTFzLTIxLjgzLTQuMTctMzAuMTctMTIuNTFjLTguMzQtOC4zNC0xMi41MS0xOC4zOS0xMi41MS0zMC4xN3M0LjE3LTIxLjgzLDEyLjUxLTMwLjE3YzguMzQtOC4zNCwxOC4zOS0xMi41LDMwLjE3LTEyLjVaTTE0MDcuNSw0MjQuMDRjLTcuODEsMC0xNC40OSwyLjc2LTIwLjAxLDguMjktNS40Nyw1LjUyLTguMjEsMTIuMTktOC4yMSwyMC4wMXMyLjczLDE0LjQxLDguMjEsMTkuOTNjNS41Miw1LjUzLDEyLjE5LDguMjksMjAuMDEsOC4yOXMxNC40Ni0yLjc2LDE5LjkzLTguMjljNS41My01LjUyLDguMjktMTIuMTcsOC4yOS0xOS45M3MtMi43Ni0xNC40OS04LjI5LTIwLjAxYy01LjQ3LTUuNTItMTIuMTItOC4yOS0xOS45My04LjI5WiIvPgogICAgICA8cGF0aCBjbGFzcz0ic3Q0IiBkPSJNMTQ2NC40MSwzNzcuMzhjMS45MywwLDMuNTkuNjgsNSwyLjAzLDEuNDEsMS40MSwyLjExLDMuMSwyLjExLDUuMDh2MzUuNjRjOC4wMi03LjE0LDE3LjQzLTEwLjcxLDI4LjIyLTEwLjcxLDExLjc3LDAsMjEuODMsNC4xNywzMC4xNywxMi41LDguMzQsOC4zNCwxMi41MSwxOC40LDEyLjUxLDMwLjE3cy00LjE3LDIxLjgzLTEyLjUxLDMwLjE3Yy04LjM0LDguMzQtMTguMzksMTIuNTEtMzAuMTcsMTIuNTFzLTIxLjgxLTQuMTQtMzAuMDktMTIuNDNjLTguMzQtOC4yOS0xMi41My0xOC4yOS0xMi41OC0zMC4wMXYtNjcuODRjMC0xLjk4LjctMy42NywyLjExLTUuMDgsMS40MS0xLjM2LDMuMDgtMi4wMyw1LTIuMDNoLjIzWk0xNDk5Ljc0LDQyNC4wNGMtNy44MiwwLTE0LjQ5LDIuNzYtMjAuMDEsOC4yOS01LjQ3LDUuNTItOC4yMSwxMi4xOS04LjIxLDIwLjAxczIuNzQsMTQuNDEsOC4yMSwxOS45M2M1LjUyLDUuNTMsMTIuMTksOC4yOSwyMC4wMSw4LjI5czE0LjQ2LTIuNzYsMTkuOTMtOC4yOWM1LjUyLTUuNTIsOC4yOC0xMi4xNyw4LjI4LTE5Ljkzcy0yLjc2LTE0LjQ5LTguMjgtMjAuMDFjLTUuNDctNS41Mi0xMi4xMi04LjI5LTE5LjkzLTguMjlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDQiIGQ9Ik0xNjMyLjE4LDQ1Mi40M2MuMDIsMS45Ni0uNjYsMy42NS0yLjA1LDUuMDgtMS4zNywxLjM4LTMuMDYsMi4wNy01LjA3LDIuMDctOC0uMDQtMTguNTItLjA4LTMxLjU1LS4xMi0xNi4xOC0uMDQtMjYuNjgtLjA3LTMxLjQ4LS4wOSwyLjE0LDguODgsNy4zOCwxNS4yMSwxNS43MywxOS4wMiw1LjU1LDIuNTMsMTEuMzIsMy4xOCwxNy4zMSwxLjk2LDUuODEtMS4xOSwxMC43NS0zLjkyLDE0LjgxLTguMiwyLjM4LTIuNDYsNS4xNC0yLjk4LDguMjctMS41NiwyLjIzLDEuMDIsMy41OSwyLjc1LDQuMDcsNS4yLjQ2LDIuMzktLjE4LDQuNDctMS45MSw2LjI2LTYuMTUsNi40Ny0xMy42MywxMC41Ny0yMi40MywxMi4yOC05LjAxLDEuOC0xNy42OC43OS0yNi4wMy0zLjAxLTEwLjcyLTQuODgtMTguMTQtMTIuODQtMjIuMjctMjMuODktNC4xMy0xMS4wNC0zLjc2LTIxLjkyLDEuMTMtMzIuNjQsNC44OC0xMC43MiwxMi44NC0xOC4xNCwyMy44OS0yMi4yNywxMS4wNC00LjEzLDIxLjkyLTMuNzYsMzIuNjQsMS4xMiw3LjczLDMuNTIsMTMuODMsOC44NSwxOC4zMSwxNS45OSw0LjQzLDcsNi42NCwxNC41OSw2LjYzLDIyLjc4Wk0xNjAxLjE3LDQyNi45N2MtNy4xMS0zLjI0LTE0LjMzLTMuNDktMjEuNjQtLjc1LTcuMjcsMi43Ni0xMi41Miw3LjY5LTE1Ljc2LDE0LjgxLS41OCwxLjI4LTEuMDYsMi41OC0xLjQzLDMuOWw1NC4yOS4xN2MtMi4zMy04LjQ1LTcuNDktMTQuNDktMTUuNDUtMTguMTJaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJzdDQiIGQ9Ik0xNjUyLjQ4LDQ4Ny42N2MwLDEuOTgtLjcsMy42NS0yLjExLDUtMS40MSwxLjQxLTMuMDcsMi4xMS01LDIuMTFoLS4yM2MtMS45MywwLTMuNTktLjctNS0yLjExLTEuNDEtMS4zNS0yLjExLTMuMDItMi4xMS01di00Mi43NWMwLTkuNzksMy40Ni0xOC4xNiwxMC4zOS0yNS4wOSw2LjkzLTYuOTMsMTUuMjktMTAuMzksMjUuMDktMTAuMzlzMTguMDgsMy40NiwyNS4wMSwxMC4zOWM2LjkzLDYuOTMsMTAuMzksMTUuMjksMTAuMzksMjUuMDl2NDIuNzVjMCwxLjk4LS43LDMuNjUtMi4xMSw1LTEuMzYsMS40MS0zLjAyLDIuMTEtNSwyLjExaC0uMTZjLTEuOTgsMC0zLjY3LS43LTUuMDgtMi4xMS0xLjQxLTEuMzUtMi4xMS0zLjAyLTIuMTEtNXYtNDIuNzVjMC01Ljc4LTIuMDMtMTAuNzMtNi4wOS0xNC44NS00LjEyLTQuMTItOS4wNy02LjE4LTE0Ljg1LTYuMThzLTEwLjgxLDIuMDYtMTQuOTMsNi4xOGMtNC4wNiw0LjEyLTYuMDksOS4wNy02LjA5LDE0Ljg1djQyLjc1WiIvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+" alt="Moben"></div>
+  <nav class="as-nav">
+    <div class="as-label">Principal</div>
+    <a class="as-item" href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Meu painel</a>
+    <a class="as-item" href="imovel.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Meus imoveis</a>
+    <a class="as-item active" href="pretendentes.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Pretendentes</a>
+    <a class="as-item" href="contrato.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Contratos</a>
+    <a class="as-item" href="financeiro.html"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Cobrancas</a>
+    <div class="as-label">Financeiro</div>
+    <a class="as-item" href="financeiro.html"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Financeiro</a>
+    <div class="as-label">Conta</div>
+    <a class="as-item" href="#"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Meu perfil</a>
+  </nav>
+  <div class="as-foot"><div style="display:flex;align-items:center;gap:8px"><div class="as-av">JS</div><div><div class="as-uname">Joao Silva</div><div class="as-uplan">Plano Essencial</div></div></div></div>
+</aside>
+<div class="main">
+  <div class="topbar">
+    <a href="imovel.html" class="back-btn"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Voltar</a>
+    <div class="tb-sep"></div>
+    <span class="page-title">Pretendentes</span>
+    <span class="prop-pill">Ap. Centro</span>
+  </div>
+  <div class="content">
+
+    <!-- VIEW 1: LISTA -->
+    <div class="view active" id="v-lista">
+      <div class="sh">
+        <h1 class="sh-title">Propostas recebidas</h1>
+        <p class="sh-sub">Gerencie os pretendentes para o Ap. Centro. Convide pelo WhatsApp, email ou cadastre diretamente com os dados que voce ja tem em maos.</p>
+      </div>
+
+      <div class="entry-actions">
+        <button class="ea primary" onclick="openDrawer('d-convite','com')">
+          <div class="ea-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div class="ea-label">Convidar — com analise de credito</div>
+          <div class="ea-desc">O pretendente preenche os dados e autoriza a analise</div>
+          <span class="ea-badge">Recomendado</span>
+        </button>
+        <button class="ea" onclick="openDrawer('d-convite','sem')">
+          <div class="ea-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81"/><path d="M1 1l22 22"/></svg></div>
+          <div class="ea-label">Convidar — sem analise de credito</div>
+          <div class="ea-desc">Cadastro simplificado sem declaracao de renda</div>
+        </button>
+        <button class="ea" onclick="showView('v-cadastro')">
+          <div class="ea-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          <div class="ea-label">Cadastrar diretamente</div>
+          <div class="ea-desc">Preencha com os dados que voce ja tem em maos</div>
+        </button>
+      </div>
+
+      <div id="lista-com-propostas">
+        <div class="proposal-item selected" onclick="showView('v-detalhe','selecionada')">
+          <div class="pi-avatars"><div class="pi-av">MS</div></div>
+          <div class="pi-info">
+            <div class="pi-name">Maria Santos</div>
+            <div class="pi-sub">Proposta 1 · 08/04/2026</div>
+          </div>
+          <span class="pi-badge selected">Proposta selecionada</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="proposal-item" onclick="showView('v-detalhe','analisada')">
+          <div class="pi-avatars">
+            <div class="pi-av">RC</div>
+            <div class="pi-av" style="background:linear-gradient(135deg,#8301CD,#0101CD)">FL</div>
+          </div>
+          <div class="pi-info">
+            <div class="pi-name">Roberto Costa e Fernanda Lima</div>
+            <div class="pi-sub">Proposta 2 · 05/04/2026 · 2 pretendentes</div>
+          </div>
+          <span class="pi-badge analyzed">Analise gerada</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="proposal-item" onclick="showView('v-detalhe','aguardando')">
+          <div class="pi-avatars"><div class="pi-av" style="background:linear-gradient(135deg,#374151,#6B7280)">PO</div></div>
+          <div class="pi-info">
+            <div class="pi-name">Paulo Oliveira</div>
+            <div class="pi-sub">Proposta 3 · 03/04/2026</div>
+          </div>
+          <span class="pi-badge pending">Aguardando autorizacao</span>
+          <div class="pi-arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+      </div>
+
+      <div id="lista-vazia" style="display:none">
+        <div class="empty">
+          <div class="empty-ico"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+          <div class="empty-title">Nenhum pretendente ainda</div>
+          <p class="empty-sub">Convide pretendentes pelo WhatsApp ou email, ou cadastre diretamente com os dados que voce tem em maos.</p>
+        </div>
+      </div>
+
+      <div class="dev-toggle">
+        <input type="checkbox" id="tog-empty" onchange="toggleEmpty()">
+        <label for="tog-empty">Ver estado vazio</label>
+      </div>
+    </div>
+
+    <!-- VIEW 2: CADASTRO DIRETO -->
+    <div class="view" id="v-cadastro">
+      <button class="btn-back" onclick="showView('v-lista')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Voltar para propostas</button>
+      <div class="sh">
+        <h1 class="sh-title">Nova proposta</h1>
+        <p class="sh-sub">Preencha os dados de quem vai morar no imovel. Se houver mais de um morador ou um fiador, voce pode adicionar logo abaixo.</p>
+      </div>
+
+      <!-- TOTALIZADOR FIXO — aparece quando ha mais de um membro -->
+      <div id="totalizador" style="display:none;background:var(--navy);padding:14px 18px;margin-bottom:16px;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Renda total declarada</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:#fff" id="tot-renda">R$ 0</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:3px">Aluguel: R$ 2.500</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Comprometimento da renda</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--cyan)" id="tot-pct">—</div>
+          <button onclick="openDrawer('d-edu-renda',null)" style="font-size:10px;color:rgba(255,255,255,.4);background:none;border:none;cursor:pointer;margin-top:3px;display:flex;align-items:center;gap:4px;padding:0">
+            <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:rgba(255,255,255,.4);fill:none;stroke-width:2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Como interpretar
+          </button>
+        </div>
+      </div>
+
+      <!-- MEMBROS DA PROPOSTA -->
+      <div id="membros-lista"></div>
+
+      <!-- FORMULARIO DO MEMBRO ATUAL -->
+      <div id="form-membro-wrap">
+        <div class="card" id="form-membro-card">
+          <div class="cs" id="form-membro-titulo">Pretendente principal</div>
+
+          <div class="fgr c2">
+            <div class="fg"><label>Nome completo</label><input type="text" id="m-nome" placeholder="Nome completo" oninput="atualizarTotalizador()"></div>
+            <div class="fg"><label>Email</label><input type="email" id="m-email" placeholder="email@exemplo.com"></div>
+          </div>
+          <div class="fgr c3">
+            <div class="fg"><label>CPF</label><input type="text" id="m-cpf" placeholder="000.000.000-00"></div>
+            <div class="fg"><label>RG</label><input type="text" id="m-rg" placeholder="00.000.000-0"></div>
+            <div class="fg"><label>Nascimento</label><input type="date" id="m-nasc"></div>
+          </div>
+          <div class="fgr c2">
+            <div class="fg"><label>Telefone</label><input type="tel" id="m-tel" placeholder="(11) 99999-9999"></div>
+            <div class="fg"><label>Estado civil</label><select id="m-civil"><option value="">Selecione...</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option><option>Uniao estavel</option></select></div>
+          </div>
+          <div style="height:1px;background:var(--border);margin:14px 0"></div>
+          <div class="fgr c2">
+            <div class="fg"><label>Profissao</label><input type="text" id="m-prof" placeholder="Ex: Engenheiro, Designer..."></div>
+            <div class="fg"><label>Ocupacao</label><select id="m-ocup"><option value="">Selecione...</option><option>Empregado CLT</option><option>Funcionario publico</option><option>Autonomo / Freelancer</option><option>Empresario</option><option>Aposentado</option></select></div>
+          </div>
+          <div class="fgr c2">
+            <div class="fg">
+              <label>Renda mensal declarada (R$)</label>
+              <input type="text" id="m-renda" placeholder="0,00" oninput="atualizarTotalizador()">
+            </div>
+            <div class="fg"><label>Dividas mensais recorrentes (R$)</label><input type="text" id="m-dividas" placeholder="0,00"></div>
+          </div>
+
+          <button class="btn-secondary" style="margin-top:6px" onclick="confirmarMembro()">
+            <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+            <span id="btn-confirmar-label">Confirmar pretendente e compor proposta</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- COMPOSICAO DA PROPOSTA — aparece apos confirmar o primeiro -->
+      <div id="composicao-wrap" style="display:none">
+
+        <!-- ADD INQUILINO SOLIDARIO -->
+        <button class="add-morador" id="btn-add-morador" onclick="adicionarMorador()">
+          <div class="add-morador-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          <div class="add-morador-info">
+            <div class="add-morador-label" style="display:flex;align-items:center;gap:6px">
+              Adicionar inquilino solidario
+              <button onclick="event.stopPropagation();openDrawer('d-edu-solidario',null)" style="background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center">
+                <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--blue);fill:none;stroke-width:2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </button>
+            </div>
+            <div class="add-morador-desc">Outro signatario do contrato — renda somada na analise</div>
+          </div>
+        </button>
+
+        <!-- SEPARADOR FIADOR -->
+        <div style="margin:20px 0 14px;padding-top:16px;border-top:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px">Garantia — fiador</div>
+
+          <!-- sem fiador (default) -->
+          <div id="fiador-none" style="border:1.5px solid var(--border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;background:var(--white)">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--navy)">Sem fiador nesta proposta</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">O tipo de garantia sera definido no contrato</div>
+            </div>
+            <button onclick="mostrarOpcoesFiador()" style="font-size:11px;font-weight:700;color:var(--blue);background:none;border:none;cursor:pointer;text-decoration:underline">Adicionar fiador</button>
+          </div>
+
+          <!-- opcoes fiador -->
+          <div id="fiador-opcoes" style="display:none">
+            <div style="font-size:12px;color:var(--muted);font-weight:500;line-height:1.5;margin-bottom:12px">Como deseja incluir o fiador nesta proposta?</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+              <button class="ea" style="padding:14px" onclick="mostrarFormFiador()">
+                <div class="ea-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+                <div class="ea-label">Cadastrar agora</div>
+                <div class="ea-desc">Preencho os dados do fiador aqui</div>
+              </button>
+              <button class="ea" onclick="mostrarConviteFiador()">
+                <div class="ea-icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+                <div class="ea-label">Convidar depois</div>
+                <div class="ea-desc">Envio o link de convite para o fiador se cadastrar</div>
+              </button>
+            </div>
+            <button onclick="cancelarFiador()" style="font-size:11px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline">Cancelar — sem fiador</button>
+          </div>
+
+          <!-- form fiador inline -->
+          <div id="fiador-form" style="display:none">
+            <div class="card" style="margin-top:10px;border-color:rgba(131,1,205,.2);background:rgba(131,1,205,.02)">
+              <div class="cs" style="color:var(--purple)">Dados do fiador</div>
+              <div class="fgr c2">
+                <div class="fg"><label>Nome completo</label><input type="text" id="f-nome" placeholder="Nome do fiador"></div>
+                <div class="fg"><label>Email</label><input type="email" id="f-email" placeholder="email@exemplo.com"></div>
+              </div>
+              <div class="fgr c3">
+                <div class="fg"><label>CPF</label><input type="text" id="f-cpf" placeholder="000.000.000-00"></div>
+                <div class="fg"><label>RG</label><input type="text" id="f-rg" placeholder="00.000.000-0"></div>
+                <div class="fg"><label>Nascimento</label><input type="date" id="f-nasc"></div>
+              </div>
+              <div class="fgr c2">
+                <div class="fg"><label>Telefone</label><input type="tel" id="f-tel" placeholder="(11) 99999-9999"></div>
+                <div class="fg"><label>Estado civil</label><select id="f-civil"><option value="">Selecione...</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option><option>Uniao estavel</option></select></div>
+              </div>
+              <div style="height:1px;background:rgba(131,1,205,.1);margin:14px 0"></div>
+              <div class="fgr c2">
+                <div class="fg"><label>Profissao</label><input type="text" id="f-prof" placeholder="Ex: Advogado..."></div>
+                <div class="fg"><label>Renda mensal declarada (R$)</label><input type="text" id="f-renda" placeholder="0,00"></div>
+              </div>
+              <div class="fh info" style="margin-top:8px"><strong>Analise de credito do fiador</strong>O fiador tambem passara pela analise de credito. Enviaremos automaticamente o pedido de autorizacao apos salvar a proposta.</div>
+              <button class="btn-secondary" style="margin-top:10px;border-color:rgba(131,1,205,.3);color:var(--purple)" onclick="confirmarFiador()">
+                <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                Confirmar fiador
+              </button>
+            </div>
+          </div>
+
+          <!-- convite fiador -->
+          <div id="fiador-convite" style="display:none">
+            <div style="background:var(--off2);border:1px solid var(--border);padding:14px 16px;margin-top:10px">
+              <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:4px">Convite para o fiador</div>
+              <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5">Informe o nome e o contato do fiador. Enviaremos o convite de cadastro apos salvar a proposta.</div>
+              <div class="fgr c2" style="margin-bottom:0">
+                <div class="fg"><label>Nome do fiador</label><input type="text" id="fc-nome" placeholder="Nome completo"></div>
+                <div class="fg"><label>WhatsApp ou email</label><input type="text" id="fc-contato" placeholder="(11) 99999-9999 ou email"></div>
+              </div>
+            </div>
+            <button onclick="cancelarFiador()" style="font-size:11px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;margin-top:8px;display:block">Cancelar — sem fiador</button>
+          </div>
+
+          <!-- fiador confirmado -->
+          <div id="fiador-confirmado" style="display:none;border:1px solid rgba(131,1,205,.2);padding:13px 16px;background:rgba(131,1,205,.03);align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#8301CD,#0101CD);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;color:#fff;flex-shrink:0" id="fconf-av">—</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--navy)" id="fconf-nome">—</div>
+                <div style="font-size:11px;color:var(--purple);margin-top:2px">Fiador · Analise de credito pendente</div>
+              </div>
+            </div>
+            <button onclick="removerFiador()" style="font-size:11px;font-weight:700;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline">Remover</button>
+          </div>
+
+        </div>
+
+        <!-- SALVAR PROPOSTA -->
+        <button class="btn-primary" style="margin-top:20px" onclick="showView('v-detalhe','aguardando')">
+          <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          Salvar proposta e enviar pedidos de autorizacao
+        </button>
+        <div class="fh" style="text-align:center;margin-top:8px">Todos os membros receberao o pedido de autorizacao de analise de credito automaticamente.</div>
+
+      </div><!-- composicao-wrap -->
+    </div>
+
+    <!-- VIEW 3: DETALHE -->
+    <div class="view" id="v-detalhe">
+      <button class="btn-back" onclick="showView('v-lista')"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Voltar para propostas</button>
+
+      <!-- STATE: AGUARDANDO -->
+      <div id="state-aguardando" style="display:none">
+        <div class="sh">
+          <h1 class="sh-title">Paulo Oliveira</h1>
+          <p class="sh-sub">Proposta 3 · Criada em 03/04/2026</p>
+        </div>
+        <div class="consent-box">
+          <div class="consent-title"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Aguardando autorizacao de analise de credito</div>
+          <div class="consent-body">Enviamos um pedido de autorizacao para paulo.oliveira@email.com em 03/04/2026 as 14h32. Conforme a LGPD, o pretendente precisa aprovar o uso dos dados antes de gerarmos a analise de credito.</div>
+          <button class="consent-resend" onclick="alert('Pedido reenviado com sucesso.')">Reenviar pedido</button>
+        </div>
+        <div class="interested-card">
+          <div class="ic-header">
+            <div class="ic-av-lg" style="background:linear-gradient(135deg,#374151,#6B7280)">PO</div>
+            <div>
+              <div class="ic-name">Paulo Oliveira</div>
+              <div class="ic-meta">paulo.oliveira@email.com · (11) 98765-4321</div>
+              <div class="ic-status pending"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Autorizacao pendente</div>
+            </div>
+          </div>
+          <div class="data-grid">
+            <div class="data-item"><div class="data-label">CPF</div><div class="data-val">042.***.***-52</div></div>
+            <div class="data-item"><div class="data-label">Nascimento</div><div class="data-val">15/03/1985</div></div>
+            <div class="data-item"><div class="data-label">Estado civil</div><div class="data-val">Solteiro</div></div>
+            <div class="data-item"><div class="data-label">Profissao</div><div class="data-val">Analista de TI</div></div>
+            <div class="data-item"><div class="data-label">Renda declarada</div><div class="data-val">R$ 6.500</div></div>
+            <div class="data-item"><div class="data-label">Dividas mensais</div><div class="data-val">R$ 800</div></div>
+          </div>
+        </div>
+        <button class="add-morador" onclick="openDrawer('d-add-morador',null)">
+          <div class="add-morador-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          <div class="add-morador-info">
+            <div class="add-morador-label">Adicionar outro morador a esta proposta</div>
+            <div class="add-morador-desc">Todos que forem assinar o contrato precisam estar na mesma proposta</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- STATE: ANALISADA (2 pretendentes) -->
+      <div id="state-analisada" style="display:none">
+        <div class="sh">
+          <h1 class="sh-title">Roberto Costa e Fernanda Lima</h1>
+          <p class="sh-sub">Proposta 2 · Criada em 05/04/2026 · 2 pretendentes</p>
+        </div>
+        <div class="renda-box">
+          <div>
+            <div class="renda-label">Renda mensal total declarada</div>
+            <div class="renda-val">R$ 14.200</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px">Aluguel: R$ 2.500</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Comprometimento</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--navy)">17,6%</div>
+            <button onclick="openDrawer('d-edu-renda',null)" style="font-size:10px;color:var(--blue);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;padding:0;margin-top:4px;margin-left:auto">
+              <svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:var(--blue);fill:none;stroke-width:2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Como interpretar
+            </button>
+          </div>
+        </div>
+
+        <!-- Roberto -->
+        <div class="interested-card">
+          <div class="ic-header">
+            <div class="ic-av-lg">RC</div>
+            <div>
+              <div class="ic-name">Roberto Costa</div>
+              <div class="ic-meta">roberto.costa@email.com · Gerente Comercial<br>Renda declarada: R$ 8.200/mes</div>
+              <div class="ic-status ok"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Analise gerada</div>
+            </div>
+          </div>
+          <div class="analysis-section">
+            <div class="analysis-header">
+              <span>Analise de credito Serasa</span>
+              <button onclick="openDrawer('d-edu-analise',null)" style="font-size:10px;color:var(--blue);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;padding:0"><svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:var(--blue);fill:none;stroke-width:2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Como interpretar</button>
+            </div>
+            <div class="analysis-grid">
+              <div class="indicator">
+                <div class="ind-label">Score Serasa</div>
+                <div class="ind-score">820</div>
+                <div class="ind-desc">1 em cada 10 pessoas neste grupo tende a apresentar debitos nos proximos 12 meses</div>
+                <div class="ind-tooltip">Score Serasa de 820 pontos. Pertence a um grupo estatistico onde, nos ultimos 12 meses, aproximadamente 1 em cada 10 pessoas apresentou debitos. Considere este dado junto aos demais ao tomar sua decisao.</div>
+              </div>
+              <div class="indicator">
+                <div class="ind-label">Negativacao</div>
+                <div class="ind-score" style="font-size:14px">Nenhuma encontrada</div>
+                <div class="ind-desc">Sem restricoes no CPF nos ultimos 3 meses</div>
+                <div class="ind-tooltip">Nao foram encontradas restricoes no CPF nos ultimos 3 meses. Este dado reflete apenas o periodo consultado.</div>
+              </div>
+              <div class="indicator">
+                <div class="ind-label">Cobrancas</div>
+                <div class="ind-score" style="font-size:14px">Nenhuma encontrada</div>
+                <div class="ind-desc">Sem ocorrencias de cobrancas registradas</div>
+                <div class="ind-tooltip">Nao foram encontradas cobrancas registradas relacionadas ao CPF no periodo consultado.</div>
+              </div>
+              <div class="indicator">
+                <div class="ind-label">Processos judiciais</div>
+                <div class="ind-score" style="font-size:14px">Nenhum encontrado</div>
+                <div class="ind-desc">Sem processos judiciais registrados</div>
+                <div class="ind-tooltip">Nao foram encontrados processos judiciais relacionados ao CPF no periodo consultado.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fernanda -->
+        <div class="interested-card">
+          <div class="ic-header">
+            <div class="ic-av-lg" style="background:linear-gradient(135deg,#8301CD,#0101CD)">FL</div>
+            <div>
+              <div class="ic-name">Fernanda Lima</div>
+              <div class="ic-meta">fernanda.lima@email.com · Professora<br>Renda declarada: R$ 6.000/mes</div>
+              <div class="ic-status ok"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Analise gerada</div>
+            </div>
+          </div>
+          <div class="analysis-section">
+            <div class="analysis-header">
+              <span>Analise de credito Serasa</span>
+              <button onclick="openDrawer('d-edu-analise',null)" style="font-size:10px;color:var(--blue);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;padding:0"><svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:var(--blue);fill:none;stroke-width:2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Como interpretar</button>
+            </div>
+            <div class="analysis-grid">
+              <div class="indicator">
+                <div class="ind-label">Score Serasa</div>
+                <div class="ind-score">580</div>
+                <div class="ind-desc">2 em cada 10 pessoas neste grupo tendem a apresentar debitos nos proximos 12 meses</div>
+                <div class="ind-tooltip">Score Serasa de 580 pontos. Pertence a um grupo estatistico onde, nos ultimos 12 meses, aproximadamente 2 em cada 10 pessoas apresentou debitos. Vale indagar o pretendente sobre sua situacao financeira atual antes de decidir.</div>
+              </div>
+              <div class="indicator">
+                <div class="ind-label">Negativacao</div>
+                <div class="ind-score" style="font-size:14px">1 restricao encontrada</div>
+                <div class="ind-desc">Valor ate R$ 100 — consultar o pretendente</div>
+                <div class="ind-tooltip">Foi encontrada 1 restricao no CPF com valor ate R$ 100. Vale indagar o pretendente se tem ciencia desta restricao e se ela ainda esta ativa. Este dado por si so nao determina a decisao de aceitar ou recusar.</div>
+              </div>
+              <div class="indicator">
+                <div class="ind-label">Cobrancas</div>
+                <div class="ind-score" style="font-size:14px">Nenhuma encontrada</div>
+                <div class="ind-desc">Sem ocorrencias de cobrancas registradas</div>
+                <div class="ind-tooltip">Nao foram encontradas cobrancas registradas relacionadas ao CPF no periodo consultado.</div>
+              </div>
+              <div class="indicator">
+                <div class="ind-label">Processos judiciais</div>
+                <div class="ind-score" style="font-size:14px">Nenhum encontrado</div>
+                <div class="ind-desc">Sem processos judiciais registrados</div>
+                <div class="ind-tooltip">Nao foram encontrados processos judiciais relacionados ao CPF no periodo consultado.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="add-morador" onclick="openDrawer('d-add-morador',null)">
+          <div class="add-morador-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          <div class="add-morador-info">
+            <div class="add-morador-label">Adicionar outro morador a esta proposta</div>
+            <div class="add-morador-desc">Todos que forem assinar o contrato precisam estar na mesma proposta</div>
+          </div>
+        </button>
+        <button class="btn-primary" style="margin-top:14px" onclick="alert('Seguir para contrato')">
+          <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          Escolher esta proposta e seguir para o contrato
+        </button>
+        <button class="btn-ghost" onclick="showView('v-lista')">Declinar esta proposta</button>
+      </div>
+
+      <!-- STATE: SELECIONADA -->
+      <div id="state-selecionada" style="display:none">
+        <div class="sh">
+          <h1 class="sh-title">Maria Santos</h1>
+          <p class="sh-sub">Proposta 1 · Criada em 08/04/2026</p>
+        </div>
+        <div style="background:var(--success-bg);border:1px solid rgba(27,127,58,.2);padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px">
+          <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--success);fill:none;stroke-width:2;flex-shrink:0"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--success)">Proposta selecionada</div>
+            <div style="font-size:11px;color:var(--success);opacity:.8;margin-top:2px">O contrato para esta proposta ja esta sendo elaborado.</div>
+          </div>
+        </div>
+        <div class="interested-card">
+          <div class="ic-header">
+            <div class="ic-av-lg">MS</div>
+            <div>
+              <div class="ic-name">Maria Santos</div>
+              <div class="ic-meta">maria.santos@email.com · Medica<br>Renda declarada: R$ 18.000/mes</div>
+              <div class="ic-status ok"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>Analise gerada</div>
+            </div>
+          </div>
+          <div class="analysis-section">
+            <div class="analysis-header"><span>Analise de credito Serasa</span><button onclick="openDrawer('d-edu-analise',null)" style="font-size:10px;color:var(--blue);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;padding:0"><svg viewBox="0 0 24 24" style="width:11px;height:11px;stroke:var(--blue);fill:none;stroke-width:2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Como interpretar</button></div>
+            <div class="analysis-grid">
+              <div class="indicator"><div class="ind-label">Score Serasa</div><div class="ind-score">950</div><div class="ind-desc">1 em cada 10 pessoas neste grupo tende a apresentar debitos nos proximos 12 meses</div><div class="ind-tooltip">Score Serasa de 950 pontos. Pertence a um grupo estatistico onde, nos ultimos 12 meses, aproximadamente 1 em cada 10 pessoas apresentou debitos.</div></div>
+              <div class="indicator"><div class="ind-label">Negativacao</div><div class="ind-score" style="font-size:14px">Nenhuma encontrada</div><div class="ind-desc">Sem restricoes no CPF nos ultimos 3 meses</div><div class="ind-tooltip">Nao foram encontradas restricoes no CPF nos ultimos 3 meses.</div></div>
+              <div class="indicator"><div class="ind-label">Cobrancas</div><div class="ind-score" style="font-size:14px">Nenhuma encontrada</div><div class="ind-desc">Sem ocorrencias de cobrancas registradas</div><div class="ind-tooltip">Nao foram encontradas cobrancas registradas no periodo consultado.</div></div>
+              <div class="indicator"><div class="ind-label">Processos judiciais</div><div class="ind-score" style="font-size:14px">Nenhum encontrado</div><div class="ind-desc">Sem processos judiciais registrados</div><div class="ind-tooltip">Nao foram encontrados processos judiciais no periodo consultado.</div></div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-secondary" onclick="alert('Ir para contrato')">
+          <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+          Ir para o contrato
+        </button>
+        <button class="btn-ghost" onclick="showView('v-lista')">Declinar e escolher outra proposta</button>
+      </div>
+    </div>
+
+  </div><!-- .content -->
+</div><!-- .main -->
+
+<!-- OVERLAY -->
+<div class="drawer-overlay" id="overlay" onclick="closeAllDrawers()"></div>
+
+<!-- DRAWER: CONVITE -->
+<div class="drawer" id="d-convite">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-title" id="d-convite-title">Convidar pretendente</div>
+      <div class="drawer-sub" id="d-convite-sub">Escolha como deseja enviar o convite.</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer('d-convite')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <!-- STEP 1: escolher canal -->
+    <div class="invite-step active" id="inv-step1">
+      <div class="channel-list">
+        <div class="ch wa" onclick="goInviteStep(2,'wa')">
+          <div class="ch-icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+          <div class="ch-info">
+            <div class="ch-label">WhatsApp</div>
+            <div class="ch-desc">Abre o WhatsApp com a mensagem pronta</div>
+          </div>
+          <div class="ch-action">Usar →</div>
+        </div>
+        <div class="ch" onclick="goInviteStep(2,'email')">
+          <div class="ch-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div class="ch-info">
+            <div class="ch-label">Email</div>
+            <div class="ch-desc">Enviamos o convite diretamente para o email</div>
+          </div>
+          <div class="ch-action">Usar →</div>
+        </div>
+      </div>
+      <div class="divider-text">ou</div>
+      <div style="margin-bottom:8px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Copiar link de convite</div>
+      <div class="copy-row">
+        <span class="copy-url">https://app.moben.com.br/cadastro/convite/inquilino/abc123/</span>
+        <button class="copy-btn" onclick="this.textContent='Copiado!';setTimeout(()=>this.textContent='Copiar',2500)">Copiar</button>
+      </div>
+      <div class="fh" style="margin-top:8px">Cole o link em qualquer aplicativo de mensagens.</div>
+    </div>
+
+    <!-- STEP 2: dados do pretendente -->
+    <div class="invite-step" id="inv-step2">
+      <div style="margin-bottom:16px;font-size:12px;color:var(--muted);font-weight:500;line-height:1.5" id="inv-step2-desc">Antes de enviar, informe os dados do pretendente para registrarmos o convite.</div>
+      <div class="fg"><label>Nome do pretendente</label><input type="text" id="inv-nome" placeholder="Nome completo"></div>
+      <div class="fg" id="inv-tel-wrap"><label>WhatsApp</label><input type="tel" id="inv-tel" placeholder="(11) 99999-9999"></div>
+      <div class="fg" id="inv-email-wrap" style="display:none"><label>Email</label><input type="email" id="inv-email" placeholder="email@exemplo.com"></div>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <div id="inv-foot1">
+      <div class="fh">O pretendente recebera um link para preencher os proprios dados.</div>
+    </div>
+    <div id="inv-foot2" style="display:none">
+      <button class="btn-drawer" id="inv-send-btn" onclick="sendInvite()">Enviar convite</button>
+      <button class="btn-drawer-sec" onclick="goInviteStep(1,null)">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<!-- DRAWER: ADD MORADOR -->
+<div class="drawer" id="d-add-morador">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-title">Adicionar morador</div>
+      <div class="drawer-sub">Inclua outra pessoa nesta proposta. Todos que forem assinar o contrato precisam estar cadastrados.</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer('d-add-morador')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div class="channel-list">
+      <div class="ch wa" onclick="alert('Abre WhatsApp com convite para esta proposta')">
+        <div class="ch-icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+        <div class="ch-info">
+          <div class="ch-label">Convidar pelo WhatsApp</div>
+          <div class="ch-desc">O morador preenche os proprios dados</div>
+        </div>
+        <div class="ch-action">Usar →</div>
+      </div>
+      <div class="ch" onclick="alert('Enviar convite por email')">
+        <div class="ch-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div class="ch-info">
+          <div class="ch-label">Convidar por email</div>
+          <div class="ch-desc">Enviamos o convite para o email informado</div>
+        </div>
+        <div class="ch-action">Usar →</div>
+      </div>
+      <div class="ch" onclick="closeDrawer('d-add-morador');showView('v-cadastro')">
+        <div class="ch-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <div class="ch-info">
+          <div class="ch-label">Cadastrar diretamente</div>
+          <div class="ch-desc">Preencha com os dados que voce ja tem em maos</div>
+        </div>
+        <div class="ch-action">Usar →</div>
+      </div>
+    </div>
+    <div class="copy-row">
+      <span class="copy-url">https://app.moben.com.br/cadastro/convite/inquilino/abc123/</span>
+      <button class="copy-btn" onclick="this.textContent='Copiado!';setTimeout(()=>this.textContent='Copiar',2500)">Copiar</button>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <div class="fh">O novo morador sera adicionado a esta proposta apos preencher o cadastro.</div>
+  </div>
+</div>
+
+<!-- DRAWER EDU: RENDA/ALUGUEL -->
+<div class="drawer" id="d-edu-renda">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-title">Comprometimento da renda</div>
+      <div class="drawer-sub">Como interpretar este indicador</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer('d-edu-renda')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div style="background:var(--off2);border:1px solid var(--border);padding:16px;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">O que significa</div>
+      <div style="font-size:13px;color:var(--text);font-weight:500;line-height:1.6">Indica quanto do salario mensal declarado seria comprometido com o aluguel. Quanto menor o percentual, mais confortavel e a situacao financeira do pretendente.</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Como interpretar</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);background:var(--white)">
+          <div style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--navy);width:52px;flex-shrink:0">ate 30%</div>
+          <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.4">Situacao confortavel. O aluguel representa uma parcela razoavel da renda declarada — referencia comum no mercado de locacao.</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);background:var(--white)">
+          <div style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--navy);width:52px;flex-shrink:0">30–40%</div>
+          <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.4">Situacao de atencao. Vale avaliar o restante do perfil — negativacoes, historico de pagamento e presenca de fiador — antes de decidir.</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);background:var(--white)">
+          <div style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--navy);width:52px;flex-shrink:0">acima de 40%</div>
+          <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.4">Comprometimento elevado. Nao impede a locacao, mas recomenda-se avaliar com cuidado o perfil completo e considerar uma garantia adicional.</div>
+        </div>
+      </div>
+    </div>
+    <div class="fh info"><strong>Importante</strong>Esses percentuais sao referencias de mercado, nao regras absolutas. Cabe ao proprietario tomar a decisao final considerando todos os dados disponíveis.</div>
+  </div>
+</div>
+
+<!-- DRAWER EDU: INQUILINO SOLIDARIO -->
+<div class="drawer" id="d-edu-solidario">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-title">O que e um inquilino solidario?</div>
+      <div class="drawer-sub">Entenda as vantagens para a sua proposta</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer('d-edu-solidario')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div style="background:var(--off2);border:1px solid var(--border);padding:16px;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Definicao</div>
+      <div style="font-size:13px;color:var(--text);font-weight:500;line-height:1.6">Inquilino solidario e uma segunda pessoa que assina o contrato de locacao junto com o inquilino principal. Ambos assumem a responsabilidade integral pelo pagamento do aluguel.</div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Vantagens para o proprietario</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;padding:10px 12px;border:1px solid var(--border);background:var(--white)">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.5"><strong style="display:block;margin-bottom:2px">Renda somada</strong>A renda dos dois inquilinos e somada na analise. Uma proposta com renda combinada de R$ 8.000 e mais forte do que duas propostas separadas de R$ 4.000.</div>
+        </div>
+        <div style="display:flex;gap:10px;padding:10px 12px;border:1px solid var(--border);background:var(--white)">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.5"><strong style="display:block;margin-bottom:2px">Responsabilidade solidaria</strong>Se um nao pagar, o outro responde pelo valor integral. Dois CPFs no contrato equivalem a duas responsabilidades independentes.</div>
+        </div>
+        <div style="display:flex;gap:10px;padding:10px 12px;border:1px solid var(--border);background:var(--white)">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.5"><strong style="display:block;margin-bottom:2px">Pode reduzir a necessidade de fiador</strong>Em muitos casos, uma proposta com dois inquilinos solidarios oferece seguranca equivalente ou superior a uma proposta com fiador.</div>
+        </div>
+        <div style="display:flex;gap:10px;padding:10px 12px;border:1px solid var(--border);background:var(--white)">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:2;flex-shrink:0;margin-top:2px"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.5"><strong style="display:block;margin-bottom:2px">Analise de credito individual</strong>Cada inquilino passa pela analise de credito separadamente. Voce tem uma visao completa do perfil de cada um antes de decidir.</div>
+        </div>
+      </div>
+    </div>
+    <div class="fh info"><strong>Morador que nao assina o contrato</strong>Filhos e outros dependentes que vao morar no imovel mas nao assinarao o contrato nao precisam ser cadastrados como inquilino solidario. Eles podem ser mencionados no contrato como ocupantes adicionais.</div>
+  </div>
+</div>
+
+<!-- DRAWER EDU: ANALISE DE CREDITO -->
+<div class="drawer" id="d-edu-analise">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-title">Como interpretar a analise</div>
+      <div class="drawer-sub">Entenda cada indicador e como usa-los</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer('d-edu-analise')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="drawer-body">
+    <div style="background:var(--off2);border:1px solid var(--border);padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;color:var(--text);font-weight:500;line-height:1.6">A analise de credito e uma ferramenta estatistica de apoio a decisao. Os dados refletem o comportamento historico de pagamentos do pretendente — mas nao determinam sozinhos se ele e um bom inquilino. Use em conjunto com os outros dados da proposta.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <div style="padding:12px 14px;border:1px solid var(--border);background:var(--white)">
+        <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px">Score Serasa</div>
+        <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.5">Representa o grupo estatistico ao qual o pretendente pertence. Indica a proporcao de pessoas naquele grupo que historicamente apresentou debitos nos ultimos 12 meses. Um score mais alto indica um grupo com menor incidencia historica de debitos.</div>
+      </div>
+      <div style="padding:12px 14px;border:1px solid var(--border);background:var(--white)">
+        <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px">Negativacao</div>
+        <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.5">Restricoes ativas no CPF nos ultimos 3 meses. Se houver ocorrencias, vale indagar o pretendente se ele tem ciencia e se a restricao ja foi resolvida antes de tomar uma decisao.</div>
+      </div>
+      <div style="padding:12px 14px;border:1px solid var(--border);background:var(--white)">
+        <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px">Cobrancas</div>
+        <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.5">Registros de cobrancas vinculados ao CPF. Assim como a negativacao, a existencia de cobrancas e um dado para investigar — nao necessariamente um impeditivo.</div>
+      </div>
+      <div style="padding:12px 14px;border:1px solid var(--border);background:var(--white)">
+        <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px">Processos judiciais</div>
+        <div style="font-size:12px;color:var(--text);font-weight:500;line-height:1.5">Processos judiciais registrados relacionados ao CPF. A presenca de processos merece atencao e pode valer uma conversa mais aprofundada com o pretendente.</div>
+      </div>
+    </div>
+    <div class="fh info"><strong>A decisao e sempre sua</strong>A Moben apresenta os dados para apoiar sua analise. A escolha do inquilino e uma decisao do proprietario, considerando o conjunto de informacoes disponíveis.</div>
+  </div>
+</div>
+
+<script>
+var curView='v-lista';
+var invChannel='wa';
+
+function showView(id,state){
+  document.getElementById(curView).classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  curView=id;
+  window.scrollTo(0,0);
+  if(id==='v-cadastro'){ initCadastro(); }
+  if(id==='v-detalhe'&&state){
+    ['state-aguardando','state-analisada','state-selecionada'].forEach(function(s){
+      document.getElementById(s).style.display='none';
+    });
+    document.getElementById('state-'+state).style.display='block';
+    // resetar estado do fiador ao abrir qualquer detalhe
+    cancelarFiador();
+  }
+}
+
+function openDrawer(id,type){
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById(id).classList.add('open');
+  if(id==='d-convite'&&type){
+    var titles={
+      'com':'Convidar — com analise de credito',
+      'sem':'Convidar — sem analise de credito'
+    };
+    var subs={
+      'com':'O pretendente preenche os dados e autoriza a analise de credito. Opcao recomendada.',
+      'sem':'Cadastro simplificado. O pretendente preenche apenas os dados basicos, sem declarar renda.'
+    };
+    document.getElementById('d-convite-title').textContent=titles[type];
+    document.getElementById('d-convite-sub').textContent=subs[type];
+    goInviteStep(1,null);
+  }
+}
+
+function closeDrawer(id){
+  document.getElementById(id).classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+function closeAllDrawers(){
+  document.querySelectorAll('.drawer').forEach(function(d){d.classList.remove('open');});
+  document.getElementById('overlay').classList.remove('show');
+}
+
+function goInviteStep(step,channel){
+  if(channel)invChannel=channel;
+  document.getElementById('inv-step1').classList.toggle('active',step===1);
+  document.getElementById('inv-step2').classList.toggle('active',step===2);
+  document.getElementById('inv-foot1').style.display=step===1?'block':'none';
+  document.getElementById('inv-foot2').style.display=step===2?'block':'none';
+  if(step===2){
+    var isWa=invChannel==='wa';
+    document.getElementById('inv-tel-wrap').style.display=isWa?'block':'none';
+    document.getElementById('inv-email-wrap').style.display=isWa?'none':'block';
+    document.getElementById('inv-step2-desc').textContent=isWa
+      ?'Informe o nome e o WhatsApp do pretendente. Abriremos o WhatsApp com a mensagem de convite pronta.'
+      :'Informe o nome e o email do pretendente. Enviaremos o convite diretamente para ele.';
+    document.getElementById('inv-send-btn').textContent=isWa?'Abrir WhatsApp':'Enviar por email';
+  }
+}
+
+function sendInvite(){
+  var nome=document.getElementById('inv-nome').value.trim();
+  if(!nome){alert('Informe o nome do pretendente.');return;}
+  closeDrawer('d-convite');
+  alert('Convite registrado para '+nome+'. '+(invChannel==='wa'?'WhatsApp sera aberto.':'Email enviado.'));
+}
+
+// --- COMPOSIÇÃO DA PROPOSTA ---
+var membros = []; // {nome, renda, tipo}
+var membroAtualIdx = 0;
+var ALUGUEL = 2500;
+
+function initCadastro() {
+  membros = [];
+  membroAtualIdx = 0;
+  document.getElementById('membros-lista').innerHTML = '';
+  document.getElementById('form-membro-wrap').style.display = 'block';
+  document.getElementById('composicao-wrap').style.display = 'none';
+  document.getElementById('totalizador').style.display = 'none';
+  document.getElementById('form-membro-titulo').textContent = 'Pretendente principal';
+  document.getElementById('btn-confirmar-label').textContent = 'Confirmar pretendente e compor proposta';
+  ['m-nome','m-email','m-cpf','m-rg','m-tel','m-prof','m-renda','m-dividas'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.value='';
+  });
+  cancelarFiador();
+  document.getElementById('fiador-none').style.display='flex';
+}
+
+function confirmarMembro() {
+  var nome = document.getElementById('m-nome').value.trim() || 'Pretendente ' + (membros.length + 1);
+  var rendaStr = document.getElementById('m-renda').value.replace(/\./g,'').replace(',','.');
+  var renda = parseFloat(rendaStr) || 0;
+  var tipo = membros.length === 0 ? 'inquilino' : 'inquilino solidario';
+
+  membros.push({nome: nome, renda: renda, tipo: tipo});
+  renderMembros();
+
+  document.getElementById('form-membro-wrap').style.display = 'none';
+  document.getElementById('composicao-wrap').style.display = 'block';
+  atualizarTotalizador();
+}
+
+function adicionarMorador() {
+  document.getElementById('form-membro-wrap').style.display = 'block';
+  document.getElementById('btn-add-morador').style.display = 'none';
+  var num = membros.length + 1;
+  var titulo = num === 1 ? 'Pretendente principal' : 'Inquilino solidario ' + (num - 1);
+  var label = num === 1 ? 'Confirmar pretendente e compor proposta' : 'Confirmar inquilino solidario';
+  document.getElementById('form-membro-titulo').textContent = titulo;
+  document.getElementById('btn-confirmar-label').textContent = label;
+  ['m-nome','m-email','m-cpf','m-rg','m-tel','m-prof','m-renda','m-dividas'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.value='';
+  });
+  setTimeout(function(){ document.getElementById('form-membro-card').scrollIntoView({behavior:'smooth',block:'start'}); }, 100);
+}
+
+function confirmarMembro() {
+  var nome = document.getElementById('m-nome').value.trim() || (membros.length === 0 ? 'Pretendente principal' : 'Inquilino solidario ' + membros.length);
+  var rendaStr = document.getElementById('m-renda').value.replace(/\./g,'').replace(',','.');
+  var renda = parseFloat(rendaStr) || 0;
+  var tipo = membros.length === 0 ? 'inquilino' : 'inquilino solidario';
+
+  membros.push({nome: nome, renda: renda, tipo: tipo});
+  renderMembros();
+
+  document.getElementById('form-membro-wrap').style.display = 'none';
+  document.getElementById('composicao-wrap').style.display = 'block';
+  atualizarTotalizador();
+}
+
+function renderMembros() {
+  var lista = document.getElementById('membros-lista');
+  lista.innerHTML = '';
+  membros.forEach(function(m, i) {
+    var iniciais = m.nome.split(' ').slice(0,2).map(function(p){return p[0]||'';}).join('').toUpperCase();
+    var tipoLabel = m.tipo === 'inquilino' ? 'Pretendente principal' : 'Inquilino solidario ' + i;
+    var rendaFmt = m.renda > 0 ? 'Renda: R$ ' + m.renda.toLocaleString('pt-BR') : 'Sem renda informada';
+    var div = document.createElement('div');
+    div.className = 'membro-card';
+    div.innerHTML = '<div class="mc-left"><div class="mc-av">'+iniciais+'</div><div><div class="mc-name">'+m.nome+'</div><div class="mc-meta">'+tipoLabel+'</div><div class="mc-renda">'+rendaFmt+'</div></div></div><button class="mc-remove" onclick="removerMembro('+i+')">Remover</button>';
+    lista.appendChild(div);
+  });
+  var formFechado = document.getElementById('form-membro-wrap').style.display === 'none';
+  var btnAdd = document.getElementById('btn-add-morador');
+  if(formFechado && membros.length < 4) {
+    btnAdd.style.display = 'flex';
+    var numSolidarios = membros.filter(function(m){return m.tipo==='inquilino solidario';}).length;
+    btnAdd.querySelector('.add-morador-desc').textContent = numSolidarios === 0
+      ? 'Outro signatario do contrato — renda somada na analise'
+      : 'Adicionar mais um — ate 4 inquilinos por proposta';
+  } else {
+    btnAdd.style.display = 'none';
+  }
+}
+
+function removerMembro(idx) {
+  membros.splice(idx, 1);
+  if(membros.length === 0) {
+    initCadastro();
+    return;
+  }
+  renderMembros();
+  atualizarTotalizador();
+}
+
+function atualizarTotalizador() {
+  var rendaForm = parseFloat((document.getElementById('m-renda')||{value:'0'}).value.replace(/\./g,'').replace(',','.')) || 0;
+  var total = membros.reduce(function(s,m){return s+m.renda;}, 0) + rendaForm;
+  var pct = total > 0 ? (ALUGUEL / total * 100) : 0;
+
+  var tot = document.getElementById('totalizador');
+  if(membros.length > 0) {
+    tot.style.display = 'flex';
+    document.getElementById('tot-renda').textContent = 'R$ ' + total.toLocaleString('pt-BR', {minimumFractionDigits:0});
+    document.getElementById('tot-pct').textContent = pct > 0 ? pct.toFixed(0) + '% da renda' : '—';
+  } else {
+    tot.style.display = 'none';
+  }
+}
+
+// FIADOR
+function mostrarOpcoesFiador() {
+  document.getElementById('fiador-none').style.display='none';
+  document.getElementById('fiador-opcoes').style.display='block';
+  document.getElementById('fiador-form').style.display='none';
+  document.getElementById('fiador-convite').style.display='none';
+  document.getElementById('fiador-confirmado').style.display='none';
+}
+
+function mostrarFormFiador() {
+  document.getElementById('fiador-opcoes').style.display='none';
+  document.getElementById('fiador-form').style.display='block';
+  setTimeout(function(){ document.getElementById('fiador-form').scrollIntoView({behavior:'smooth',block:'start'}); }, 100);
+}
+
+function mostrarConviteFiador() {
+  document.getElementById('fiador-opcoes').style.display='none';
+  document.getElementById('fiador-convite').style.display='block';
+}
+
+function cancelarFiador() {
+  document.getElementById('fiador-none').style.display='flex';
+  document.getElementById('fiador-opcoes').style.display='none';
+  document.getElementById('fiador-form').style.display='none';
+  document.getElementById('fiador-convite').style.display='none';
+  document.getElementById('fiador-confirmado').style.display='none';
+}
+
+function confirmarFiador() {
+  var nome = document.getElementById('f-nome').value.trim() || 'Fiador';
+  var iniciais = nome.split(' ').slice(0,2).map(function(p){return p[0]||'';}).join('').toUpperCase();
+  document.getElementById('fconf-nome').textContent = nome;
+  document.getElementById('fconf-av').textContent = iniciais;
+  document.getElementById('fiador-form').style.display='none';
+  document.getElementById('fiador-confirmado').style.display='flex';
+}
+
+function removerFiador() {
+  cancelarFiador();
+}
+
+function toggleEmpty(){
+  var cb=document.getElementById('tog-empty');
+  document.getElementById('lista-com-propostas').style.display=cb.checked?'none':'block';
+  document.getElementById('lista-vazia').style.display=cb.checked?'block':'none';
+}
+</script>
+
+<!-- BOTTOM NAV MOBILE -->
+<nav class="bottom-nav">
+  <div class="bn-inner">
+    <a href="dashboard.html" class="bn-item"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Painel</span></a>
+    <a href="imovel.html" class="bn-item"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Imoveis</span></a>
+    <a href="contrato.html" class="bn-item"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg><span>Contratos</span></a>
+    <a href="financeiro.html" class="bn-item"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Financeiro</span></a>
+    <a href="#" class="bn-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></a>
+  </div>
+</nav>
+</body>
+</html>
